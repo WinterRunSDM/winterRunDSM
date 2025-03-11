@@ -16,7 +16,7 @@ route_regional(
   prop_pulse_flows,
   migration_survival_rate,
   proportion_flow_bypass,
-  filling_fn = fallRunDSM::fill_regional,
+  filling_fn = fill_regional,
   filling_args = NULL,
   movement_fn = NULL,
   movement_months = NULL,
@@ -45,7 +45,7 @@ route_regional(
 
 \item{proportion_flow_bypass}{Variable describing the proportion of flows routed through the bypasses, more details at \code{\link[DSMflow]{proportion_flow_bypasses}}}
 
-\item{filling_fn}{optional filling function to use in routing procedure, by default it uses fallRunDSM::fill_regional}
+\item{filling_fn}{optional filling function to use in routing procedure, by default it uses fill_regional}
 
 \item{filling_args}{when passing custom filling function, pass function specific arguments as a list here}
 

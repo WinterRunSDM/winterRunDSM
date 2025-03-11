@@ -22,9 +22,9 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                    avg_ocean_transition_month = avg_ocean_transition_month,
                                    stochastic = stochastic,
                                    juveniles, ic_growth, fp_growth, delta_growth,
-                                   filling_fn = fallRunDSM::fill_natal,
+                                   filling_fn = fill_natal,
                                    filling_args = NULL,
-                                   filling_regional_fn = fallRunDSM::fill_regional,
+                                   filling_regional_fn = fill_regional,
                                    filling_regional_args = NULL,
                                    movement_fn = NULL,
                                    movement_args = NULL,
@@ -435,7 +435,7 @@ create_fish_df <- function(fish_df, month, year) {
   
   tmp[1:nrow(north_delta_fish), ] <- north_delta_fish
   fish_df <- data.frame(tmp + south_delta_fish) |>
-    dplyr::mutate(watershed = fallRunDSM::watershed_labels[1:31],
+    dplyr::mutate(watershed = springRunDSM::watershed_labels[1:31],
                   month = month,
                   year = year,
                   hypothesis = hypothesis)

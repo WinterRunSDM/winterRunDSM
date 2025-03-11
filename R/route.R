@@ -113,13 +113,13 @@ route <- function(year, month, juveniles, inchannel_habitat,
 #' @param territory_size Array of juvenile fish territory requirements for \code{\link{fill_regional}}
 #' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @param hypothesis Movement hypothesis to use for routing
-#' @param filling_fn optional filling function to use in routing procedure, by default it uses fallRunDSM::fill_regional
+#' @param filling_fn optional filling function to use in routing procedure, by default it uses fill_regional
 #' @param filling_args when passing custom filling function, pass function specific arguments as a list here
 #' @source IP-117068
 #' @export
 route_bypass <- function(bypass_fish, bypass_habitat, migration_survival_rate,
                          territory_size, stochastic, hypothesis,
-                         filling_fn = fallRunDSM::fill_regional,
+                         filling_fn = fill_regional,
                          filling_args = NULL) {
 
   bypass_fish <- filling_fn(juveniles = bypass_fish,
@@ -154,7 +154,7 @@ route_bypass <- function(bypass_fish, bypass_habitat, migration_survival_rate,
 #' @param detour Values can be 'sutter' or 'yolo' if some juveniles are detoured on to that bypass, otherwise NULL
 #' @param territory_size Array of juvenile fish territory requirements for \code{\link{fill_regional}}
 #' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
-#' @param filling_fn optional filling function to use in routing procedure, by default it uses fallRunDSM::fill_regional
+#' @param filling_fn optional filling function to use in routing procedure, by default it uses fill_regional
 #' @param filling_args when passing custom filling function, pass function specific arguments as a list here
 #' @param movement_fn optional movement function to use in routing procedure
 #' @param movement_months when passing custom movement function, pass movement months here
@@ -167,7 +167,7 @@ route_regional <- function(month, year, migrants,
                            inchannel_habitat, floodplain_habitat,
                            prop_pulse_flows, migration_survival_rate,
                            proportion_flow_bypass,
-                           filling_fn = fallRunDSM::fill_regional,
+                           filling_fn = fill_regional,
                            filling_args = NULL,
                            movement_fn = NULL,
                            movement_months = NULL,
