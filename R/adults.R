@@ -110,17 +110,17 @@ apply_enroute_survival <- function(year,
   }))
   
   
-  # for all years and months 10-12 there is always at least one true
-  bypass_is_overtopped <- sapply(10:12, function(month) {
+  # for all years and months 1-4 there is always at least one true
+  bypass_is_overtopped <- sapply(1:4, function(month) {
     
     tis <- gates_overtopped[month, year, 1] * tisdale_bypass_watershed
     yolo <- gates_overtopped[month, year, 2] * yolo_bypass_watershed
     as.logical(tis + yolo)
   })
   
-  en_route_temps <- migratory_temperature_proportion_over_20[, 10:12]
+  en_route_temps <- migratory_temperature_proportion_over_20[, 1:4]
   
-  adult_en_route_surv <- pmin(sapply(1:3, function(month) {
+  adult_en_route_surv <- pmin(sapply(1:4, function(month) {
     adult_en_route_surv <- surv_adult_enroute(migratory_temp = en_route_temps[,month],
                                               bypass_overtopped = bypass_is_overtopped[,month],
                                               ..surv_adult_enroute_int = ..surv_adult_enroute_int,
@@ -129,7 +129,7 @@ apply_enroute_survival <- function(year,
   }), 1)
   
   # Natural adults
-  natural_adults_survived_to_spawning <- sapply(1:3, function(month) {
+  natural_adults_survived_to_spawning <- sapply(1:4, function(month) {
     if (stochastic) {
       rbinom(31, round(natural_adults_by_month[, month]), adult_en_route_surv[, month])
     } else {
@@ -138,7 +138,7 @@ apply_enroute_survival <- function(year,
   })
   # Hatchery
   # APPLY NAT ADULT REMOVAL RATE (APPLIED TO HATCHERY FISH instead of natural fish)
-  hatchery_adults_survived_to_spawning <- sapply(1:3, function(month) {
+  hatchery_adults_survived_to_spawning <- sapply(1:4, function(month) {
     if (stochastic) {
       rbinom(31, round(hatchery_adults_by_month[, month]), adult_en_route_surv[, month])
     } else {
@@ -147,7 +147,7 @@ apply_enroute_survival <- function(year,
   })
   # Removes logic to remove hatchery fish if no
   if (sum(hatchery_release) > 0 ) {
-    hatchery_adults_survived_to_spawning <- sapply(1:3, function(month) {
+    hatchery_adults_survived_to_spawning <- sapply(1:4, function(month) {
       if (stochastic) {
         rbinom(31, round(hatchery_adults_survived_to_spawning[, month]), (1 - natural_adult_removal_rate))
       } else {
@@ -163,7 +163,7 @@ apply_enroute_survival <- function(year,
   proportion_natural <- surviving_natural_adults / init_adults
   
   list(init_adults = round(init_adults),
-       proportion_natural = replace(proportion_natural, is.nan(proportion_natural), 0)
+       proportion_natural = proportion_natural
   ) # TODO do we need inut adult by month
 }
 
