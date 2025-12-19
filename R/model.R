@@ -99,11 +99,9 @@ winter_run_model <- function(scenario = NULL,
                    "simulate" = seeds$adults,
                    "calibrate" = seeds,
   )
-  
-  # TODO do we want the yearling logic from springRunDSM?
 
   for (year in 1:simulation_length) {
-    # TODO added this list from springRunDSM - keep?
+    # tracks strays; likely do not need SJ tracking but keep for now
     adults_in_ocean <- numeric(31)
     lower_mid_sac_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
     lower_sac_fish <- matrix(0, nrow = 27, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:27], winterRunDSM::size_class_labels))
@@ -195,7 +193,8 @@ winter_run_model <- function(scenario = NULL,
     }
     
     if(mode == "simulate") {
-      # TODO brought in harvest logic from springRunDSM - ok?
+      # harvest logic is only hooking mortality for winterRunDSM
+      # TODO can simplify logic? will likely not be applying 'harvest of hatchery fish only' to winter run
       # HARVEST ----------------------------------------------------------------
       # Incidental harvest percentage 
       hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 
@@ -251,7 +250,6 @@ winter_run_model <- function(scenario = NULL,
     }
     
     init_adults <- round(spawners$init_adults)
-    init_adults[is.na(init_adults)] <- 0 # TODO keep this?
     
     output$spawners[ , year] <- init_adults
     # # For use in the r2r metrics ---------------------------------------------
@@ -293,21 +291,21 @@ winter_run_model <- function(scenario = NULL,
       ..surv_egg_to_fry_mean_egg_temp_effect = ..params$..surv_egg_to_fry_mean_egg_temp_effect
       )
     
-    min_spawn_habitat <- apply(..params$spawning_habitat[ , 3:6, year], 1, min)
+    min_spawn_habitat <- apply(..params$spawning_habitat[ , 1:4, year], 1, min)
     
-    # Migatory accumulated degree days and associated prespawn survival 
-    accumulated_degree_days <- cbind(march = rowSums(..params$degree_days[ , 3:6, year]),
-                                     april = rowSums(..params$degree_days[ , 4:6, year]),
-                                     may = rowSums(..params$degree_days[ , 5:6, year]),
-                                     june = ..params$degree_days[ , 6, year])
+    # Migratory accumulated degree days and associated prespawn survival 
+    accumulated_degree_days <- cbind(jan = rowSums(..params$degree_days[ , 1:4, year]),
+                                     feb = rowSums(..params$degree_days[ , 2:4, year]),
+                                     march = rowSums(..params$degree_days[ , 3:4, year]),
+                                     april = ..params$degree_days[ , 4, year])
     
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, ..params$month_return_proportions)
     
     # R2R: above and below degree days
-    average_degree_days_abv_dam <- apply(cbind(march = rowSums(..params$degree_days_abv_dam[ , 3:6, year]),
-                                               april = rowSums(..params$degree_days_abv_dam[ , 4:6, year]),
-                                               may = rowSums(..params$degree_days_abv_dam[ , 5:6, year]),
-                                               june = ..params$degree_days_abv_dam[ , 6, year]), 1, weighted.mean, ..params$month_return_proportions)
+    average_degree_days_abv_dam <- apply(cbind(jan = rowSums(..params$degree_days_abv_dam[ , 1:4, year]),
+                                               feb = rowSums(..params$degree_days_abv_dam[ , 2:4, year]),
+                                               march = rowSums(..params$degree_days_abv_dam[ , 3:4, year]),
+                                               april = ..params$degree_days_abv_dam[ , 4, year]), 1, weighted.mean, ..params$month_return_proportions)
     
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              .adult_prespawn_int = ..params$.adult_prespawn_int,
@@ -466,7 +464,7 @@ winter_run_model <- function(scenario = NULL,
                                                    .surv_juv_outmigration_san_joaquin_large = ..params$.surv_juv_outmigration_san_joaquin_large,
                                                    min_survival_rate = ..params$min_survival_rate,
                                                    stochastic = stochastic)
-      
+      # TODO remove
       if(any(..params$san_joaquin_flows > 0)) {
         migratory_survival$san_joaquin <- migratory_survival$san_joaquin_flow_based
       }
