@@ -15,6 +15,7 @@ source("calibration/fitness.R")
 source("calibration/update-params.R")
 
 params <- DSMCalibrationData::set_synth_years(winterRunDSM::r_to_r_baseline_params)
+params_LTO_comparison <- DSMCalibrationData::set_synth_years(winterRunDSM::r_to_r_baseline_params)
 
 # Test model 
 test <- winterRunDSM::winter_run_model(mode = "calibrate", 
@@ -24,13 +25,26 @@ test <- winterRunDSM::winter_run_model(mode = "calibrate",
                                       delta_surv_inflation = FALSE)
 
 test
+
+
+# Comparison to LTO -------------------------------------------------------
+
+
+# ensure using same inputs as LTO DSM inputs for comparison
+# also updated to bring in extra calibrated parameters per LTO DSM
+# read in synthetic diversion
+# TODO create new_diver from .rds file
+params_LTO_comparison$total_diverted[1,,] <- new_diver
+# TODO update mins and maxes to match LTO script
+# TODO run LTO calibration, use set.seed(), set same pop size, iterations, etc.
+
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
           fitness =
             function(x) -winter_run_fitness(
               known_adults = DSMCalibrationData::grandtab_observed$winter,
               seeds = DSMCalibrationData::grandtab_imputed$winter,
-              params = params,
+              params = params_LTO_comparison,
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
               x[11]
             ),
@@ -103,5 +117,6 @@ r1_eval_df %>%
   summarise(
     r = cor(observed, simulated, use = "pairwise.complete.obs")
   )
+
 
 
