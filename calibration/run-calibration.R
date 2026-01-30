@@ -10,6 +10,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(readr)
+library(DSMCalibrationData)
 
 source("calibration/fitness.R")
 source("calibration/update-params.R")
@@ -34,7 +35,22 @@ test
 # also updated to bring in extra calibrated parameters per LTO DSM
 # read in synthetic diversion
 # TODO create new_diver from .rds file
-params_LTO_comparison$total_diverted[1,,] <- new_diver
+params_LTO_comparison$total_diverted[1,,] <- readRDS(here::here("data-raw", "synth.t.diver.rds"))
+
+# TODO check inputs
+
+# Changed Battle Creek abundances to 0 to match LTO. 
+# Also edited known_adults in res to call known_adults = grandtab_observed$winter instead of DSMCalibrationData::grandtab_observed$winter
+grandtab_observed <- DSMCalibrationData::grandtab_observed
+grandtab_observed$winter[3,]<- 0
+
+# Lines 94-103 of LTO Wrapper script
+  # Q_free, Q_vern, Q_stck, through SWP_exp 
+  # are different years (1998-2017) and values from 
+  # r_to_r_baseline_params$freeport_flows, vernalis_flows, stockton_flows, etc.
+
+# Lines 136-138: what are these decay values? 
+
 # TODO update mins and maxes to match LTO script
 # TODO run LTO calibration, use set.seed(), set same pop size, iterations, etc.
 
@@ -42,7 +58,7 @@ params_LTO_comparison$total_diverted[1,,] <- new_diver
 res <- ga(type = "real-valued",
           fitness =
             function(x) -winter_run_fitness(
-              known_adults = DSMCalibrationData::grandtab_observed$winter,
+              known_adults = grandtab_observed$winter,
               seeds = DSMCalibrationData::grandtab_imputed$winter,
               params = params_LTO_comparison,
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
