@@ -49,10 +49,60 @@ grandtab_observed$winter[3,]<- 0
   # are different years (1998-2017) and values from 
   # r_to_r_baseline_params$freeport_flows, vernalis_flows, stockton_flows, etc.
 
-# Lines 136-138: what are these decay values? 
+# read in calibration data to set above parameters
+# TODO why are they so big?
+# TODO what is Trap_trans? 
+LTO_calib_data <- readRDS("calibration/LTO_inputs/delta-calibration-1980_2017.rds")
+params_LTO_comparison$freeport_flows <- LTO_calib_data$Q_free[,19:38]
+row.names(params_LTO_comparison$freeport_flows) <- month.abb
+
+params_LTO_comparison$vernalis_flows <- LTO_calib_data$Q_vern[,19:38]
+row.names(params_LTO_comparison$vernalis_flows) <- month.abb
+
+params_LTO_comparison$stockton_flows <- LTO_calib_data$Q_stck[,19:38]
+row.names(params_LTO_comparison$stockton_flows) <- month.abb
+
+params_LTO_comparison$prisoners_point_temps <- LTO_calib_data$Temp_pp[,19:38]
+row.names(params_LTO_comparison$prisoners_point_temps) <- month.abb
+
+params_LTO_comparison$vernalis_temps <- LTO_calib_data$Temp_vern[,19:38]
+row.names(params_LTO_comparison$vernalis_temps) <- month.abb
+
+params_LTO_comparison$SWP_exports <- LTO_calib_data$SWP_exp[,19:38]
+row.names(params_LTO_comparison$SWP_exports) <- month.abb
+
+params_LTO_comparison$CVP_exports <- LTO_calib_data$CVP_exp[,19:38]
+row.names(params_LTO_comparison$CVP_exports) <- month.abb
+
+
+# Lines 136-138: what are these decay values?
+# TODO this is a difference in model structure due to changes proposed and accepted to CVPIA in 2023
+# for now we will set Upper Sac to the LTO value for all months (uniform) because it is lower
+params_LTO_comparison$spawn_decay_multiplier["Upper Sacramento River",,] <- 0.9736472 # pulled from calibration script from LTO 
+params_LTO_comparison$spawn_decay_multiplier["Cottonwood Creek",,] <- 0.9736472 
+params_LTO_comparison$spawn_decay_multiplier["Cow Creek",,] <- 0.9736472 
+params_LTO_comparison$spawn_decay_multiplier["Clear Creek",,] <- 0.9736472
+
+params_LTO_comparison$spawn_decay_multiplier["Battle Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Antelope Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Bear Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Big Chico Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Butte Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Deer Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Elder Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Mill Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Paynes Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Stony Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Thomes Creek",,] <- 0.9949492 
 
 # TODO update mins and maxes to match LTO script
+minz <- c(rep(-3.5,10),0,-3.5,rep(0,4)) # set 0 for lower bound for en route survival [11]
+maxz <- c(rep(3.5,9),-1,rep(3.5,6))
+
 # TODO run LTO calibration, use set.seed(), set same pop size, iterations, etc.
+set.seed(1234)
+pop_size <- 10
+iter <- 10000 
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
@@ -64,13 +114,15 @@ res <- ga(type = "real-valued",
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
               x[11]
             ),
-          lower = c(2.5, rep(-3.5, 11)),
-          upper = rep(3.5, 12),
-          popSize = 100,
-          maxiter = 100000,
+          lower = minz,
+          upper = maxz,
+          popSize = pop_size,
+          maxiter = iter,
           run = 50,
           parallel = TRUE,
           pmutation = .4)
+
+readr::write_rds(res, paste0("calibration/res-", Sys.Date(), "-LTO_comparison-pop", pop_size, ".rds"))
 
 readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
 
