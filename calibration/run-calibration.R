@@ -97,12 +97,26 @@ params_LTO_comparison$spawn_decay_multiplier["Thomes Creek",,] <- 0.9949492
 
 # TODO update mins and maxes to match LTO script
 minz <- c(rep(-3.5,10),0,-3.5,rep(0,4)) # set 0 for lower bound for en route survival [11]
+minz_LTO <- c(minz[11], minz[1], minz[13], minz[14], 
+              minz[15], minz[2], minz[3], minz[13], 
+              minz[16], minz[4], minz[12], minz[10])
 maxz <- c(rep(3.5,9),-1,rep(3.5,6))
+maxz_LTO <- c(maxz[11], maxz[1], maxz[13], maxz[14], 
+              maxz[15], maxz[2], maxz[3], maxz[13], 
+              maxz[16], maxz[4], maxz[12], maxz[10])
 
 # TODO run LTO calibration, use set.seed(), set same pop size, iterations, etc.
 set.seed(1234)
 pop_size <- 10
 iter <- 10000 
+
+# TODO copy over starting values from LTO
+LTO_suggestions<-c(-0.6558315, -3.4999845,  1.4933417, -3.0188308,  2.0000003,  0.7999889, -3.5000000, -0.1999996,
+                   -3.4999920, -2.9839253,  3.4999976,  0.6466230,  0.0194795,  0.1000000,  0.3000000,  0.4820249)
+LTO_suggestions_mapped <- c(LTO_suggestions[11], LTO_suggestions[1], LTO_suggestions[13], LTO_suggestions[14], 
+                            LTO_suggestions[15], LTO_suggestions[2], LTO_suggestions[3], LTO_suggestions[13], 
+                            LTO_suggestions[16], LTO_suggestions[4], LTO_suggestions[12], LTO_suggestions[10])
+LTO_suggestions_matrix <- matrix(LTO_suggestions_mapped, nrow=pop_size, ncol=12, byrow=TRUE)
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
@@ -112,10 +126,11 @@ res <- ga(type = "real-valued",
               seeds = DSMCalibrationData::grandtab_imputed$winter,
               params = params_LTO_comparison,
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
-              x[11]
+              x[11], x[12]
             ),
-          lower = minz,
-          upper = maxz,
+          lower = minz_LTO,
+          upper = maxz_LTO,
+          suggestions = LTO_suggestions_matrix,
           popSize = pop_size,
           maxiter = iter,
           run = 50,
