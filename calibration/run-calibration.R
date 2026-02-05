@@ -95,7 +95,7 @@ params_LTO_comparison$spawn_decay_multiplier["Paynes Creek",,] <- 0.9949492
 params_LTO_comparison$spawn_decay_multiplier["Stony Creek",,] <- 0.9949492 
 params_LTO_comparison$spawn_decay_multiplier["Thomes Creek",,] <- 0.9949492 
 
-# TODO update mins and maxes to match LTO script
+# update mins and maxes to match LTO script
 minz <- c(rep(-3.5,10),0,-3.5,rep(0,4)) # set 0 for lower bound for en route survival [11]
 minz_LTO <- c(minz[11], minz[1], minz[13], minz[14], 
               minz[15], minz[2], minz[3], minz[13], 
@@ -105,7 +105,7 @@ maxz_LTO <- c(maxz[11], maxz[1], maxz[13], maxz[14],
               maxz[15], maxz[2], maxz[3], maxz[13], 
               maxz[16], maxz[4], maxz[12], maxz[10])
 
-# TODO run LTO calibration, use set.seed(), set same pop size, iterations, etc.
+# run LTO calibration, use set.seed(), set same pop size, iterations, etc.
 set.seed(1234)
 pop_size <- 10
 iter <- 10000 
