@@ -1,11 +1,11 @@
 
 
 # compare results
-map_params <- tibble("LTO_index" = 1:16,
+map_params <- tibble("LTO_index" = c(1:16, NA),
                      "R2R_index" = c(2, 6, 7, 10,
                                      NA, NA, NA, NA,
                                      NA, 12, 1, 11, 
-                                     3, 4, 5, 9))
+                                     3, 4, 5, 9, 8))
 
 LTO_res <- readRDS("calibration/LTO_inputs/LTO_calib_output_popsize_10-2026-02-03.rds")
 R2R_res <- readRDS("calibration/res-2026-02-03-LTO_comparison-pop10.rds")

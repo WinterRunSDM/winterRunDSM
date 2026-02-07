@@ -34,10 +34,7 @@ test
 # ensure using same inputs as LTO DSM inputs for comparison
 # also updated to bring in extra calibrated parameters per LTO DSM
 # read in synthetic diversion
-# TODO create new_diver from .rds file
 params_LTO_comparison$total_diverted[1,,] <- readRDS(here::here("data-raw", "synth.t.diver.rds"))
-
-# TODO check inputs
 
 # Changed Battle Creek abundances to 0 to match LTO. 
 # Also edited known_adults in res to call known_adults = grandtab_observed$winter instead of DSMCalibrationData::grandtab_observed$winter
@@ -96,27 +93,27 @@ params_LTO_comparison$spawn_decay_multiplier["Stony Creek",,] <- 0.9949492
 params_LTO_comparison$spawn_decay_multiplier["Thomes Creek",,] <- 0.9949492 
 
 # update mins and maxes to match LTO script
-minz <- c(rep(-3.5,10),0,-3.5,rep(0,4)) # set 0 for lower bound for en route survival [11]
-minz_LTO <- c(minz[11], minz[1], minz[13], minz[14], 
-              minz[15], minz[2], minz[3], minz[13], 
-              minz[16], minz[4], minz[12], minz[10])
-maxz <- c(rep(3.5,9),-1,rep(3.5,6))
-maxz_LTO <- c(maxz[11], maxz[1], maxz[13], maxz[14], 
-              maxz[15], maxz[2], maxz[3], maxz[13], 
-              maxz[16], maxz[4], maxz[12], maxz[10])
+map_params <- tibble("LTO_index" = c(1:16, 13),
+                     "R2R_index" = c(2, 6, 7, 10,
+                                     NA, NA, NA, NA,
+                                     NA, 12, 1, 11, 
+                                     3, 4, 5, 9, 8)) |> 
+  mutate("LTO_mins" = c(rep(-3.5,10),0,-3.5,rep(0,4), 0), # set 0 for lower bound for en route survival [11]
+         "LTO_maxes" = c(rep(3.5,9),-1,rep(3.5,6), 3.5),
+         "LTO_suggested" = c(-0.6558315, -3.4999845,  1.4933417, -3.0188308,  2.0000003,  0.7999889, -3.5000000, -0.1999996,
+                             -3.4999920, -2.9839253,  3.4999976,  0.6466230,  0.0194795,  0.1000000,  0.3000000,  0.4820249,
+                             0.0194795)) |> 
+  arrange(R2R_index)
 
 # run LTO calibration, use set.seed(), set same pop size, iterations, etc.
 set.seed(1234)
-pop_size <- 10
+pop_size <- 100
 iter <- 10000 
 
-# TODO copy over starting values from LTO
-LTO_suggestions<-c(-0.6558315, -3.4999845,  1.4933417, -3.0188308,  2.0000003,  0.7999889, -3.5000000, -0.1999996,
-                   -3.4999920, -2.9839253,  3.4999976,  0.6466230,  0.0194795,  0.1000000,  0.3000000,  0.4820249)
-LTO_suggestions_mapped <- c(LTO_suggestions[11], LTO_suggestions[1], LTO_suggestions[13], LTO_suggestions[14], 
-                            LTO_suggestions[15], LTO_suggestions[2], LTO_suggestions[3], LTO_suggestions[13], 
-                            LTO_suggestions[16], LTO_suggestions[4], LTO_suggestions[12], LTO_suggestions[10])
-LTO_suggestions_matrix <- matrix(LTO_suggestions_mapped, nrow=pop_size, ncol=12, byrow=TRUE)
+LTO_suggestions_matrix <- map_params |> 
+  filter(!is.na(R2R_index)) |> 
+  pull(LTO_suggested) |> 
+  matrix(nrow = pop_size, ncol = 12, byrow = TRUE)
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
