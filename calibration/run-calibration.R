@@ -123,22 +123,24 @@ res <- ga(type = "real-valued",
             function(x) -winter_run_fitness(
               known_adults = grandtab_observed$winter,
               seeds = DSMCalibrationData::grandtab_imputed$winter,
-              params = params_LTO_comparison,
+              params = params,
+              #params = params_LTO_comparison,
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
               x[11], x[12]
             ),
-          lower = map_params_R2R$LTO_mins,
-          upper = map_params_R2R$LTO_maxes,
-          suggestions = LTO_suggestions_matrix,
+          lower = c(2.5, rep(-3.5, 11)), # map_params_R2R$LTO_mins,
+          upper = rep(3.5, 12), # map_params_R2R$LTO_maxes,
+          #suggestions = LTO_suggestions_matrix,
           popSize = pop_size,
           maxiter = iter,
           run = 50,
           parallel = TRUE,
           pmutation = .4)
 
+readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
+
 readr::write_rds(res, paste0("calibration/res-", Sys.Date(), "-LTO_comparison-pop", pop_size, ".rds"))
 
-readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
 
 res <- readr::read_rds(paste0("calibration/res-", Sys.Date(), ".rds"))
 
