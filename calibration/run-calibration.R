@@ -105,13 +105,15 @@ map_params <- tibble("LTO_index" = c(1:16, 13),
                              0.0194795)) |> 
   arrange(R2R_index)
 
+map_params_R2R <- map_params |> 
+  filter(!is.na(R2R_index))
+
 # run LTO calibration, use set.seed(), set same pop size, iterations, etc.
 set.seed(1234)
 pop_size <- 100
 iter <- 10000 
 
-LTO_suggestions_matrix <- map_params |> 
-  filter(!is.na(R2R_index)) |> 
+LTO_suggestions_matrix <- map_params_R2R |> 
   pull(LTO_suggested) |> 
   matrix(nrow = pop_size, ncol = 12, byrow = TRUE)
 
@@ -125,8 +127,8 @@ res <- ga(type = "real-valued",
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
               x[11], x[12]
             ),
-          lower = minz_LTO,
-          upper = maxz_LTO,
+          lower = map_params_R2R$LTO_mins,
+          upper = map_params_R2R$LTO_maxes,
           suggestions = LTO_suggestions_matrix,
           popSize = pop_size,
           maxiter = iter,
