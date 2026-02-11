@@ -13,6 +13,7 @@ winter_run_fitness <- function(
   surv_juv_delta_contact_points,
   surv_juv_delta_total_diverted,
   surv_juv_outmigration_sj_int,
+  surv_egg_to_fry_temp_effect,
   ocean_entry_success_int
 ) {
   
@@ -28,6 +29,7 @@ winter_run_fitness <- function(
   params_init$..surv_juv_delta_contact_points = surv_juv_delta_contact_points
   params_init$..surv_juv_delta_total_diverted = surv_juv_delta_total_diverted
   params_init$..surv_juv_outmigration_sj_int = surv_juv_outmigration_sj_int
+  params_init$..surv_egg_to_fry_mean_egg_temp_effect = surv_egg_to_fry_temp_effect
   params_init$..ocean_entry_success_int = rep(ocean_entry_success_int, 31)
   
   keep <- c(1, 3)
