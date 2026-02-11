@@ -32,8 +32,10 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
         }
       }))
     }
-  
-  if (length(growth) == 16) { # a 4x4 matrix has len == 16, also can check dim = (4, 4)
+
+  # TODO fix the regional case when there are mnay watersheds for juvs
+  # but not the same corresponding
+  if (length(growth) == 16) {
     next_juveniles <- survived %*% growth
   } else {
     next_juveniles <- round(t(sapply(1:nrow(juveniles), function(i) {

@@ -4,11 +4,14 @@
 \name{params}
 \alias{params}
 \alias{params_2019}
+\alias{r_to_r_baseline_params}
 \title{Model Parameters}
 \usage{
 params
 
 params_2019
+
+r_to_r_baseline_params
 }
 \description{
 A list containing all parameters needed for running the \code{\link{winter_run_model}}. Parameters with a single
@@ -110,7 +113,7 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{avg_temp}: See Tributary Rearing Survival \code{avg_temp} above
   \item \code{prop_high_predation}: See Tributary Rearing Survival \code{prop_high_predation} above
   \item \code{..surv_juv_bypass_int}: Intercept, Source: calibration
-  \item \code{.surv_juv_bypass_avg_temp_thresh}: Coefficient for \code{avg_temp_thresh} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/marine_cech_water_temp_effects.pdf}{Marine and Chech (2004)}
+  \item \code{.surv_juv_bypass_avg_temp_thresh}: Coefficient for \code{avg_temp_thresh} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/marine_cech_water_temp_effects.pdf}{Marine and Cech (2004)}
   \item \code{.surv_juv_bypass_high_predation}: Coefficient for \code{high_predation} variable, source: \href{https://pubag.nal.usda.gov/catalog/512123}{Cavallo et al. (2012)}
   \item \code{.surv_juv_bypass_medium}: Size related intercept for medium sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
   \item \code{.surv_juv_bypass_large}: Size related intercept for large sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
@@ -152,7 +155,7 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{CVP_exports}: More details at \code{\link[DSMflow]{cvp_exports}}
   \item \code{SWP_exports}: More details at \code{\link[DSMflow]{swp_exports}}
   \item \code{..surv_juv_outmigration_sj_int} Intercept, source: calibration
-  \item \code{.surv_juv_outmigration_san_joquin_medium} Size related intercept for medium sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
+  \item \code{.surv_juv_outmigration_san_joaquin_medium} Size related intercept for medium sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
   \item \code{.surv_juv_outmigration_san_joaquin_large} Size related intercept for large sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
   \item \code{min_survival_rate} Estimated survival rate if temperature threshold is exceeded, source: expert opinion
   \item \code{avg_temp}: More details at \code{\link[DSMtemperature]{stream_temperature}}

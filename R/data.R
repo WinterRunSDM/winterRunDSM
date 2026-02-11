@@ -8,12 +8,12 @@
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "adult_harvest_rate"
 
-#' Natural Spawners Removal Rate
-#' @title Natural Spawners Removal Rate
+#' Spawners Removal Rate
+#' @title Spawners Removal Rate
 #' @description Spawners removed for hatcheries
 #' @format 1 dimensional array [31 watersheds]
 #' @source
-#' Various \href{https://s3-us-west-2.amazonaws.com/cvpia-reference-docs/AWP+Attachment+1.pdf}{CVPIA Science Integration Team: FY18 Decision Support Model activities and FY17 priorities Memorandum}
+#' Spawner removal rate was derived using coded wire tag analysis. Details and methodology are available \href{https://cvpia-osc.github.io/fallRunDSM/articles/hatchery-analysis.html}{here}.
 #'
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "natural_adult_removal_rate"
@@ -61,7 +61,7 @@
 #' @title Stray Rate
 #' @description Natural straying allocation
 #' @format Vector of length 31 [31 watersheds]
-#' @source Estimated with coded wire tag data 2010–2013 (\href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg= AOvVaw0VgMOwD7knFfSxRZy6k8RG}{Kormos et al. 2012},
+#' @source Estimated with coded wire tag data 2010–2013 (\href{https://www.calfish.org/Portals/2/Programs/CentralValley/CFM/docs/2010_CFM_CWT_Report.pdf}{Kormos et al. 2012},
 #' \href{https://www.rmpc.org/files/mark-mtg-2014-docs/2011_CFM_CWT_Recovery_Report_FAR_2013(Melodie_Palmer-Zwahlen).pdf}{Palmer-Zwahlen & Kormos 2013-2015},
 #' \href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg=AOvVaw3wSbd-zJk1eQa085Xuxiyg}{Palmer-Zwahlen et al. 2018})
 "stray_rate"
@@ -181,7 +181,7 @@ NULL
 #'   \item \code{avg_temp}: See Tributary Rearing Survival \code{avg_temp} above
 #'   \item \code{prop_high_predation}: See Tributary Rearing Survival \code{prop_high_predation} above
 #'   \item \code{..surv_juv_bypass_int}: Intercept, Source: calibration
-#'   \item \code{.surv_juv_bypass_avg_temp_thresh}: Coefficient for \code{avg_temp_thresh} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/marine_cech_water_temp_effects.pdf}{Marine and Chech (2004)}
+#'   \item \code{.surv_juv_bypass_avg_temp_thresh}: Coefficient for \code{avg_temp_thresh} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/marine_cech_water_temp_effects.pdf}{Marine and Cech (2004)}
 #'   \item \code{.surv_juv_bypass_high_predation}: Coefficient for \code{high_predation} variable, source: \href{https://pubag.nal.usda.gov/catalog/512123}{Cavallo et al. (2012)}
 #'   \item \code{.surv_juv_bypass_medium}: Size related intercept for medium sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
 #'   \item \code{.surv_juv_bypass_large}: Size related intercept for large sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
@@ -217,7 +217,7 @@ NULL
 #'   \item \code{CVP_exports}: More details at \code{\link[DSMflow]{cvp_exports}}
 #'   \item \code{SWP_exports}: More details at \code{\link[DSMflow]{swp_exports}}
 #'   \item \code{..surv_juv_outmigration_sj_int} Intercept, source: calibration
-#'   \item \code{.surv_juv_outmigration_san_joquin_medium} Size related intercept for medium sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
+#'   \item \code{.surv_juv_outmigration_san_joaquin_medium} Size related intercept for medium sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
 #'   \item \code{.surv_juv_outmigration_san_joaquin_large} Size related intercept for large sized fish, source: \href{https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1577/M02-161.1}{Connor et al. (2004)}
 #'   \item \code{min_survival_rate} Estimated survival rate if temperature threshold is exceeded, source: expert opinion
 #'   \item \code{avg_temp}: More details at \code{\link[DSMtemperature]{stream_temperature}}
@@ -272,3 +272,7 @@ NULL
 #' @rdname params
 #' @format NULL
 "params_2019"
+
+#' @rdname params
+#' @format NULL
+"r_to_r_baseline_params"
