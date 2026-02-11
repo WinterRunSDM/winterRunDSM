@@ -32,7 +32,7 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
         }
       }))
     }
-  
+
   # TODO fix the regional case when there are mnay watersheds for juvs
   # but not the same corresponding
   if (length(growth) == 16) {

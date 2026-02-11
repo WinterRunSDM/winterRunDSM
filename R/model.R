@@ -375,6 +375,10 @@ winter_run_model <- function(scenario = NULL,
     growth_temps <- ..params$avg_temp
     growth_temps[which(growth_temps > 28)] <- 28
     
+    
+    growth_temps <- ..params$avg_temp
+    growth_temps[which(growth_temps > 28)] <- 28
+    
     for (month in c(9:12, 1:5)) {
       if (month %in% 1:5) iter_year <- year + 1 else iter_year <- year
       
