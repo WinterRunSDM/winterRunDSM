@@ -276,3 +276,7 @@ NULL
 #' @rdname params
 #' @format NULL
 "r_to_r_baseline_params"
+
+#' @rdname params
+#' @format NULL
+"wr_sdm_baseline_params"
