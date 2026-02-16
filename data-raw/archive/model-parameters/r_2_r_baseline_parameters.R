@@ -153,7 +153,7 @@ r_to_r_baseline_params <- list(
   above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$wr, # R2R - above dam proportion
   
   # TODO fix this update through out the model (remove ..)  
-  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::params_2019$..surv_egg_to_fry_mean_egg_temp_effect,
+  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::wr_sdm_baseline_params$..surv_egg_to_fry_mean_egg_temp_effect,
   
   # Calibration Variables (vary by run)
   ..surv_adult_enroute_int = solution[1],

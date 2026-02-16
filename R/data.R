@@ -267,16 +267,4 @@ NULL
 #'   \item \code{diversity_group}: More details at \code{\link{diversity_group}}
 #' }
 #' @usage params
-"params"
-
-#' @rdname params
-#' @format NULL
-"params_2019"
-
-#' @rdname params
-#' @format NULL
-"r_to_r_baseline_params"
-
-#' @rdname params
-#' @format NULL
 "wr_sdm_baseline_params"

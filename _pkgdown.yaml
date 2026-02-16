@@ -16,7 +16,7 @@ reference:
   desc: The winter run life cycle model and it's parameters
   contents:
   - winter_run_model
-  - params
+  - wr_sdm_baseline_params
 
 - title: Survival Sub-models
   desc: Functions that calculate survival

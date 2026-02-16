@@ -162,7 +162,7 @@ r1_nat_spawners <- as_tibble(r1_sim[keep, ,drop = F]) %>%
          year = readr::parse_number(year) + 5)
 
 
-r1_observed <- as_tibble((1 - winterRunDSM::params$proportion_hatchery[keep]) * DSMCalibrationData::grandtab_observed$winter[keep, ]) %>%
+r1_observed <- as_tibble((1 - winterRunDSM::wr_sdm_baseline_params$proportion_hatchery[keep]) * DSMCalibrationData::grandtab_observed$winter[keep, ]) %>%
   mutate(watershed = DSMscenario::watershed_labels[keep]) %>%
   gather(year, spawners, -watershed) %>%
   mutate(type = "observed", year = as.numeric(year) - 1997) %>%

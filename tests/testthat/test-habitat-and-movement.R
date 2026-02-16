@@ -45,12 +45,12 @@ expected_habitat <- list(inchannel = c(`Upper Sacramento River` = 284862.5186007
 
 test_that('The get_habitat function returns the expected values for year 1 and month 3', {
   expect_equal(get_habitat(year = year, month = month,
-                           inchannel_habitat_fry = winterRunDSM::params$inchannel_habitat_fry,
-                           inchannel_habitat_juvenile = winterRunDSM::params$inchannel_habitat_juvenile,
-                           floodplain_habitat = winterRunDSM::params$floodplain_habitat,
-                           sutter_habitat = winterRunDSM::params$sutter_habitat,
-                           yolo_habitat = winterRunDSM::params$yolo_habitat,
-                           delta_habitat = winterRunDSM::params$delta_habitat), expected_habitat)
+                           inchannel_habitat_fry = winterRunDSM::wr_sdm_baseline_params$inchannel_habitat_fry,
+                           inchannel_habitat_juvenile = winterRunDSM::wr_sdm_baseline_params$inchannel_habitat_juvenile,
+                           floodplain_habitat = winterRunDSM::wr_sdm_baseline_params$floodplain_habitat,
+                           sutter_habitat = winterRunDSM::wr_sdm_baseline_params$sutter_habitat,
+                           yolo_habitat = winterRunDSM::wr_sdm_baseline_params$yolo_habitat,
+                           delta_habitat = winterRunDSM::wr_sdm_baseline_params$delta_habitat), expected_habitat)
 })
 
 # Test movement functions ------------------------------------------------------
@@ -73,9 +73,9 @@ test_that('The ocean entry success function returns the expected values for year
   ocean_entry_actual <- ocean_entry_success(migrants = migrants_at_golden_gate,
                                             month = month,
                                             avg_ocean_transition_month = avg_ocean_transition_month,
-                                            .ocean_entry_success_length = winterRunDSM::params$.ocean_entry_success_length,
-                                            ..ocean_entry_success_int = winterRunDSM::params$..ocean_entry_success_int,
-                                            .ocean_entry_success_months = winterRunDSM::params$.ocean_entry_success_months,
+                                            .ocean_entry_success_length = winterRunDSM::wr_sdm_baseline_params$.ocean_entry_success_length,
+                                            ..ocean_entry_success_int = winterRunDSM::wr_sdm_baseline_params$..ocean_entry_success_int,
+                                            .ocean_entry_success_months = winterRunDSM::wr_sdm_baseline_params$.ocean_entry_success_months,
                                             stochastic = TRUE)
   expect_equal(ocean_entry_actual,
                expected_ocean_entry_success)
@@ -90,9 +90,9 @@ test_that('The ocean entry success function returns the expected values for year
   expect_equal(ocean_entry_success(migrants = migrants_at_golden_gate,
                                    month = month,
                                    avg_ocean_transition_month = avg_ocean_transition_month,
-                                   .ocean_entry_success_length = winterRunDSM::params$.ocean_entry_success_length,
-                                   ..ocean_entry_success_int = winterRunDSM::params$..ocean_entry_success_int,
-                                   .ocean_entry_success_months = winterRunDSM::params$.ocean_entry_success_months,
+                                   .ocean_entry_success_length = winterRunDSM::wr_sdm_baseline_params$.ocean_entry_success_length,
+                                   ..ocean_entry_success_int = winterRunDSM::wr_sdm_baseline_params$..ocean_entry_success_int,
+                                   .ocean_entry_success_months = winterRunDSM::wr_sdm_baseline_params$.ocean_entry_success_months,
                                    stochastic = FALSE),
                expected_ocean_entry_success_det)
 })
@@ -151,7 +151,7 @@ expected_pulse_movement <- structure(c(0.000453375580564798, 0.00045004799330693
                                                                                                     )))
 
 test_that('The pulse_movement function returns the expected values for year 1 month 3', {
-  expect_equal(pulse_movement(winterRunDSM::params$prop_pulse_flows[ , month]),
+  expect_equal(pulse_movement(winterRunDSM::wr_sdm_baseline_params$prop_pulse_flows[ , month]),
                expected_pulse_movement)
 })
 
@@ -221,16 +221,16 @@ test_that('The route function returns the expected values for year 1 month 3, st
                  juveniles = juveniles,
                  inchannel_habitat = expected_habitat$inchannel,
                  floodplain_habitat = expected_habitat$floodplain,
-                 prop_pulse_flows = winterRunDSM::params$prop_pulse_flows,
-                 .pulse_movement_intercept = winterRunDSM::params$.pulse_movement_intercept,
-                 .pulse_movement_proportion_pulse = winterRunDSM::params$.pulse_movement_proportion_pulse,
-                 .pulse_movement_medium = winterRunDSM::params$.pulse_movement_medium,
-                 .pulse_movement_large = winterRunDSM::params$.pulse_movement_large,
-                 .pulse_movement_vlarge = winterRunDSM::params$.pulse_movement_vlarge,
-                 .pulse_movement_medium_pulse = winterRunDSM::params$.pulse_movement_medium_pulse,
-                 .pulse_movement_large_pulse = winterRunDSM::params$.pulse_movement_large_pulse,
-                 .pulse_movement_very_large_pulse = winterRunDSM::params$.pulse_movement_very_large_pulse,
-                 territory_size = winterRunDSM::params$territory_size,
+                 prop_pulse_flows = winterRunDSM::wr_sdm_baseline_params$prop_pulse_flows,
+                 .pulse_movement_intercept = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_intercept,
+                 .pulse_movement_proportion_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_proportion_pulse,
+                 .pulse_movement_medium = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_medium,
+                 .pulse_movement_large = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_large,
+                 .pulse_movement_vlarge = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_vlarge,
+                 .pulse_movement_medium_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_medium_pulse,
+                 .pulse_movement_large_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_large_pulse,
+                 .pulse_movement_very_large_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_very_large_pulse,
+                 territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                  stochastic = TRUE)
   expect_equal(route, expected_route)
 })
@@ -288,16 +288,16 @@ test_that('The route function returns the expected values for year 1 month 3, st
                  juveniles = juveniles,
                  inchannel_habitat = expected_habitat$inchannel,
                  floodplain_habitat = expected_habitat$floodplain,
-                 prop_pulse_flows = winterRunDSM::params$prop_pulse_flows,
-                 .pulse_movement_intercept = winterRunDSM::params$.pulse_movement_intercept,
-                 .pulse_movement_proportion_pulse = winterRunDSM::params$.pulse_movement_proportion_pulse,
-                 .pulse_movement_medium = winterRunDSM::params$.pulse_movement_medium,
-                 .pulse_movement_large = winterRunDSM::params$.pulse_movement_large,
-                 .pulse_movement_vlarge = winterRunDSM::params$.pulse_movement_vlarge,
-                 .pulse_movement_medium_pulse = winterRunDSM::params$.pulse_movement_medium_pulse,
-                 .pulse_movement_large_pulse = winterRunDSM::params$.pulse_movement_large_pulse,
-                 .pulse_movement_very_large_pulse = winterRunDSM::params$.pulse_movement_very_large_pulse,
-                 territory_size = winterRunDSM::params$territory_size,
+                 prop_pulse_flows = winterRunDSM::wr_sdm_baseline_params$prop_pulse_flows,
+                 .pulse_movement_intercept = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_intercept,
+                 .pulse_movement_proportion_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_proportion_pulse,
+                 .pulse_movement_medium = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_medium,
+                 .pulse_movement_large = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_large,
+                 .pulse_movement_vlarge = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_vlarge,
+                 .pulse_movement_medium_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_medium_pulse,
+                 .pulse_movement_large_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_large_pulse,
+                 .pulse_movement_very_large_pulse = winterRunDSM::wr_sdm_baseline_params$.pulse_movement_very_large_pulse,
+                 territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                  stochastic = FALSE)
   expect_equal(route, expected_route_det)
 })
@@ -357,7 +357,7 @@ test_that('The route_bypass function returns the expected values for year 1 mont
   route_sutter <- route_bypass(bypass_fish = sutter_fish,
                                bypass_habitat = expected_habitat$sutter,
                                migration_survival_rate = migratory_survival$sutter,
-                               territory_size = winterRunDSM::params$territory_size,
+                               territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                                stochastic = TRUE)
   expect_equal(route_sutter, expected_route_sutter)
 })
@@ -385,7 +385,7 @@ test_that('The route_bypass function returns the expected values for year 1 mont
   route_sutter <- route_bypass(bypass_fish = sutter_fish,
                                bypass_habitat = expected_habitat$sutter,
                                migration_survival_rate = migratory_survival$sutter,
-                               territory_size = winterRunDSM::params$territory_size,
+                               territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                                stochastic = FALSE)
   expect_equal(route_sutter, expected_route_sutter_det)
 })
@@ -424,9 +424,9 @@ test_that('The route_regional function returns the expected values for year 1 mo
                           migrants = sutter_fish,
                           inchannel_habitat = expected_habitat$inchannel[16],
                           floodplain_habitat = expected_habitat$floodplain[16],
-                          prop_pulse_flows = winterRunDSM::params$prop_pulse_flows[16, , drop = FALSE],
+                          prop_pulse_flows = winterRunDSM::wr_sdm_baseline_params$prop_pulse_flows[16, , drop = FALSE],
                           migration_survival_rate = migratory_survival$uppermid_sac,
-                          territory_size = winterRunDSM::params$territory_size,
+                          territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                           stochastic = TRUE)
   expect_equal(route, expected_route_regional)
 })
@@ -465,9 +465,9 @@ test_that('The route_regional function returns the expected values for year 1 mo
                           migrants = sutter_fish,
                           inchannel_habitat = expected_habitat$inchannel[16],
                           floodplain_habitat = expected_habitat$floodplain[16],
-                          prop_pulse_flows = winterRunDSM::params$prop_pulse_flows[16, , drop = FALSE],
+                          prop_pulse_flows = winterRunDSM::wr_sdm_baseline_params$prop_pulse_flows[16, , drop = FALSE],
                           migration_survival_rate = migratory_survival$uppermid_sac,
-                          territory_size = winterRunDSM::params$territory_size,
+                          territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                           stochastic = FALSE)
   expect_equal(route, expected_route_regional_det)
 })
@@ -476,8 +476,8 @@ test_that('The route_regional function returns the expected values for year 1 mo
 expected_south_delta_routing <- 0.184891187138488
 
 test_that('The south delta routing function returns the expected values for year 1 month 3', {
-  expect_equal(route_to_south_delta(freeport_flow = winterRunDSM::params$freeport_flows[[month, year]] * 35.3147,
-                                    dcc_closed = winterRunDSM::params$cc_gates_days_closed[month],
+  expect_equal(route_to_south_delta(freeport_flow = winterRunDSM::wr_sdm_baseline_params$freeport_flows[[month, year]] * 35.3147,
+                                    dcc_closed = winterRunDSM::wr_sdm_baseline_params$cc_gates_days_closed[month],
                                     month = month),
                expected_south_delta_routing)
 })
@@ -655,14 +655,14 @@ test_that('The route_and_rear_delta function returns the expected values for yea
                                                   south_delta_fish = south_delta_fish,
                                                   north_delta_habitat = expected_habitat$north_delta,
                                                   south_delta_habitat = expected_habitat$south_delta,
-                                                  cc_gates_days_closed = winterRunDSM::params$cc_gates_days_closed,
-                                                  freeport_flows = winterRunDSM::params$freeport_flows,
+                                                  cc_gates_days_closed = winterRunDSM::wr_sdm_baseline_params$cc_gates_days_closed,
+                                                  freeport_flows = winterRunDSM::wr_sdm_baseline_params$freeport_flows,
                                                   rearing_survival_delta = rearing_survival$delta,
                                                   migratory_survival_delta = migratory_survival$delta,
                                                   migratory_survival_bay_delta = migratory_survival$bay_delta,
                                                   juveniles_at_chipps = juveniles_at_chipps,
                                                   growth_rates = growth_rates,
-                                                  territory_size = winterRunDSM::params$territory_size,
+                                                  territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                                                   stochastic = TRUE)
   expect_equal(actual_delta_routing, expectd_delta_routing)
 })
@@ -722,14 +722,14 @@ test_that('The route_and_rear_delta function returns the expected values for yea
                                                 south_delta_fish = south_delta_fish,
                                                 north_delta_habitat = expected_habitat$north_delta,
                                                 south_delta_habitat = expected_habitat$south_delta,
-                                                cc_gates_days_closed = winterRunDSM::params$cc_gates_days_closed,
-                                                freeport_flows = winterRunDSM::params$freeport_flows,
+                                                cc_gates_days_closed = winterRunDSM::wr_sdm_baseline_params$cc_gates_days_closed,
+                                                freeport_flows = winterRunDSM::wr_sdm_baseline_params$freeport_flows,
                                                 rearing_survival_delta = rearing_survival$delta,
                                                 migratory_survival_delta = migratory_survival$delta,
                                                 migratory_survival_bay_delta = migratory_survival$bay_delta,
                                                 juveniles_at_chipps = juveniles_at_chipps,
                                                 growth_rates = growth_rates,
-                                                territory_size = winterRunDSM::params$territory_size,
+                                                territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size,
                                                 stochastic = FALSE)
   expect_equal(actual_delta_routing, expected_delta_routing_det)
 })
@@ -776,7 +776,7 @@ expected_fill_natal <- list(inchannel = structure(c(5709299, 95877.4873630614, 4
 test_that('the fill_natal function returns the expected output, stochastic = TRUE', {
   expect_equal(fill_natal(juveniles = juveniles, inchannel_habitat = expected_habitat$inchannel,
                           floodplain_habitat = expected_habitat$floodplain,
-                          territory_size = winterRunDSM::params$territory_size),
+                          territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size),
                expected_fill_natal)
 })
 
@@ -837,7 +837,7 @@ expected_fill_regional <- list(inchannel = structure(c(3630265, 14772, 61702, 22
 test_that('the fill_regional() function returns the expected output', {
   expect_equal(fill_regional(juveniles = juveniles, habitat = expected_habitat$inchannel,
                              floodplain_habitat = expected_habitat$floodplain,
-                             territory_size = winterRunDSM::params$territory_size),
+                             territory_size = winterRunDSM::wr_sdm_baseline_params$territory_size),
                expected_fill_regional)
 })
 

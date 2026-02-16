@@ -10,9 +10,11 @@ IP-117068
 surv_adult_enroute(
   migratory_temp,
   bypass_overtopped,
-  ..surv_adult_enroute_int = winterRunDSM::params$..surv_adult_enroute_int,
-  .migratory_temp = winterRunDSM::params$.adult_en_route_migratory_temp,
-  .bypass_overtopped = winterRunDSM::params$.adult_en_route_bypass_overtopped
+  ..surv_adult_enroute_int =
+    winterRunDSM::wr_sdm_baseline_params$..surv_adult_enroute_int,
+  .migratory_temp = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_migratory_temp,
+  .bypass_overtopped =
+    winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped
 )
 }
 \arguments{

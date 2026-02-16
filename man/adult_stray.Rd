@@ -14,13 +14,13 @@ adult_stray(
   cross_channel_gates_closed,
   prop_bay_trans = 0,
   prop_delta_trans = 0,
-  .intercept = winterRunDSM::params$.adult_stray_intercept,
-  .wild = winterRunDSM::params$.adult_stray_wild,
-  .natal_flow = winterRunDSM::params$.adult_stray_natal_flow,
+  .intercept = winterRunDSM::wr_sdm_baseline_params$.adult_stray_intercept,
+  .wild = winterRunDSM::wr_sdm_baseline_params$.adult_stray_wild,
+  .natal_flow = winterRunDSM::wr_sdm_baseline_params$.adult_stray_natal_flow,
   .cross_channel_gates_closed =
-    winterRunDSM::params$.adult_stray_cross_channel_gates_closed,
-  .prop_bay_trans = winterRunDSM::params$.adult_stray_prop_bay_trans,
-  .prop_delta_trans = winterRunDSM::params$.adult_stray_prop_delta_trans
+    winterRunDSM::wr_sdm_baseline_params$.adult_stray_cross_channel_gates_closed,
+  .prop_bay_trans = winterRunDSM::wr_sdm_baseline_params$.adult_stray_prop_bay_trans,
+  .prop_delta_trans = winterRunDSM::wr_sdm_baseline_params$.adult_stray_prop_delta_trans
 )
 }
 \arguments{

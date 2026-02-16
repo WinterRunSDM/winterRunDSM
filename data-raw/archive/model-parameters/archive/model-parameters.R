@@ -143,7 +143,7 @@ params <- list(
   prob_nest_scoured = DSMhabitat::prob_nest_scoured,
 
   # TODO fix this update through out the model (remove ..)  
-  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::params_2019$..surv_egg_to_fry_mean_egg_temp_effect,
+  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::wr_sdm_baseline_params$..surv_egg_to_fry_mean_egg_temp_effect,
   
   prey_density = winterRunDSM::prey_density,
   prey_density_delta = winterRunDSM::prey_density_delta,

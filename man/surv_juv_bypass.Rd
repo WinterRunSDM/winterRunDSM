@@ -11,13 +11,14 @@ surv_juv_bypass(
   max_temp_thresh,
   avg_temp_thresh,
   high_predation,
-  ..surv_juv_bypass_int = winterRunDSM::params$..surv_juv_bypass_int,
-  .avg_temp_thresh = winterRunDSM::params$.surv_juv_bypass_avg_temp_thresh,
-  .high_predation = winterRunDSM::params$.surv_juv_bypass_high_predation,
-  .medium = winterRunDSM::params$.surv_juv_bypass_medium,
-  .large = winterRunDSM::params$.surv_juv_bypass_large,
-  .floodplain = winterRunDSM::params$.surv_juv_bypass_floodplain,
-  min_survival_rate = winterRunDSM::params$min_survival_rate,
+  ..surv_juv_bypass_int = winterRunDSM::wr_sdm_baseline_params$..surv_juv_bypass_int,
+  .avg_temp_thresh =
+    winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_avg_temp_thresh,
+  .high_predation = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_high_predation,
+  .medium = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_medium,
+  .large = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_large,
+  .floodplain = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_floodplain,
+  min_survival_rate = winterRunDSM::wr_sdm_baseline_params$min_survival_rate,
   stochastic
 )
 }

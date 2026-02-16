@@ -15,17 +15,21 @@ surv_juv_delta(
   contact_points,
   prop_diverted,
   total_diverted,
-  ..surv_juv_delta_int = winterRunDSM::params$..surv_juv_delta_int,
-  .avg_temp_thresh = winterRunDSM::params$.surv_juv_delta_avg_temp_thresh,
-  .high_predation = winterRunDSM::params$.surv_juv_delta_high_predation,
-  .surv_juv_delta_contact_points = winterRunDSM::params$.surv_juv_delta_contact_points,
-  ..surv_juv_delta_contact_points = winterRunDSM::params$..surv_juv_delta_contact_points,
-  .prop_diverted = winterRunDSM::params$.surv_juv_delta_prop_diverted,
-  .surv_juv_delta_total_diverted = winterRunDSM::params$.surv_juv_delta_total_diverted,
-  ..surv_juv_delta_total_diverted = winterRunDSM::params$..surv_juv_delta_total_diverted,
-  .medium = winterRunDSM::params$.surv_juv_delta_medium,
-  .large = winterRunDSM::params$.surv_juv_delta_large,
-  min_survival_rate = winterRunDSM::params$min_survival_rate,
+  ..surv_juv_delta_int = winterRunDSM::wr_sdm_baseline_params$..surv_juv_delta_int,
+  .avg_temp_thresh = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_avg_temp_thresh,
+  .high_predation = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_high_predation,
+  .surv_juv_delta_contact_points =
+    winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_contact_points,
+  ..surv_juv_delta_contact_points =
+    winterRunDSM::wr_sdm_baseline_params$..surv_juv_delta_contact_points,
+  .prop_diverted = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_prop_diverted,
+  .surv_juv_delta_total_diverted =
+    winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_total_diverted,
+  ..surv_juv_delta_total_diverted =
+    winterRunDSM::wr_sdm_baseline_params$..surv_juv_delta_total_diverted,
+  .medium = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_medium,
+  .large = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_large,
+  min_survival_rate = winterRunDSM::wr_sdm_baseline_params$min_survival_rate,
   stochastic
 )
 }
