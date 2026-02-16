@@ -18,49 +18,21 @@
 winter_run_model <- function(scenario = NULL,
                              mode = c("seed", "simulate", "calibrate"),
                              seeds = NULL,
-                             ..params = winterRunDSM::r_to_r_baseline_params,
+                             ..params = winterRunDSM::wr_sdm_baseline_params,
                              stochastic = FALSE,
                              delta_surv_inflation = FALSE){
   
   mode <- match.arg(mode)
   
+  # code to use the R2Rscenarios package is available at Reorienting-to-Recovery/winterRunDSM/ and for fallRunDSM and springRunDSM
+  # we are converting to using the parameter list for this current modeling effort
+  
   if (mode == "simulate") {
-    if (is.null(scenario)) {
-      # the do nothing scenario to force habitat degradation
+    
       ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
                                              dimnames = list(DSMscenario::watershed_labels,
                                                              1980:2000))
-      scenario_data <- ..params
-    } else {
-      if(is.data.frame(scenario)) {
-        # if you are passing a custom scenario
-        scenario_data <- R2Rscenario::load_scenario(scenario,
-                                                    params = ..params,
-                                                    species = R2Rscenario::species$WINTER_RUN)
-      } else {
-        
-        scenario_group <- case_when(scenario %in% c("elephant", "platypus", "tortoise", "elephant_plus") ~ "balanced_scenarios",
-                                    scenario == "baseline" ~ "baseline_scenarios",
-                                    TRUE ~ "blended_scenarios")
-        
-        # Create new inputs consistent with R2Rscenario package
-        scenario_path <- paste0(paste0("R2Rscenario::scenarios$", scenario_group, "$", scenario))
-        scenario_object <- eval(parse(text = scenario_path))
-        scenario_data <- R2Rscenario::load_scenario(eval(parse(text = scenario_path)),
-                                                    params = ..params,
-                                                    species = R2Rscenario::species$WINTER_RUN)
       }
-      
-      # if(is.null(scenario_object)) {
-      #   stop("The scenario you provided is not in the available options. Please see ??R2Rscenario::scenarios for a list of available scenarios to run.")
-      # }
-      
-      ..params <- scenario_data
-      ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
-                                             dimnames = list(DSMscenario::watershed_labels,
-                                                             1980:2000))
-    }
-  }
 
   if (mode == "calibrate") {
     ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
@@ -702,7 +674,7 @@ winter_run_model <- function(scenario = NULL,
         ..params$movement_hypo_weights[8] * fish_list$route_8_fish$adults_in_ocean
     } # end month loop
     
-    output$juvenile_biomass[ , year] <- juveniles_at_chipps %*% winterRunDSM::params$mass_by_size_class
+    output$juvenile_biomass[ , year] <- juveniles_at_chipps %*% winterRunDSM::wr_sdm_baseline_params$mass_by_size_class
 
     
     # Updated logic here for R2R so that natural adults and hatchery adults return separately
