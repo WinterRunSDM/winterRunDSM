@@ -17,14 +17,14 @@ adult_seeds <- matrix(0, nrow = 31, ncol = 30)
 no_wr_spawn <- !as.logical(DSMhabitat::watershed_species_present[1:31, ]$wr *
                              DSMhabitat::watershed_species_present[1:31,]$spawn)
 
-adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 %>%
-  bind_cols(no_wr_spawn = no_wr_spawn) %>%
-  select(watershed, Winter, no_wr_spawn) %>%
+adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 |>
+  bind_cols(no_wr_spawn = no_wr_spawn) |>
+  select(watershed, Winter, no_wr_spawn) |>
   mutate(corrected_winter = case_when(
     no_wr_spawn ~ 0,
     is.na(Winter) | Winter < 10 ~ 12,
     TRUE ~ Winter)
-  ) %>% pull(corrected_winter)
+  ) |> pull(corrected_winter)
 
 rownames(adult_seeds) <- watershed_labels
 
