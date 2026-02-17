@@ -45,7 +45,6 @@ wr_sdm_baseline_params <- list(
   .adult_stray_prop_delta_trans = 2.89,
   .adult_en_route_migratory_temp = -0.26,
   .adult_en_route_bypass_overtopped = -0.019,
-  .adult_en_route_adult_harvest_rate = winterRunDSM::adult_harvest_rate, # varies by run
   .adult_prespawn_int = 3,
   .adult_prespawn_deg_day = -0.000669526,
   

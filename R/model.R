@@ -166,7 +166,6 @@ winter_run_model <- function(scenario = NULL,
     
     if(mode == "simulate") {
       # harvest logic is only hooking mortality for winterRunDSM
-      # TODO can simplify logic? will likely not be applying 'harvest of hatchery fish only' to winter run
       # HARVEST ----------------------------------------------------------------
       # Incidental harvest percentage 
       hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 

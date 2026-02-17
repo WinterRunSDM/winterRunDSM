@@ -70,7 +70,6 @@ surv_adult_enroute <- function(migratory_temp, bypass_overtopped,
 #' @param ..surv_adult_enroute_int Additional parameters for adult enroute survival.
 #' @param .adult_en_route_migratory_temp Parameter for adult enroute survival related to migratory temperature.
 #' @param .adult_en_route_bypass_overtopped Parameter for adult enroute survival related to bypass overtopped.
-#' @param .adult_en_route_adult_harvest_rate Parameter for adult enroute survival related to adult harvest rate.
 #' @param stochastic Logical indicating whether to include stochastic elements in the simulation.
 #'
 #' @return A list containing the initial number of adults, the proportion of natural adults, and the initial number of adults by month.

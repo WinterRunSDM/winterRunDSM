@@ -63,7 +63,6 @@ reference:
   desc: Data used by the lifecycle model
   contents:
   - adult_seeds
-  - adult_harvest_rate
   - cross_channel_stray_rate
   - growth_rates
   - hatchery_allocation

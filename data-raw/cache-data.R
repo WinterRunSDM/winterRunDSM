@@ -59,10 +59,6 @@ names(mass_by_size_class) <- c("s", "m", "l", "vl")
 usethis::use_data(mass_by_size_class, overwrite = TRUE)
 
 # differs based on run ------
-adult_harvest_rate <- c(0.2, rep(0, 30)) # from Corey Phillis
-names(adult_harvest_rate) <- watershed_labels
-usethis::use_data(adult_harvest_rate, overwrite = TRUE)
-
 natural_adult_removal_rate <- c(mean(c(0.18,0.09,0.07,0.13,0.02,0.03)), rep(0, 30)) # from Doug Killam 2012 - 2017 data  # differs based on run
 names(natural_adult_removal_rate) <- watershed_labels
 usethis::use_data(natural_adult_removal_rate, overwrite = TRUE)
