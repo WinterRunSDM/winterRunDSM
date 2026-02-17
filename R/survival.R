@@ -657,7 +657,6 @@ get_migratory_survival <- function(year, month,
                                    CVP_exports,
                                    SWP_exports,
                                    upper_sacramento_flows,
-                                   san_joaquin_flows,
                                    delta_inflow,
                                    avg_temp_delta,
                                    avg_temp,
@@ -693,8 +692,6 @@ get_migratory_survival <- function(year, month,
   sj_migration_surv <- surv_juv_outmigration_san_joaquin(..surv_juv_outmigration_sj_int = ..surv_juv_outmigration_sj_int,
                                                          .medium = .surv_juv_outmigration_san_joaquin_medium,
                                                          .large = .surv_juv_outmigration_san_joaquin_large)
-  
-  sj_flow <- san_joaquin_flows[month, year]
 
   delta_survival <- surv_juv_outmigration_delta(prop_DCC_closed = cc_gates_prop_days_closed[month],
                                                 hor_barr = 0,

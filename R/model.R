@@ -428,7 +428,6 @@ winter_run_model <- function(scenario = NULL,
                                                    CVP_exports = ..params$CVP_exports,
                                                    SWP_exports = ..params$SWP_exports,
                                                    upper_sacramento_flows = ..params$upper_sacramento_flows,
-                                                   san_joaquin_flows = ..params$san_joaquin_flows,
                                                    delta_inflow = ..params$delta_inflow,
                                                    avg_temp_delta = ..params$avg_temp_delta,
                                                    avg_temp = ..params$avg_temp,
@@ -438,10 +437,6 @@ winter_run_model <- function(scenario = NULL,
                                                    .surv_juv_outmigration_san_joaquin_large = ..params$.surv_juv_outmigration_san_joaquin_large,
                                                    min_survival_rate = ..params$min_survival_rate,
                                                    stochastic = stochastic)
-      # TODO remove
-      if(any(..params$san_joaquin_flows > 0)) {
-        migratory_survival$san_joaquin <- migratory_survival$san_joaquin_flow_based
-      }
       
       if (delta_surv_inflation == TRUE){
         migratory_survival$bay_delta <- min(1, migratory_survival$bay_delt * 2)
