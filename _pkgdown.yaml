@@ -30,7 +30,6 @@ reference:
   - surv_juv_outmigration_delta
   - surv_juv_outmigration_sac
   - surv_juv_outmigration_san_joaquin
-  - surv_juv_outmigration_san_joaquin_flow_based
   - surv_juv_rear
   - spawn_success
   - ocean_entry_success

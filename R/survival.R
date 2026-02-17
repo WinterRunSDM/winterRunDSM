@@ -458,17 +458,6 @@ surv_juv_outmigration_san_joaquin <- function(..surv_juv_outmigration_sj_int = w
   cbind(s = s, m = m, l = l, vl = vl)
 }
 
-#' @title Juvenile Mainstem San Joaquin Outmigration Survival
-#' @description Calculates the Mainstem San Joaquin juvenile out migration survival
-#' @param flow_cms Variable representing upper San Joaquin River flow in cubic meters per second
-#' @source \link[DSMflow FF documentation]{https://reorienting-to-recovery.github.io/DSMflow/articles/EFF_SJ.html}
-#' @export
-surv_juv_outmigration_san_joaquin_flow_based <- function(flow_cms){
-  
-  result <- rep((flow_cms <= 26) * 0.03 + (flow_cms > 26 & flow_cms <= 66) * 0.189 + (flow_cms > 66) * 0.508, 4)
-  setNames(result, springRunDSM::size_class_labels)
-}
-
 
 #' @title Juvenile Delta Outmigration Survival
 #' @description Calculates the North and South Delta juvenile out migration survival
@@ -706,7 +695,6 @@ get_migratory_survival <- function(year, month,
                                                          .large = .surv_juv_outmigration_san_joaquin_large)
   
   sj_flow <- san_joaquin_flows[month, year]
-  sj_migration_surv_flow_based <- surv_juv_outmigration_san_joaquin_flow_based(sj_flow)
 
   delta_survival <- surv_juv_outmigration_delta(prop_DCC_closed = cc_gates_prop_days_closed[month],
                                                 hor_barr = 0,
@@ -730,7 +718,6 @@ get_migratory_survival <- function(year, month,
       sutter = pmin(bp_surv, 1),
       yolo = pmin(bp_surv, 1),
       san_joaquin = pmin(sj_migration_surv, 1),
-      san_joaquin_flow_based = pmin(sj_migration_surv_flow_based, 1),
       delta = pmin(delta_survival, 1),
       bay_delta = pmin(bay_delta_migration_surv, 1)
     ))
