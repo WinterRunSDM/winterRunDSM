@@ -1,12 +1,3 @@
-#' Adult Harvest Rate
-#' @title Adult Harvest Rate
-#' @description Proportion of adults harvested from golden gate until they reach their natal shed
-#' @format 1 dimensional array [31 watersheds]
-#' @source
-#' Various \href{https://s3-us-west-2.amazonaws.com/cvpia-reference-docs/AWP+Attachment+1.pdf}{CVPIA Science Integration Team: FY18 Decision Support Model activities and FY17 priorities Memorandum}
-#'
-#' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
-"adult_harvest_rate"
 
 #' Spawners Removal Rate
 #' @title Spawners Removal Rate
@@ -267,16 +258,4 @@ NULL
 #'   \item \code{diversity_group}: More details at \code{\link{diversity_group}}
 #' }
 #' @usage params
-"params"
-
-#' @rdname params
-#' @format NULL
-"params_2019"
-
-#' @rdname params
-#' @format NULL
-"r_to_r_baseline_params"
-
-#' @rdname params
-#' @format NULL
 "wr_sdm_baseline_params"

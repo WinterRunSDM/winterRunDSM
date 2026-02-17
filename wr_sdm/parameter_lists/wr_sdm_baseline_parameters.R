@@ -45,7 +45,6 @@ wr_sdm_baseline_params <- list(
   .adult_stray_prop_delta_trans = 2.89,
   .adult_en_route_migratory_temp = -0.26,
   .adult_en_route_bypass_overtopped = -0.019,
-  .adult_en_route_adult_harvest_rate = winterRunDSM::adult_harvest_rate, # varies by run
   .adult_prespawn_int = 3,
   .adult_prespawn_deg_day = -0.000669526,
   
@@ -163,7 +162,7 @@ wr_sdm_baseline_params <- list(
   
   # Calibration Variables (vary by run)
   # TODO Liz replace the ..surv_egg_to_fry_mean_egg_temp_effect with the correct calibration parameter
-  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::params_2019$..surv_egg_to_fry_mean_egg_temp_effect,
+  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::wr_sdm_baseline_params$..surv_egg_to_fry_mean_egg_temp_effect,
   ..surv_adult_enroute_int = solution[1],
   ..surv_juv_rear_int = rep(solution[2], 31),
   ..surv_juv_rear_contact_points = solution[3],

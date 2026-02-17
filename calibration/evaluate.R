@@ -38,53 +38,53 @@ results <- parallel::mclapply(1:250, function(i) {run_model(i)}, mc.cores = 15)
 toc()
 
 nat_spawn <- map_df(1:250, function(i) {
-  as_tibble(results[[i]][keep, ]) %>%
-    mutate(watershed = DSMscenario::watershed_labels[keep], run = i) %>%
-    gather(year, nat_spawn, -watershed, -run) %>%
+  as_tibble(results[[i]][keep, ]) |>
+    mutate(watershed = DSMscenario::watershed_labels[keep], run = i) |>
+    gather(year, nat_spawn, -watershed, -run) |>
     mutate(year = readr::parse_number(year) + 5)
 })
 
-grand_tab <- as_tibble(DSMCalibrationData::grandtab_observed$fall[keep,]) %>%
-  mutate(watershed = DSMscenario::watershed_labels[keep]) %>%
-  gather(year, spawners, -watershed) %>%
-  filter(!is.na(spawners)) %>%
+grand_tab <- as_tibble(DSMCalibrationData::grandtab_observed$fall[keep,]) |>
+  mutate(watershed = DSMscenario::watershed_labels[keep]) |>
+  gather(year, spawners, -watershed) |>
+  filter(!is.na(spawners)) |>
   mutate(year = as.numeric(year) - 1997,
          observed_nat_spawn = round(((1-prop_hatch_to_keep[watershed]) * spawners)))
 
-all <- nat_spawn %>%
-  left_join(grand_tab) %>%
+all <- nat_spawn |>
+  left_join(grand_tab) |>
   filter(year > 5)
 
-all %>%
+all |>
   ggplot(aes(x = year, group = run)) +
   geom_line(aes(y = nat_spawn), alpha = .1) +
   geom_line(aes(y = observed_nat_spawn), alpha = .1, color = 'red') +
   # geom_point(aes(y = observed_nat_spawn), alpha = .1, color = 'red', size=.8) +
   facet_wrap(~watershed, scales = 'free_y')
 
-all %>%
-  group_by(watershed, year) %>%
+all |>
+  group_by(watershed, year) |>
   summarise(nat_spawn = mean(nat_spawn),
-            observed_nat_spawn = mean(observed_nat_spawn)) %>%
-  ungroup() %>%
-  filter(!is.na(observed_nat_spawn)) %>%
+            observed_nat_spawn = mean(observed_nat_spawn)) |>
+  ungroup() |>
+  filter(!is.na(observed_nat_spawn)) |>
   ggplot(aes(observed_nat_spawn, nat_spawn)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0)
 
 plot_watershed_scatter <- function(w) {
-  d <- all %>%
-    filter(watershed == w) %>%
-    group_by(year) %>%
+  d <- all |>
+    filter(watershed == w) |>
+    group_by(year) |>
     summarise(nat_spawn = mean(nat_spawn),
-              observed_nat_spawn = mean(observed_nat_spawn)) %>%
-    ungroup() %>%
+              observed_nat_spawn = mean(observed_nat_spawn)) |>
+    ungroup() |>
     filter(!is.na(observed_nat_spawn))
 
   upper_lim <- min(50000, max(d$observed_nat_spawn))
 
 
-  d %>%
+  d |>
     ggplot(aes(observed_nat_spawn, nat_spawn)) +
     geom_point() +
     geom_abline(slope = 1, intercept = 0) +
@@ -99,22 +99,22 @@ plot_watershed_scatter <- function(w) {
 plot_watershed_scatter("Deer Creek")
 
 # valley wide correlation
-all %>%
-  group_by(watershed, year) %>%
+all |>
+  group_by(watershed, year) |>
   summarise(nat_spawn = mean(nat_spawn),
-            observed_nat_spawn = mean(observed_nat_spawn)) %>%
-  filter(!is.na(observed_nat_spawn)) %>%
-  ungroup() %>%
+            observed_nat_spawn = mean(observed_nat_spawn)) |>
+  filter(!is.na(observed_nat_spawn)) |>
+  ungroup() |>
   summarise(r = cor(nat_spawn, observed_nat_spawn))
 
 # watershed level correlations
-all %>%
-  group_by(watershed, year) %>%
+all |>
+  group_by(watershed, year) |>
   summarise(nat_spawn = mean(nat_spawn),
-            observed_nat_spawn = mean(observed_nat_spawn)) %>%
-  filter(!is.na(observed_nat_spawn)) %>%
-  group_by(watershed) %>%
-  summarise(r = cor(nat_spawn, observed_nat_spawn)) %>%
+            observed_nat_spawn = mean(observed_nat_spawn)) |>
+  filter(!is.na(observed_nat_spawn)) |>
+  group_by(watershed) |>
+  summarise(r = cor(nat_spawn, observed_nat_spawn)) |>
   arrange(desc(r))
 
 

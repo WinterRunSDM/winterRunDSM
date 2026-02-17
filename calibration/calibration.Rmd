@@ -76,7 +76,7 @@ R package.
 ```{r echo=FALSE}
 tibble::tibble(
   `Calibration Year` = names(DSMCalibrationData::calibration_year_spawn_index), 
-  `Selected Proxy Year` = DSMCalibrationData::calibration_year_spawn_index) %>% 
+  `Selected Proxy Year` = DSMCalibrationData::calibration_year_spawn_index) |> 
   knitr::kable()
 ```
 
@@ -84,7 +84,7 @@ tibble::tibble(
 ```{r echo=FALSE}
 tibble::tibble(
   `Calibration Year` = names(DSMCalibrationData::calibration_year_index), 
-  `Selected Proxy Year` = DSMCalibrationData::calibration_year_index) %>% 
+  `Selected Proxy Year` = DSMCalibrationData::calibration_year_index) |> 
   knitr::kable()
 ```
 

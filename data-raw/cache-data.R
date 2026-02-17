@@ -17,14 +17,14 @@ adult_seeds <- matrix(0, nrow = 31, ncol = 30)
 no_wr_spawn <- !as.logical(DSMhabitat::watershed_species_present[1:31, ]$wr *
                              DSMhabitat::watershed_species_present[1:31,]$spawn)
 
-adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 %>%
-  bind_cols(no_wr_spawn = no_wr_spawn) %>%
-  select(watershed, Winter, no_wr_spawn) %>%
+adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 |>
+  bind_cols(no_wr_spawn = no_wr_spawn) |>
+  select(watershed, Winter, no_wr_spawn) |>
   mutate(corrected_winter = case_when(
     no_wr_spawn ~ 0,
     is.na(Winter) | Winter < 10 ~ 12,
     TRUE ~ Winter)
-  ) %>% pull(corrected_winter)
+  ) |> pull(corrected_winter)
 
 rownames(adult_seeds) <- watershed_labels
 
@@ -59,10 +59,6 @@ names(mass_by_size_class) <- c("s", "m", "l", "vl")
 usethis::use_data(mass_by_size_class, overwrite = TRUE)
 
 # differs based on run ------
-adult_harvest_rate <- c(0.2, rep(0, 30)) # from Corey Phillis
-names(adult_harvest_rate) <- watershed_labels
-usethis::use_data(adult_harvest_rate, overwrite = TRUE)
-
 natural_adult_removal_rate <- c(mean(c(0.18,0.09,0.07,0.13,0.02,0.03)), rep(0, 30)) # from Doug Killam 2012 - 2017 data  # differs based on run
 names(natural_adult_removal_rate) <- watershed_labels
 usethis::use_data(natural_adult_removal_rate, overwrite = TRUE)

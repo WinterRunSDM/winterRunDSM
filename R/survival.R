@@ -29,20 +29,20 @@
 surv_juv_rear <- function(max_temp_thresh, avg_temp_thresh, high_predation,
                           contact_points, prop_diversions, total_diversions,
                           stranded, weeks_flooded,
-                          ..surv_juv_rear_int = winterRunDSM::params$..surv_juv_rear_int,
-                          .avg_temp_thresh = winterRunDSM::params$.surv_juv_rear_avg_temp_thresh,
-                          .high_predation = winterRunDSM::params$.surv_juv_rear_high_predation,
-                          .surv_juv_rear_contact_points = winterRunDSM::params$.surv_juv_rear_contact_points,
-                          ..surv_juv_rear_contact_points = winterRunDSM::params$..surv_juv_rear_contact_points,
-                          .surv_juv_rear_prop_diversions = winterRunDSM::params$.surv_juv_rear_prop_diversions,
-                          ..surv_juv_rear_prop_diversions = winterRunDSM::params$..surv_juv_rear_prop_diversions,
-                          .surv_juv_rear_total_diversions = winterRunDSM::params$.surv_juv_rear_total_diversions,
-                          ..surv_juv_rear_total_diversions = winterRunDSM::params$..surv_juv_rear_total_diversions,
-                          .stranded = winterRunDSM::params$.surv_juv_rear_stranded,
-                          .medium = winterRunDSM::params$.surv_juv_rear_medium,
-                          .large = winterRunDSM::params$.surv_juv_rear_large,
-                          .floodplain = winterRunDSM::params$.surv_juv_rear_floodplain,
-                          min_survival_rate = winterRunDSM::params$min_survival_rate, 
+                          ..surv_juv_rear_int = winterRunDSM::wr_sdm_baseline_params$..surv_juv_rear_int,
+                          .avg_temp_thresh = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_avg_temp_thresh,
+                          .high_predation = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_high_predation,
+                          .surv_juv_rear_contact_points = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_contact_points,
+                          ..surv_juv_rear_contact_points = winterRunDSM::wr_sdm_baseline_params$..surv_juv_rear_contact_points,
+                          .surv_juv_rear_prop_diversions = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_prop_diversions,
+                          ..surv_juv_rear_prop_diversions = winterRunDSM::wr_sdm_baseline_params$..surv_juv_rear_prop_diversions,
+                          .surv_juv_rear_total_diversions = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_total_diversions,
+                          ..surv_juv_rear_total_diversions = winterRunDSM::wr_sdm_baseline_params$..surv_juv_rear_total_diversions,
+                          .stranded = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_stranded,
+                          .medium = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_medium,
+                          .large = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_large,
+                          .floodplain = winterRunDSM::wr_sdm_baseline_params$.surv_juv_rear_floodplain,
+                          min_survival_rate = winterRunDSM::wr_sdm_baseline_params$min_survival_rate, 
 stochastic){
   # determine the proportion of weeks when flooded vs not
   prop_ic <-ifelse(weeks_flooded > 0, (4 - weeks_flooded) / 4, 1)
@@ -104,13 +104,13 @@ stochastic){
 #' @source IP-117068
 #' @export
 surv_juv_bypass <- function(max_temp_thresh, avg_temp_thresh, high_predation,
-                            ..surv_juv_bypass_int = winterRunDSM::params$..surv_juv_bypass_int,
-                            .avg_temp_thresh = winterRunDSM::params$.surv_juv_bypass_avg_temp_thresh,
-                            .high_predation = winterRunDSM::params$.surv_juv_bypass_high_predation,
-                            .medium = winterRunDSM::params$.surv_juv_bypass_medium,
-                            .large = winterRunDSM::params$.surv_juv_bypass_large,
-                            .floodplain = winterRunDSM::params$.surv_juv_bypass_floodplain,
-                            min_survival_rate = winterRunDSM::params$min_survival_rate, 
+                            ..surv_juv_bypass_int = winterRunDSM::wr_sdm_baseline_params$..surv_juv_bypass_int,
+                            .avg_temp_thresh = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_avg_temp_thresh,
+                            .high_predation = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_high_predation,
+                            .medium = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_medium,
+                            .large = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_large,
+                            .floodplain = winterRunDSM::wr_sdm_baseline_params$.surv_juv_bypass_floodplain,
+                            min_survival_rate = winterRunDSM::wr_sdm_baseline_params$min_survival_rate, 
 stochastic){
 
   base_score <- ..surv_juv_bypass_int + .floodplain +
@@ -156,17 +156,17 @@ stochastic){
 #' @export
 surv_juv_delta <- function(avg_temp, max_temp_thresh, avg_temp_thresh, high_predation, contact_points,
                            prop_diverted, total_diverted,
-                           ..surv_juv_delta_int = winterRunDSM::params$..surv_juv_delta_int,
-                           .avg_temp_thresh = winterRunDSM::params$.surv_juv_delta_avg_temp_thresh,
-                           .high_predation = winterRunDSM::params$.surv_juv_delta_high_predation,
-                           .surv_juv_delta_contact_points = winterRunDSM::params$.surv_juv_delta_contact_points,
-                           ..surv_juv_delta_contact_points = winterRunDSM::params$..surv_juv_delta_contact_points,
-                           .prop_diverted = winterRunDSM::params$.surv_juv_delta_prop_diverted,
-                           .surv_juv_delta_total_diverted = winterRunDSM::params$.surv_juv_delta_total_diverted,
-                           ..surv_juv_delta_total_diverted = winterRunDSM::params$..surv_juv_delta_total_diverted,
-                           .medium = winterRunDSM::params$.surv_juv_delta_medium,
-                           .large =  winterRunDSM::params$.surv_juv_delta_large,
-                           min_survival_rate = winterRunDSM::params$min_survival_rate, 
+                           ..surv_juv_delta_int = winterRunDSM::wr_sdm_baseline_params$..surv_juv_delta_int,
+                           .avg_temp_thresh = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_avg_temp_thresh,
+                           .high_predation = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_high_predation,
+                           .surv_juv_delta_contact_points = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_contact_points,
+                           ..surv_juv_delta_contact_points = winterRunDSM::wr_sdm_baseline_params$..surv_juv_delta_contact_points,
+                           .prop_diverted = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_prop_diverted,
+                           .surv_juv_delta_total_diverted = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_total_diverted,
+                           ..surv_juv_delta_total_diverted = winterRunDSM::wr_sdm_baseline_params$..surv_juv_delta_total_diverted,
+                           .medium = winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_medium,
+                           .large =  winterRunDSM::wr_sdm_baseline_params$.surv_juv_delta_large,
+                           min_survival_rate = winterRunDSM::wr_sdm_baseline_params$min_survival_rate, 
 stochastic){
   # north delta
   north_delta_surv <- c(rep((avg_temp <= 16.5)*.42 + (avg_temp > 16.5 & avg_temp < 19.5) * 0.42 /
@@ -447,26 +447,15 @@ surv_juv_outmigration_sac <- function(flow_cms){
 #' @param .large Size related intercept for large sized fish
 #' @source IP-117068
 #' @export
-surv_juv_outmigration_san_joaquin <- function(..surv_juv_outmigration_sj_int = winterRunDSM::params$..surv_juv_outmigration_sj_int,
-                                              .medium = winterRunDSM::params$.surv_juv_outmigration_san_joaquin_medium,
-                                              .large = winterRunDSM::params$.surv_juv_outmigration_san_joaquin_large){
+surv_juv_outmigration_san_joaquin <- function(..surv_juv_outmigration_sj_int = winterRunDSM::wr_sdm_baseline_params$..surv_juv_outmigration_sj_int,
+                                              .medium = winterRunDSM::wr_sdm_baseline_params$.surv_juv_outmigration_san_joaquin_medium,
+                                              .large = winterRunDSM::wr_sdm_baseline_params$.surv_juv_outmigration_san_joaquin_large){
 
   s <- boot::inv.logit(..surv_juv_outmigration_sj_int)
   m <- boot::inv.logit(..surv_juv_outmigration_sj_int + .medium)
   l <- vl <- boot::inv.logit(..surv_juv_outmigration_sj_int + .large)
 
   cbind(s = s, m = m, l = l, vl = vl)
-}
-
-#' @title Juvenile Mainstem San Joaquin Outmigration Survival
-#' @description Calculates the Mainstem San Joaquin juvenile out migration survival
-#' @param flow_cms Variable representing upper San Joaquin River flow in cubic meters per second
-#' @source \link[DSMflow FF documentation]{https://reorienting-to-recovery.github.io/DSMflow/articles/EFF_SJ.html}
-#' @export
-surv_juv_outmigration_san_joaquin_flow_based <- function(flow_cms){
-  
-  result <- rep((flow_cms <= 26) * 0.03 + (flow_cms > 26 & flow_cms <= 66) * 0.189 + (flow_cms > 66) * 0.508, 4)
-  setNames(result, springRunDSM::size_class_labels)
 }
 
 
@@ -668,7 +657,6 @@ get_migratory_survival <- function(year, month,
                                    CVP_exports,
                                    SWP_exports,
                                    upper_sacramento_flows,
-                                   san_joaquin_flows,
                                    delta_inflow,
                                    avg_temp_delta,
                                    avg_temp,
@@ -704,9 +692,6 @@ get_migratory_survival <- function(year, month,
   sj_migration_surv <- surv_juv_outmigration_san_joaquin(..surv_juv_outmigration_sj_int = ..surv_juv_outmigration_sj_int,
                                                          .medium = .surv_juv_outmigration_san_joaquin_medium,
                                                          .large = .surv_juv_outmigration_san_joaquin_large)
-  
-  sj_flow <- san_joaquin_flows[month, year]
-  sj_migration_surv_flow_based <- surv_juv_outmigration_san_joaquin_flow_based(sj_flow)
 
   delta_survival <- surv_juv_outmigration_delta(prop_DCC_closed = cc_gates_prop_days_closed[month],
                                                 hor_barr = 0,
@@ -730,7 +715,6 @@ get_migratory_survival <- function(year, month,
       sutter = pmin(bp_surv, 1),
       yolo = pmin(bp_surv, 1),
       san_joaquin = pmin(sj_migration_surv, 1),
-      san_joaquin_flow_based = pmin(sj_migration_surv_flow_based, 1),
       delta = pmin(delta_survival, 1),
       bay_delta = pmin(bay_delta_migration_surv, 1)
     ))

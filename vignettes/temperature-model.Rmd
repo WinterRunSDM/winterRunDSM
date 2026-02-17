@@ -94,16 +94,16 @@ The table below shows the Central Valley and delta temperatures grouped by month
 
 ```{r}
 full_temp_data <- read_csv(system.file("extdata", "temperature-data", "Full temperature data.csv", 
-                           package = "winterRunDSM", mustWork = TRUE)) %>% 
-  na.omit() %>%
+                           package = "winterRunDSM", mustWork = TRUE)) |> 
+  na.omit() |>
   mutate(gt20 = ifelse(medC > 20, 1, 0),
          gt25 = ifelse(maxC > 25, 1, 0))
 
-grouped_temp_measures <- full_temp_data %>%
-  group_by(year, month) %>%
+grouped_temp_measures <- full_temp_data |>
+  group_by(year, month) |>
   summarise(prop_gt_20 = round(mean(gt20), 2),
             count_measures_gt_25 = sum(gt25),
-            month_mean_temp = round(mean(medC), 2)) %>% 
+            month_mean_temp = round(mean(medC), 2)) |> 
   ungroup()
 
 jersey_point <- read_csv(system.file("extdata", "temperature-data", "JERSEY POINT.csv", 
@@ -115,21 +115,21 @@ georgiana_slough <- read_csv(system.file("extdata", "temperature-data", "GEORGIA
 potato_slough <-read_csv(system.file("extdata", "temperature-data", "LPotatoSlough.csv", 
                            package = "winterRunDSM", mustWork = TRUE))
 
-delta_full_temp_data <- rbind(jersey_point, dutch_slough, georgiana_slough, potato_slough) %>%
+delta_full_temp_data <- rbind(jersey_point, dutch_slough, georgiana_slough, potato_slough) |>
   mutate(gt20 = ifelse(TempC > 20, 1, 0),
          gt25 = ifelse(TempC > 25, 1, 0))
 
-grouped_temp_measures_delta <- delta_full_temp_data %>%
-  group_by(year, month) %>%
+grouped_temp_measures_delta <- delta_full_temp_data |>
+  group_by(year, month) |>
   summarise(delta_prop_gt_20 = round(mean(gt20), 2),
             delta_count_gt_25 = sum(gt25),
-            delta_month_mean_temp = round(mean(TempC), 2)) %>% 
+            delta_month_mean_temp = round(mean(TempC), 2)) |> 
   ungroup()
 
-combined_temp_measures <- grouped_temp_measures_delta %>% 
+combined_temp_measures <- grouped_temp_measures_delta |> 
   full_join(grouped_temp_measures, by = c("month", "year"))
 
-datatable(combined_temp_measures %>% rename("Year" = year, 
+datatable(combined_temp_measures |> rename("Year" = year, 
                                            "Month" = month,
                                            "CV Number of Measures Exceeding 25°C" = count_measures_gt_25,
                                            "CV Proportion Exceeding 20°C" = prop_gt_20,
@@ -158,7 +158,7 @@ To allow for logistic regression model use, we made the following edits:
 * We edited our `Number of Measures Exceeding 25 degrees` to create a binary column describing when the temperature exceeds 25 in a month (1) and when the temperature does not exceed 25 in a month (0).
 
 ```{r}
-grouped_temp_measures_for_logistic <- grouped_temp_measures %>%
+grouped_temp_measures_for_logistic <- grouped_temp_measures |>
   mutate(prop_gt_20 = case_when(prop_gt_20 == 0 ~ 0.001, 
                                  prop_gt_20 == 1 ~ 0.999,
                                  prop_gt_20 != 0 & prop_gt_20 != 1 ~ prop_gt_20),
@@ -172,8 +172,8 @@ prediction <- boot::inv.logit(lm_summary$coefficients[1, 1] + lm_summary$coeffic
 monthly_predictions <- data.frame(month_means, prediction)
 
 # Repeat for delta 
-delta_grouped_temp_measures_for_logit <- grouped_temp_measures_delta %>%
-  ungroup() %>% 
+delta_grouped_temp_measures_for_logit <- grouped_temp_measures_delta |>
+  ungroup() |> 
   mutate(prop_gt_20 = case_when(delta_prop_gt_20 == 0 ~ 0.001, 
                                  delta_prop_gt_20 == 1 ~ 0.999,
                                  TRUE ~ delta_prop_gt_20),
@@ -206,7 +206,7 @@ The scatter plots below show the mean monthly temperature and the proportion of 
 ranges between 5°C and 25°C.
 
 ```{r}
-cv_plot <- monthly_predictions %>%
+cv_plot <- monthly_predictions |>
   ggplot() +
   geom_line(aes(month_means, prediction), color = "Red") +
   geom_point(data = grouped_temp_measures_for_logistic, aes(x = month_mean_temp, y = prop_gt_20)) +
@@ -215,7 +215,7 @@ cv_plot <- monthly_predictions %>%
   ggtitle("Central Valley Temperature Model") +
   theme(text = element_text(size = 18))
 
-delta_plot <- delta_monthly_predictions %>%
+delta_plot <- delta_monthly_predictions |>
   ggplot() +
   geom_line(aes(month_means, prediction), color = "Red") +
   geom_point(data = delta_grouped_temp_measures_for_logit, aes(x = delta_month_mean_temp, y = delta_prop_gt_20)) +
@@ -231,7 +231,7 @@ grid.arrange(cv_plot, delta_plot, ncol = 2)
 
 
 ```{r}
-grouped_temp_measures_for_logistic <- grouped_temp_measures %>%
+grouped_temp_measures_for_logistic <- grouped_temp_measures |>
   mutate(count_measures_gt_25 = ifelse(count_measures_gt_25 > 1, 1, count_measures_gt_25))
 
 glm_summary <- summary(glm(count_measures_gt_25 ~ month_mean_temp, data=grouped_temp_measures_for_logistic, family='binomial'))
@@ -241,7 +241,7 @@ prediction <- boot::inv.logit(glm_summary$coefficients[1, 1] + glm_summary$coeff
 monthly_predictions <- data.frame(month_means, prediction)
 
 # Delta model
-delta_grouped_temp_measures_for_logit <- grouped_temp_measures_delta %>%
+delta_grouped_temp_measures_for_logit <- grouped_temp_measures_delta |>
   mutate(delta_count_gt_25 = ifelse(delta_count_gt_25 > 1, 1, delta_count_gt_25))
 
 delta_glm_summary <- summary(glm(delta_count_gt_25 ~ delta_month_mean_temp, data = delta_grouped_temp_measures_for_logit, family='binomial'))
@@ -269,7 +269,7 @@ $$P_{> 25} = inv.logit(-155.563 + 6.910016 \times temperature)$$
 
 The scatter plots below show if temp exceeds 25°C for a given mean monthly temperature in the Delta and Central Valley Rivers. The red line is our logistic model prediction based on the numeric input defined above (`boot::inv.logit(Numeric Input)`):
 ```{r}
-cv_plot <- monthly_predictions %>%
+cv_plot <- monthly_predictions |>
   ggplot() +
   geom_line(aes(month_means, prediction), color = "Red") +
   geom_point(data = grouped_temp_measures_for_logistic, aes(x = month_mean_temp, y = count_measures_gt_25)) +
@@ -278,7 +278,7 @@ cv_plot <- monthly_predictions %>%
   ggtitle("Central Valley Temperature Model") +
   theme(text = element_text(size = 18))
 
-delta_plot <- delta_monthly_predictions %>%
+delta_plot <- delta_monthly_predictions |>
   ggplot() +
   geom_line(aes(month_means, prediction), color = "Red") +
   geom_point(data = delta_grouped_temp_measures_for_logit, aes(x = delta_month_mean_temp, y = delta_count_gt_25)) +

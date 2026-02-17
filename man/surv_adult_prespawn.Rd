@@ -9,8 +9,8 @@ IP-117068
 \usage{
 surv_adult_prespawn(
   deg_day,
-  .adult_prespawn_int = winterRunDSM::params$.adult_prespawn_int,
-  .deg_day = winterRunDSM::params$.adult_prespawn_deg_day
+  .adult_prespawn_int = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_int,
+  .deg_day = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_deg_day
 )
 }
 \arguments{

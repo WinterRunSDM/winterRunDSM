@@ -3,7 +3,7 @@
 # compare results
 
 r2r_param_mapping <- tibble("R2R_index" = 1:12) |> 
-  mutate("R2R_name" = c("surv_adult_enroute_int",
+  mutate("R2R_name" = c("..surv_adult_enroute_int",
                     "..surv_juv_rear_int",
                     "..surv_juv_rear_contact_points",
                     "..surv_juv_rear_prop_diversions",
@@ -17,22 +17,22 @@ r2r_param_mapping <- tibble("R2R_index" = 1:12) |>
                     "..ocean_entry_success_int"))
 
 LTO_param_mapping <- tibble("LTO_index" = 1:16,
-                            "LTO_name" = c("juvenile in-channel survival intercept",
-                                           "juvenile floodplains bypass survival intercept",
-                                           "juvenile delta survival functions rearing intercept",
-                                           "juvenile san joaquin outmigration survival intercept",
-                                           "juvenile outmigration survival parameter intercept 1",
-                                           "juvenile outmigration survival parameter intercept 2",
-                                           "juvenile delta outmigration survival intercept 1",
-                                           "juvenile delta outmigration survival intercept 2",
-                                           "juvenile delta outmigration survival intercept 3",
-                                           "ocean entry survival intercept",
+                            "LTO_name" = c("juvenile in-channel and floodplain rearing survival intercept",
+                                           "juvenile bypass rearing survival intercept",
+                                           "juvenile delta rearing survival intercept ",
+                                           "juvenile san joaquin migratory survival intercept ",
+                                           "juvenile sacramento river migratory survival intercept (temperature model)",
+                                           "juvenile sacramento river migratory survival intercept (discharge model)",
+                                           "juvenile delta migratory survival intercept (flow model)",
+                                           "juvenile delta migratory survival intercept (temperature model)",
+                                           "juvenile delta migratory survival intercept (diversion model)",
+                                           "juvenile ocean entry survival intercept",
                                            "adult en route survival intercept",
-                                           "egg to fry survival temperature coefficient",
-                                           "juvenile contact points survival",
-                                           "juvenile proportion diverted survival parameter",
-                                           "juvenile total diverted survival parameter",
-                                           "juvenile rearing survival total diversions parameter"))
+                                           "egg-to-fry survival intercept",
+                                           "effect of contact points on juvenile rearing survival",
+                                           "effect of proportion flow diverted on juvenile rearing/migratory survival",
+                                           "effect of total flow diverted on juvenile rearing/migratory survival",
+                                           "effect of delta diversions on juvenile rearing survival"))
 
 map_params <- tibble("LTO_index" = c(1:16, NA),
                      "R2R_index" = c(2, 6, 7, 10,
@@ -43,7 +43,7 @@ map_params <- tibble("LTO_index" = c(1:16, NA),
   left_join(LTO_param_mapping, by = "LTO_index") |> 
   # pulled over from run-calibration.R
   mutate("LTO_mins" = c(rep(-3.5,10),0,-3.5,rep(0,4), 0), # set 0 for lower bound for en route survival [11]
-         "LTO_maxes" = c(rep(3.5,9),-1,rep(3.5,6), 3.5),
+         "LTO_maxes" = c(rep(3.5,9),-2,rep(3.5,6), 3.5), # changed to -2 based on report
          "LTO_suggested" = c(-0.6558315, -3.4999845,  1.4933417, -3.0188308,  2.0000003,  0.7999889, -3.5000000, -0.1999996,
                              -3.4999920, -2.9839253,  3.4999976,  0.6466230,  0.0194795,  0.1000000,  0.3000000,  0.4820249,
                              0.0194795))

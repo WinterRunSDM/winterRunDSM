@@ -176,8 +176,8 @@ param_sensitivity <- function(param) {
   scalars <- if (param == "weeks_flooded") {
 
     (function() {
-      original <- winterRunDSM::params$weeks_flooded
-      fp_filter <- winterRunDSM::params$floodplain_habitat > 0
+      original <- winterRunDSM::wr_sdm_baseline_params$weeks_flooded
+      fp_filter <- winterRunDSM::wr_sdm_baseline_params$floodplain_habitat > 0
 
       weeks_flooded_scaled <- list()
       weeks_flooded_scaled[[1]] <- pmin(original + 2, 4) * fp_filter

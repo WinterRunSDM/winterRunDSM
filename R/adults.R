@@ -17,12 +17,12 @@
 #' @export
 adult_stray <- function(wild, natal_flow, south_delta_watershed, cross_channel_gates_closed,
                         prop_bay_trans = 0, prop_delta_trans = 0, # bring these up top level so we can have as params based on hatchery logic (can also manipualate props in R2R scenario)
-                        .intercept = winterRunDSM::params$.adult_stray_intercept,
-                        .wild = winterRunDSM::params$.adult_stray_wild,
-                        .natal_flow = winterRunDSM::params$.adult_stray_natal_flow,
-                        .cross_channel_gates_closed = winterRunDSM::params$.adult_stray_cross_channel_gates_closed,
-                        .prop_bay_trans = winterRunDSM::params$.adult_stray_prop_bay_trans,
-                        .prop_delta_trans = winterRunDSM::params$.adult_stray_prop_delta_trans){
+                        .intercept = winterRunDSM::wr_sdm_baseline_params$.adult_stray_intercept,
+                        .wild = winterRunDSM::wr_sdm_baseline_params$.adult_stray_wild,
+                        .natal_flow = winterRunDSM::wr_sdm_baseline_params$.adult_stray_natal_flow,
+                        .cross_channel_gates_closed = winterRunDSM::wr_sdm_baseline_params$.adult_stray_cross_channel_gates_closed,
+                        .prop_bay_trans = winterRunDSM::wr_sdm_baseline_params$.adult_stray_prop_bay_trans,
+                        .prop_delta_trans = winterRunDSM::wr_sdm_baseline_params$.adult_stray_prop_delta_trans){
 
   boot::inv.logit(
     .intercept +
@@ -46,9 +46,9 @@ adult_stray <- function(wild, natal_flow, south_delta_watershed, cross_channel_g
 #' @source IP-117068
 #' @export
 surv_adult_enroute <- function(migratory_temp, bypass_overtopped, 
-                               ..surv_adult_enroute_int = winterRunDSM::params$..surv_adult_enroute_int,
-                               .migratory_temp = winterRunDSM::params$.adult_en_route_migratory_temp,
-                               .bypass_overtopped = winterRunDSM::params$.adult_en_route_bypass_overtopped) {
+                               ..surv_adult_enroute_int = winterRunDSM::wr_sdm_baseline_params$..surv_adult_enroute_int,
+                               .migratory_temp = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_migratory_temp,
+                               .bypass_overtopped = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped) {
 
   pmax(boot::inv.logit(..surv_adult_enroute_int +
                        .migratory_temp * migratory_temp +
@@ -70,7 +70,6 @@ surv_adult_enroute <- function(migratory_temp, bypass_overtopped,
 #' @param ..surv_adult_enroute_int Additional parameters for adult enroute survival.
 #' @param .adult_en_route_migratory_temp Parameter for adult enroute survival related to migratory temperature.
 #' @param .adult_en_route_bypass_overtopped Parameter for adult enroute survival related to bypass overtopped.
-#' @param .adult_en_route_adult_harvest_rate Parameter for adult enroute survival related to adult harvest rate.
 #' @param stochastic Logical indicating whether to include stochastic elements in the simulation.
 #'
 #' @return A list containing the initial number of adults, the proportion of natural adults, and the initial number of adults by month.
@@ -176,8 +175,8 @@ apply_enroute_survival <- function(year,
 #' @source IP-117068
 #' @export
 surv_adult_prespawn <- function(deg_day,
-                                .adult_prespawn_int = winterRunDSM::params$.adult_prespawn_int,
-                                .deg_day = winterRunDSM::params$.adult_prespawn_deg_day){
+                                .adult_prespawn_int = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_int,
+                                .deg_day = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_deg_day){
 
   boot::inv.logit(.adult_prespawn_int + .deg_day * deg_day)
 }

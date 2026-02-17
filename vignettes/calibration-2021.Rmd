@@ -75,15 +75,15 @@ For calibration, we have prepared the GrandTab data in two ways:
 **Observed Values**
 
 ```{r, echo=FALSE, warning=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
-as_tibble(grandtab_observed$winter[keep, ]) %>% 
-  mutate(watershed = winterRunDSM::watershed_labels[keep]) %>% 
-  gather(year, spawners, -watershed) %>% 
-  mutate(year = readr::parse_number(year)) %>% 
+as_tibble(grandtab_observed$winter[keep, ]) |> 
+  mutate(watershed = winterRunDSM::watershed_labels[keep]) |> 
+  gather(year, spawners, -watershed) |> 
+  mutate(year = readr::parse_number(year)) |> 
   plot_ly(x = ~year, y = ~spawners, type = "scatter", mode = "lines", 
           color = ~watershed, 
           hoverinfo = "text", 
           text = ~paste("<b>Year</b>", year, "<br><b>Spawners</b>", 
-                        winterRunDSM::pretty_num(spawners))) %>% 
+                        winterRunDSM::pretty_num(spawners))) |> 
   config(displayModeBar = FALSE)
 
 ```
@@ -94,15 +94,15 @@ as_tibble(grandtab_observed$winter[keep, ]) %>%
 
 ```{r, echo=FALSE, warning=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
 
-as_tibble(grandtab_imputed$winter[keep, ]) %>% 
-  mutate(watershed = winterRunDSM::watershed_labels[keep]) %>% 
-  gather(year, spawners, -watershed) %>% 
-  mutate(year = readr::parse_number(year)) %>% 
+as_tibble(grandtab_imputed$winter[keep, ]) |> 
+  mutate(watershed = winterRunDSM::watershed_labels[keep]) |> 
+  gather(year, spawners, -watershed) |> 
+  mutate(year = readr::parse_number(year)) |> 
   plot_ly(x = ~year, y = ~spawners, type = "scatter", mode = "lines", 
           color = ~watershed, 
           hoverinfo = "text", 
           text = ~paste("<b>Year</b>", year, "<br><b>Spawners</b>", 
-                        winterRunDSM::pretty_num(spawners))) %>% 
+                        winterRunDSM::pretty_num(spawners))) |> 
   config(displayModeBar = FALSE)
 ```
 
@@ -118,7 +118,7 @@ R package.
 ```{r echo=FALSE}
 tibble::tibble(
   `Calibration Year` = names(DSMCalibrationData::calibration_year_spawn_index), 
-  `Selected Proxy Year` = DSMCalibrationData::calibration_year_spawn_index) %>% 
+  `Selected Proxy Year` = DSMCalibrationData::calibration_year_spawn_index) |> 
   knitr::kable()
 ```
 
@@ -126,7 +126,7 @@ tibble::tibble(
 ```{r echo=FALSE}
 tibble::tibble(
   `Calibration Year` = names(DSMCalibrationData::calibration_year_index), 
-  `Selected Proxy Year` = DSMCalibrationData::calibration_year_index) %>% 
+  `Selected Proxy Year` = DSMCalibrationData::calibration_year_index) |> 
   knitr::kable()
 ```
 

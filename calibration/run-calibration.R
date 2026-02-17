@@ -155,17 +155,17 @@ r1_sim <- winter_run_model(seeds = DSMCalibrationData::grandtab_imputed$winter, 
                            stochastic = FALSE)
 
 
-r1_nat_spawners <- as_tibble(r1_sim[keep, ,drop = F]) %>%
-  mutate(watershed = DSMscenario::watershed_labels[keep]) %>%
-  gather(year, spawners, -watershed) %>%
+r1_nat_spawners <- as_tibble(r1_sim[keep, ,drop = F]) |>
+  mutate(watershed = DSMscenario::watershed_labels[keep]) |>
+  gather(year, spawners, -watershed) |>
   mutate(type = "simulated",
          year = readr::parse_number(year) + 5)
 
 
-r1_observed <- as_tibble((1 - winterRunDSM::params$proportion_hatchery[keep]) * DSMCalibrationData::grandtab_observed$winter[keep, ]) %>%
-  mutate(watershed = DSMscenario::watershed_labels[keep]) %>%
-  gather(year, spawners, -watershed) %>%
-  mutate(type = "observed", year = as.numeric(year) - 1997) %>%
+r1_observed <- as_tibble((1 - winterRunDSM::wr_sdm_baseline_params$proportion_hatchery[keep]) * DSMCalibrationData::grandtab_observed$winter[keep, ]) |>
+  mutate(watershed = DSMscenario::watershed_labels[keep]) |>
+  gather(year, spawners, -watershed) |>
+  mutate(type = "observed", year = as.numeric(year) - 1997) |>
   filter(!is.na(spawners),
          year > 5)
 
@@ -174,11 +174,11 @@ r1_observed <- as_tibble((1 - winterRunDSM::params$proportion_hatchery[keep]) * 
 r1_eval_df <- bind_rows(r1_nat_spawners, r1_observed)
 
 
-r1_eval_df %>% 
+r1_eval_df |> 
   ggplot(aes(year, spawners, color = type)) + geom_line() + facet_wrap(~watershed, scales = "free_y")
 
-r1_eval_df %>%
-  spread(type, spawners) %>%
+r1_eval_df |>
+  spread(type, spawners) |>
   ggplot(aes(observed, simulated)) + geom_point() +
   geom_abline(intercept = 0, slope = 1) +
   labs(title = "Observed vs Predicted updated",
@@ -187,17 +187,17 @@ r1_eval_df %>%
   xlim(0, 20000) +
   ylim(0, 20000)
 
-r1_eval_df %>%
-  spread(type, spawners) %>%
-  filter(!is.na(observed)) %>%
-  group_by(watershed) %>%
+r1_eval_df |>
+  spread(type, spawners) |>
+  filter(!is.na(observed)) |>
+  group_by(watershed) |>
   summarise(
     r = cor(observed, simulated, use = "pairwise.complete.obs")
-  ) %>% arrange(desc(abs(r)))
+  ) |> arrange(desc(abs(r)))
 
-r1_eval_df %>%
-  spread(type, spawners) %>%
-  filter(!is.na(observed)) %>%
+r1_eval_df |>
+  spread(type, spawners) |>
+  filter(!is.na(observed)) |>
   summarise(
     r = cor(observed, simulated, use = "pairwise.complete.obs")
   )
