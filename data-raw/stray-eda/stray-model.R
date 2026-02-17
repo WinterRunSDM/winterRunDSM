@@ -21,7 +21,7 @@ sum(data$tot_estnum) ##N expanded recoveries being used in model
 
 ##z-transform all predictors cept categorical variables (LH Type, site type)
 cols_to_transform <- c(2:3, 7, 11:15, 21:33, 36:42)
-data2 <- data %>%
+data2 <- data |>
   mutate(across(all_of(cols_to_transform), ~ ( . - mean(., na.rm = TRUE)) / sd(., na.rm = TRUE)),
          hatchery = as.factor(hatchery))
 
@@ -30,7 +30,7 @@ normalize <- function(x) {
 }
 
 
-data2 <- data %>%
+data2 <- data |>
   mutate(across(all_of(cols_to_transform), ~ normalize(.)))
 
 
