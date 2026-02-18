@@ -28,7 +28,7 @@ juvenile_month_dynamic(
 )
 }
 \arguments{
-\item{fish}{list object containing tracking matrices for juveniles, juveniles at chips, and adults in ocean}
+\item{fish}{list object containing tracking matrices for juveniles, juveniles at Chipps island, and adults in ocean}
 
 \item{year}{year}
 
@@ -40,7 +40,7 @@ juvenile_month_dynamic(
 
 \item{habitat}{habitat for year and month}
 
-\item{..params}{full params list from model parms}
+\item{..params}{full params list from model params}
 
 \item{hypothesis}{movement hypothesis to test}
 }

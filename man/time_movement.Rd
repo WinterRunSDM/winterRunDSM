@@ -2,7 +2,7 @@
 % Please edit documentation in R/movement.R
 \name{time_movement}
 \alias{time_movement}
-\title{Time Movmenet}
+\title{Time Movement}
 \usage{
 time_movement(juveniles, movement_month = 3, stochastic)
 }
