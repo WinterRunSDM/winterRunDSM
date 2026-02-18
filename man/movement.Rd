@@ -32,7 +32,7 @@ genetic_movement(juveniles, p_leave = 0.25, stochastic = FALSE)
 \description{
 Sends fry Chinook salmon out of natal tributaries when they are at the fry stage
 The \code{snow_globe_movement} function sends fish out of natal tributaries
-           when the sum of flows at freeport and vernalis exceed a threshold
+           when the sum of flows at freeport and vernalis exceeds a threshold
 The \code{genetic_movement} function sends fish out of natal tributaries
           based on a user specified proportion
 }

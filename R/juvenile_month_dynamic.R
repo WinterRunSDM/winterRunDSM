@@ -1,13 +1,13 @@
 #' Juvenile Month Dynamics
 #' @description Function to run through monthly juvenile routing and rearing logic.
 #' @param hypothesis movement hypothesis to test
-#' @param fish list object containing tracking matrices for juveniles, juveniles at chips, and adults in ocean
+#' @param fish list object containing tracking matrices for juveniles, juveniles at Chipps island, and adults in ocean
 #' @param year year
 #' @param month month
 #' @param rearing_survival rearing survival for year and month
 #' @param migratory_survival migratory survival for year and month
 #' @param habitat habitat for year and month
-#' @param ..params full params list from model parms
+#' @param ..params full params list from model params
 #' @examples
 #' fish = list(juveniles = juveniles,
 #'             north_delta_fish = north_delta_fish,

@@ -1,7 +1,7 @@
 #' @title Fry fish movement out of natal tributaries
 #' @description Sends fry Chinook salmon out of natal tributaries when they are at the fry stage
 #' The \code{snow_globe_movement} function sends fish out of natal tributaries
-#'            when the sum of flows at freeport and vernalis exceed a threshold
+#'            when the sum of flows at freeport and vernalis exceeds a threshold
 #' The \code{genetic_movement} function sends fish out of natal tributaries
 #'           based on a user specified proportion
 #' @param juveniles An n by 4 matrix of juvenile fish size s, m, l, vl
@@ -71,7 +71,7 @@ temperature_movement <- function(juveniles, movement_month = 3,
   list(river_rear = river_rear, migrants = migrants)
 }
 
-#' @title Time Movmenet
+#' @title Time Movement
 #' @description moves juvenile based on time in simulation
 #' @export
 time_movement <- function(juveniles, movement_month = 3, stochastic){
