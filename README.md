@@ -1,6 +1,9 @@
-# Winter Chinook Salmon Science Iintegration Team Model
+# Winter-Run Chinook Salmon Model for 2026 Winter-Run Structured Decision Making Effort 
 
-## Primary Authors:                                                     
+This model was forked from the [Reorienting to Recovery](https://github.com/Reorienting-to-Recovery/winterRunDSM) model, which was based off the [CVPIA Science Integration Team Model](https://github.com/CVPIA-OSC/winterRunDSM) model.
+The model has undergone a few different iterations for a variety of purposes. 
+
+## Original Authors:                                                     
                                                                      
 James T. Peterson                                                    
 U.S. Geological Survey, Oregon Cooperative Fish and Wildlife         
@@ -11,6 +14,8 @@ Adam Duarte
 USDA Forest Service, Pacific Northwest Research Station  
 Olympia, Washington 98512  
 [adam.duarte\@usda.gov](mailto:adam.duarte@usda.gov)
+
+See [Peterson and Duarte 2020](https://doi.org/10.1111/rec.13244) for information about original model development.
 
 ## Disclaimer:
 Although this code has been processed successfully on a computer system at the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the code for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty. The USGS or the U.S. Government shall not be held liable for improper or incorrect use of the  code  described and/or contained herein.
@@ -24,62 +29,47 @@ IP-117068
 
 ### Package Installation
 The `winterRunDSM` package depends on a number of packages developed by the [CVPIA Open Science Collaborative](https://github.com/CVPIA-OSC). 
-To install `winterRunDSM` and additional `CVPIA-OSC` packages use the `remotes::install_github()` function. 
+Modifications have been made to the packages. For the 2026 Winter Run SDM, install `winterRunDSM` and additional packages using the `remotes::install_github()` function. 
 
 ```r
 # install.packages("remotes")
-remotes::install_github("CVPIA-OSC/winterRunDSM")
-remotes::install_github("CVPIA-OSC/DSMscenario")
+remotes::install_github("WinterRunSDM/winterRunDSM")
 
 # optional - need if calibrating model
 remotes::install_github("CVPIA-OSC/DSMCalibrationData")
 
 # optional - need if wanting to explore or modify flow, habitat, and temperature inputs
-remotes::install_github("CVPIA-OSC/DSMflow")
-remotes::install_github("CVPIA-OSC/DSMhabitat")
-remotes::install_github("CVPIA-OSC/DSMtemperature")
+remotes::install_github("WinterRunSDM/DSMflow")
+remotes::install_github("WinterRunSDM/DSMhabitat")
+remotes::install_github("WinterRunSDM/DSMtemperature")
 ```
 
 ### Run Model
-The `winter_run_model()` is a Winter Run Chinook life cycle model used for [CVPIA's Structured Decision Making Process](http://cvpia.scienceintegrationteam.com/).
+The `winter_run_model()` is a Winter Run Chinook life cycle model originally used for [CVPIA's Structured Decision Making Process](http://cvpia.scienceintegrationteam.com/).
 Running the model simulates Winter Run Chinook population dynamics across 31 watersheds in California over a 20 year period. 
 
-The following code runs the winter run model with SIT defined scenario 1:
-```r
-# seed the model
-winter_run_seeds <- winter_run_model(mode = "seed")
-
-# run the 20 year simulation
-results <- winter_run_model(scenario = DSMscenario::scenarios$ONE,
-                          mode = "simulate",
-                          seeds = winter_run_seeds)
-```
-
 The following code runs the winter run model with a custom scenario defined in `scenario_df`:
+
 ```r
 # define scenario
-scenario_df <- data.frame(watershed = c("Upper Sacramento River", "Battle Creek"),
-                          action = c(3, 2),
-                          start_year = c(1980, 1979),
-                          end_year = c(1989, 1988),
-                          units_of_effort = c(1, 2))
-
-# create scenario input
-scenario <- DSMscenario::get_action_matrices(scenario_df)
+The SDM process led to several proposed scenarios. 
+Scenarios can be created by updating parameter values and running the model.
 
 # seed model
-winter_run_seeds <- winter_run_model(mode = "seed")
+wr_sdm_seeds <- winterRunDSM::winter_run_model(mode = "seed",
+                                              seeds = NULL, 
+                                              ..params = winterRunDSM::wr_sdm_baseline_params)
 
 # evaluate the impact of your scenario over the 20 year simulation
-results <- winter_run_model(scenario = scenario,
-                          mode = "simulate",
-                          seeds = winter_run_seeds)
+wr_sdm_model_results <- winterRunDSM::winter_run_model(mode = "simulate", 
+                                                    ..params = winterRunDSM::wr_sdm_scenario_params,
+                                                    seeds = wr_sdm_seeds)
 ```
 
 ## Details on Supporting Data
 
 ### Dependencies
-The `winterRunDSM` package uses data from several other packages within the [CVPIA Open Science Collaborative](https://github.com/CVPIA-OSC). These relationships are visualized in the dependency graph below. 
+The `winterRunDSM` package uses data from several other packages within the [CVPIA Open Science Collaborative](https://github.com/WinterRunSDM). These relationships are visualized in the dependency graph below. 
 
 <img src="man/figures/dependencyChain.svg" width="100%"/>
 
@@ -91,16 +81,10 @@ All data used in the `winterRunDSM` is passed in as a argument to `winter_run_mo
 * **Habitat Data**: View detailed documentation of habitat data inputs at [DSMhabitat](https://cvpia-osc.github.io/DSMhabitat/). Modeling details for each stream can be viewed [here](https://cvpia-osc.github.io/DSMhabitat/reference/habitat_data.html#modeling-details-for-streams).
 * **Temperature Data**: View detailed documentation of temperature data inputs at [DSMtemperature](https://cvpia-osc.github.io/DSMtemperature/). Modeling details for each stream can be viewed [here](https://cvpia-osc.github.io/DSMtemperature/reference/stream_temperature.html#watershed-modeling-details).
 
-### Scenario Functionality
-
-Running scenarios through the `winter_run_model()` model the impact of restoration actions on Winter Run Chinook populations. 
-The [CVPIA SIT (Science Integration Team)](http://cvpia.scienceintegrationteam.com/) has developed restoration action portfolios composed of actions preformed on watersheds over a set time period. 
-
-There are seven predefined scenarios that were developed by the CVPIA SIT. Additional scenarios can be defined by creating a `scenario_df` describing watershed, action, start year, end year, and units of effort. The function `get_action_matrices()` takes a user defined `scenario_df` and returns a scenario in the correct format to be used as the `scenario` input for `winter_run_model()`. For additional description on how to build a scenario view `load_scenario()` documentation by searching `?DSMscenario::load_scenario()`  
-
 ### Calibration Data
 
-We prepared additional datasets in the `DSMCalibration` package for model calibration:
+Datasets for calibration exist in the `DSMCalibration` package for model calibration. 
+These inputs were used :
 
 1. [GrandTab](https://wildlife.ca.gov/Conservation/Fishes/Chinook-Salmon/Anadromous-Assessment) estimated escapement data for the years 1998-2017. The GrandTab data is prepared as `DSMCalibrationData::grandtab_observed` and is used to measure the difference between model predictions and observed escapements. Grandtab data is additionally prepared as `DSMCalibrationData::grandtab_imputed` and is used to calculate the number of juveniles during the 20 year simulation.
 
