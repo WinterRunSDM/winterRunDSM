@@ -64,7 +64,7 @@ Additionally, we are using [DSMCalibrationData](https://github.com/CVPIA-OSC/DSM
 We will be minimizing the error between [GrandTab](https://wildlife.ca.gov/Conservation/Fishes/Chinook-Salmon/Anadromous-Assessment) estimated escapement data for the years 1998-2017 to natural spawners predicted by the DSM. We are further scaling this error by a weight representing the amount of observed data available for a given watershed. Given that
 GrandTab includes both hatchery and natural spawners, we will scale GrandTab escapement
 values using an estimated proportion natural spawners for each watershed.
-This will allow us to compare predicted natural spawners to psuedo GrandTab natural spawners.
+This will allow us to compare predicted natural spawners to pseudo GrandTab natural spawners.
 
 For calibration, we have prepared the GrandTab data in two ways:
 
