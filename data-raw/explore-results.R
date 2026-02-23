@@ -39,8 +39,8 @@ ggplotly(spawn)
 # CHECK against grandtab
 grandtab_totals <- dplyr::as_tibble(DSMCalibrationData::grandtab_observed$winter)|> 
   dplyr::mutate(location = winterRunDSM::watershed_labels) |>
-  pivot_longer(cols = c(`1998`:`2017`), values_to = 'spawners', names_to = "year") %>%
-  filter(location %in% spawn_regions) |>
+  pivot_longer(cols = c(`1998`:`2017`), values_to = 'spawners', names_to = "year") |> 
+  dplyr::filter(location %in% spawn_regions) |>
   group_by(year,
            location
   ) |>
