@@ -15,7 +15,8 @@ library(DSMCalibrationData)
 source("calibration/fitness.R")
 source("calibration/update-params.R")
 
-params <- DSMCalibrationData::set_synth_years(winterRunDSM::wr_sdm_baseline_params)
+params <- DSMCalibrationData::set_synth_years(winterRunDSM::r_to_r_baseline_params)
+params_LTO_comparison <- DSMCalibrationData::set_synth_years(winterRunDSM::r_to_r_baseline_params)
 
 # Test model 
 test <- winterRunDSM::winter_run_model(mode = "calibrate", 
@@ -25,6 +26,71 @@ test <- winterRunDSM::winter_run_model(mode = "calibrate",
                                       delta_surv_inflation = FALSE)
 
 test
+
+
+# Comparison to LTO -------------------------------------------------------
+
+
+# ensure using same inputs as LTO DSM inputs for comparison
+# also updated to bring in extra calibrated parameters per LTO DSM
+# read in synthetic diversion
+params_LTO_comparison$total_diverted[1,,] <- readRDS(here::here("data-raw", "synth.t.diver.rds"))
+
+# Changed Battle Creek abundances to 0 to match LTO. 
+# Also edited known_adults in res to call known_adults = grandtab_observed$winter instead of DSMCalibrationData::grandtab_observed$winter
+grandtab_observed <- DSMCalibrationData::grandtab_observed
+grandtab_observed$winter[3,]<- 0
+
+# Lines 94-103 of LTO Wrapper script
+  # Q_free, Q_vern, Q_stck, through SWP_exp 
+  # are different years (1998-2017) and values from 
+  # r_to_r_baseline_params$freeport_flows, vernalis_flows, stockton_flows, etc.
+
+# read in calibration data to set above parameters
+# TODO why are they so big?
+# TODO what is Trap_trans? 
+LTO_calib_data <- readRDS("calibration/LTO_inputs/delta-calibration-1980_2017.rds")
+params_LTO_comparison$freeport_flows <- LTO_calib_data$Q_free[,19:38]
+row.names(params_LTO_comparison$freeport_flows) <- month.abb
+
+params_LTO_comparison$vernalis_flows <- LTO_calib_data$Q_vern[,19:38]
+row.names(params_LTO_comparison$vernalis_flows) <- month.abb
+
+params_LTO_comparison$stockton_flows <- LTO_calib_data$Q_stck[,19:38]
+row.names(params_LTO_comparison$stockton_flows) <- month.abb
+
+params_LTO_comparison$prisoners_point_temps <- LTO_calib_data$Temp_pp[,19:38]
+row.names(params_LTO_comparison$prisoners_point_temps) <- month.abb
+
+params_LTO_comparison$vernalis_temps <- LTO_calib_data$Temp_vern[,19:38]
+row.names(params_LTO_comparison$vernalis_temps) <- month.abb
+
+params_LTO_comparison$SWP_exports <- LTO_calib_data$SWP_exp[,19:38]
+row.names(params_LTO_comparison$SWP_exports) <- month.abb
+
+params_LTO_comparison$CVP_exports <- LTO_calib_data$CVP_exp[,19:38]
+row.names(params_LTO_comparison$CVP_exports) <- month.abb
+
+
+# Lines 136-138: what are these decay values?
+# TODO this is a difference in model structure due to changes proposed and accepted to CVPIA in 2023
+# for now we will set Upper Sac to the LTO value for all months (uniform) because it is lower
+params_LTO_comparison$spawn_decay_multiplier["Upper Sacramento River",,] <- 0.9736472 # pulled from calibration script from LTO 
+params_LTO_comparison$spawn_decay_multiplier["Cottonwood Creek",,] <- 0.9736472 
+params_LTO_comparison$spawn_decay_multiplier["Cow Creek",,] <- 0.9736472 
+params_LTO_comparison$spawn_decay_multiplier["Clear Creek",,] <- 0.9736472
+
+params_LTO_comparison$spawn_decay_multiplier["Battle Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Antelope Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Bear Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Big Chico Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Butte Creek",,] <- 0.9949492
+params_LTO_comparison$spawn_decay_multiplier["Deer Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Elder Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Mill Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Paynes Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Stony Creek",,] <- 0.9949492 
+params_LTO_comparison$spawn_decay_multiplier["Thomes Creek",,] <- 0.9949492 
 
 # update mins and maxes to match LTO script
 map_params <- tibble("LTO_index" = c(1:16, 13),
@@ -45,7 +111,7 @@ map_params_R2R <- map_params |>
 # run LTO calibration, use set.seed(), set same pop size, iterations, etc.
 set.seed(1234)
 pop_size <- 100
-iter <- 1
+iter <- 10000 
 
 LTO_suggestions_matrix <- map_params_R2R |> 
   pull(LTO_suggested) |> 
@@ -62,9 +128,9 @@ res <- ga(type = "real-valued",
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
               x[11], x[12]
             ),
-          lower = map_params_R2R$LTO_mins, # c(2.5, rep(-3.5, 11)),
-          upper =  map_params_R2R$LTO_maxes, # rep(3.5, 12),
-          suggestions = LTO_suggestions_matrix,
+          lower = c(2.5, rep(-3.5, 11)), # map_params_R2R$LTO_mins,
+          upper = rep(3.5, 12), # map_params_R2R$LTO_maxes,
+          #suggestions = LTO_suggestions_matrix,
           popSize = pop_size,
           maxiter = iter,
           run = 50,
@@ -73,6 +139,8 @@ res <- ga(type = "real-valued",
 
 readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
 
+readr::write_rds(res, paste0("calibration/res-", Sys.Date(), "-LTO_comparison-pop", pop_size, ".rds"))
+
 
 res <- readr::read_rds(paste0("calibration/res-", Sys.Date(), ".rds"))
 
@@ -80,7 +148,7 @@ res <- readr::read_rds(paste0("calibration/res-", Sys.Date(), ".rds"))
 keep <- c(1, 3)
 r1_solution <- res@solution[1, ]
 
-r1_params <- update_params(x = r1_solution, winterRunDSM::wr_sdm_baseline_params)
+r1_params <- update_params(x = r1_solution, winterRunDSM::r_to_r_baseline_params)
 r1_params <- DSMCalibrationData::set_synth_years(r1_params)
 r1_sim <- winter_run_model(seeds = DSMCalibrationData::grandtab_imputed$winter, mode = "calibrate",
                            ..params = r1_params,
