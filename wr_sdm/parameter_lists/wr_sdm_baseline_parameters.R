@@ -187,7 +187,10 @@ wr_sdm_baseline_params <- list(
   # multi route
   movement_hypo_weights = c(1, rep(0, 7)), # rep(1/8, 8),
   ..habitat_capacity = 5,
-  ..floodplain_capacity = 5
+  ..floodplain_capacity = 5,
+  
+  # winter Run SDM inputs
+  adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels)
   
 )
 

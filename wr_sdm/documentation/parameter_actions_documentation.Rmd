@@ -1,0 +1,13 @@
+---
+title: "parameter_actions_documentation"
+output: html_document
+---
+
+This is to document each update we make to the model in the course of the SDM.
+
+
+## Simple Update to Existing Parameter Value
+
+## Multiplier requiring code changes
+
+## Structural change to model logic

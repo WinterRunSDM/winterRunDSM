@@ -17,7 +17,8 @@ apply_enroute_survival(
   .adult_en_route_migratory_temp,
   .adult_en_route_bypass_overtopped,
   hatchery_release,
-  stochastic
+  stochastic,
+  adult_enroute_surv_mult
 )
 }
 \arguments{
