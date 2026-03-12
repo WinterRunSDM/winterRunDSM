@@ -217,7 +217,9 @@ winter_run_model <- function(scenario = NULL,
                                          .adult_en_route_migratory_temp = ..params$.adult_en_route_migratory_temp,
                                          .adult_en_route_bypass_overtopped = ..params$.adult_en_route_bypass_overtopped,
                                          hatchery_release = ..params$hatchery_release[, , year],
-                                         stochastic = stochastic)
+                                         stochastic = stochastic,
+                                         # winter run SDM parameter
+                                         adult_enroute_surv_mult = ..params$adult_enroute_surv_mult)
     }
     
     init_adults <- round(spawners$init_adults)

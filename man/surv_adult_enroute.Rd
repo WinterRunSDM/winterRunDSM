@@ -14,7 +14,8 @@ surv_adult_enroute(
     winterRunDSM::wr_sdm_baseline_params$..surv_adult_enroute_int,
   .migratory_temp = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_migratory_temp,
   .bypass_overtopped =
-    winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped
+    winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped,
+  adult_enroute_surv_mult = adult_enroute_surv_mult
 )
 }
 \arguments{

@@ -48,11 +48,13 @@ adult_stray <- function(wild, natal_flow, south_delta_watershed, cross_channel_g
 surv_adult_enroute <- function(migratory_temp, bypass_overtopped, 
                                ..surv_adult_enroute_int = winterRunDSM::wr_sdm_baseline_params$..surv_adult_enroute_int,
                                .migratory_temp = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_migratory_temp,
-                               .bypass_overtopped = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped) {
+                               .bypass_overtopped = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped,
+                               # winter run SDM parameter
+                               adult_enroute_surv_mult = adult_enroute_surv_mult) {
 
   pmax(boot::inv.logit(..surv_adult_enroute_int +
                        .migratory_temp * migratory_temp +
-                       .bypass_overtopped * bypass_overtopped), 0)
+                       .bypass_overtopped * bypass_overtopped), 0) * adult_enroute_surv_mult
 }
 
 #' Apply enroute survival to adult salmon
@@ -88,7 +90,9 @@ apply_enroute_survival <- function(year,
                                    .adult_en_route_migratory_temp,
                                    .adult_en_route_bypass_overtopped,
                                    hatchery_release,
-                                   stochastic) {
+                                   stochastic,
+                                   # winter Run SDM parameter
+                                   adult_enroute_surv_mult) {
   # Do adults by month
   # Natural Adults
   natural_adults_by_month <- t(sapply(1:31, function(watershed) {
@@ -124,8 +128,10 @@ apply_enroute_survival <- function(year,
                                               bypass_overtopped = bypass_is_overtopped[,month],
                                               ..surv_adult_enroute_int = ..surv_adult_enroute_int,
                                               .migratory_temp = .adult_en_route_migratory_temp,
-                                              .bypass_overtopped = .adult_en_route_bypass_overtopped)
+                                              .bypass_overtopped = .adult_en_route_bypass_overtopped,
+                                              adult_enroute_surv_mult = adult_enroute_surv_mult)
   }), 1)
+  
   
   # Natural adults
   natural_adults_survived_to_spawning <- sapply(1:4, function(month) {
