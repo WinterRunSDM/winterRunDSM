@@ -170,7 +170,7 @@ winter_run_model <- function(scenario = NULL,
       # Harvest percentage (incidental in tributaries)
       hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 
       adults_after_ocean_harvest <- hatch_adults * (1 - ..params$harvest_rate_ocean) # assume 11% harvest in the ocean 
-      adult_after_harvest <- adults_after_ocean_harvest * (1-..params$harvest_rate_trib)
+      adults_after_harvest <- adults_after_ocean_harvest * (1-..params$harvest_rate_trib)
       hatch_after_harvest_by_age <- round(unname(adults_after_harvest) * as.matrix(default_hatch_age_dist[2:5]))
       row.names(hatch_after_harvest_by_age) = winterRunDSM::watershed_labels
       colnames(hatch_after_harvest_by_age) = c(2, 3, 4, 5)
