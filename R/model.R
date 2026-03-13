@@ -167,17 +167,19 @@ winter_run_model <- function(scenario = NULL,
     if(mode == "simulate") {
       # harvest logic is only hooking mortality for winterRunDSM
       # HARVEST ----------------------------------------------------------------
-      # Incidental harvest percentage 
+      # Harvest percentage (incidental in tributaries)
       hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 
-      adults_after_harvest <- hatch_adults * (1 - ..params$incidental_trib_harvest) # assume 10% hooking mortality 
+      adults_after_ocean_harvest <- hatch_adults * (1 - ..params$harvest_rate_ocean) # assume 11% harvest in the ocean 
+      adult_after_harvest <- adults_after_ocean_harvest * (1-..params$harvest_rate_trib)
       hatch_after_harvest_by_age <- round(unname(adults_after_harvest) * as.matrix(default_hatch_age_dist[2:5]))
       row.names(hatch_after_harvest_by_age) = winterRunDSM::watershed_labels
       colnames(hatch_after_harvest_by_age) = c(2, 3, 4, 5)
       harvested_hatchery_adults <- hatch_adults - adults_after_harvest
       
-      # Incidental harvest percentage 
+      # Harvest percentage (incidental in tributaries)
       nat_adults <- annual_adults_hatch_removed * (1 - seeds$proportion_hatchery)
-      natural_adults_after_harvest <- nat_adults * (1 - .1) # assume 10% hooking mortality 
+      natural_adults_after_ocean_harvest <- nat_adults * (1 - ..params$harvest_rate_ocean) # assume 11% harvest in the ocean 
+      natural_adults_after_harvest <- natural_adults_after_ocean_harvest  * (1-..params$harvest_rate_trib)
       natural_adults_by_age <- round(unname(natural_adults_after_harvest) * as.matrix(default_nat_age_dist[2:5]))
       harvested_natural_adults <- nat_adults - natural_adults_after_harvest
       row.names(natural_adults_by_age) = winterRunDSM::watershed_labels
