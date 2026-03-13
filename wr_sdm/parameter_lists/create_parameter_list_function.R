@@ -11,7 +11,7 @@ action_params <- read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.c
          !is.na(action_id)) |> 
   arrange(parameter_title)
 
-action_params |> filter(action_id == "SR-1")
+action_params |> filter(action_id == "SR-3")
 
 
 
@@ -49,20 +49,55 @@ create_param_list <- function(action_id) {
   
   # Sacramento River ----------------
   if(action_id == "SR-1") {
-    # double floodplain habitat in Upper and Upper-mid Sacramento River
-    param_list$floodplain_habitat["Upper-mid Sacramento River",,] <- param_list$floodplain_habitat["Upper-mid Sacramento River",,]*2
+    # triple floodplain habitat in Upper-mid Sacramento River
+    param_list$floodplain_habitat["Upper-mid Sacramento River",,] <- param_list$floodplain_habitat["Upper-mid Sacramento River",,]*3
   }
   
+  if(action_id == "SR-2a") {
+    # double instream habitat in Upper-mid Sacramento River
+    # TODO do we need to do anything with temperature suitability here? 
+    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
+  }
+  
+  if(action_id == "SR-2b") {
+    # double instream habitat in Upper-mid Sacramento River
+    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
+  }
   
   if(action_id == "SR-4a") {
     # reduce predator contact points by 25%
     param_list$contact_points <- round(param_list$contact_points * 0.75)
-    # TODO explore proportion of high predation. Probably will only choose one of the two parameters.
   }
   
+  if(action_id == "SR-4b") {
+    # reduce prop high predation
+    param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
+  }
   
+  if(action_id == "SR-5") {
+    # reduce effect by 10%
+    param_list$.surv_juv_rear_prop_diversions <- param_list$.surv_juv_rear_prop_diversions * 0.9
+  }
+  
+  if(action_id == "SR-8a") {
+    # TODO TBD on the reduction percentage
+    param_list$contact_points <- round(param_list$contact_points * 0.5)
+  }
+  
+  if(action_id == "SR-8b") {
+    # reduce prop high predation
+    param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
+  }
   # Above Shasta ----------------
-  
+  if(action_id == "SR-9") {
+    # TODO implement this change in model script? or spawn_success? 
+    param_list$effect_upstream_vol_adult_kwk <- 0.99
+    param_list$effect_upstream_vol_juv_kwk <- 0.97
+    # TODO modify this value
+    param_list$spawning_habitat["Upper-mid Sacramento River",,] <- param_list$spawning_habitat["Upper-mid Sacramento River",,] + 4
+  }
   
   
   # Battle Creek--------
