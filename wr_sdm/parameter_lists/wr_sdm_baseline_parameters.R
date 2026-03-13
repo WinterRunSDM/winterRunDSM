@@ -32,8 +32,9 @@ wr_sdm_baseline_params <- list(
   growth_rates = winterRunDSM::growth_rates_inchannel,
   growth_rates_floodplain = winterRunDSM::growth_rates_floodplain,
   mass_by_size_class = winterRunDSM::mass_by_size_class,
-  cross_channel_stray_rate = winterRunDSM::cross_channel_stray_rate,
-  stray_rate = winterRunDSM::stray_rate,
+  # these do not appear to be used 
+  # cross_channel_stray_rate = winterRunDSM::cross_channel_stray_rate,
+  # stray_rate = winterRunDSM::stray_rate,
   diversity_group = winterRunDSM::diversity_group,
   
   # Coefficients for adult submodules
@@ -190,7 +191,8 @@ wr_sdm_baseline_params <- list(
   ..floodplain_capacity = 5,
   
   # winter Run SDM inputs
-  adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels)
+  adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),
+  incidental_trib_harvest = 0.1
   
 )
 
