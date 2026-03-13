@@ -14,7 +14,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
 
 # test out adult enroute survival multiplier
 test_params <- winterRunDSM::wr_sdm_baseline_params
-test_params$adult_enroute_surv_mult["Upper Sacramento River"] <- 2
+test_params$.surv_juv_rear_prop_diversions <- test_params$.surv_juv_rear_prop_diversions * 0.75
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
