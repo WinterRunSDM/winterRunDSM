@@ -77,7 +77,7 @@ create_param_list <- function(action_id) {
   }
   
   if(action_id == "SR-5") {
-    # reduce effect by 75%
+    # reduce effect by 75% - we saw some effect in the spawners but not too drastic
     param_list$.surv_juv_rear_prop_diversions <- param_list$.surv_juv_rear_prop_diversions * 0.75
   }
   
@@ -90,7 +90,7 @@ create_param_list <- function(action_id) {
     # reduce prop high predation
     param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
   }
-  # Above Shasta ----------------
+ 
   if(action_id == "SR-9") {
     # TODO implement this change in model script? or spawn_success? 
     param_list$effect_upstream_vol_adult_kwk <- 0.99
@@ -100,6 +100,11 @@ create_param_list <- function(action_id) {
   }
   
   
+  if(action_id == "SR-11") {
+    param_list$addl_juv_chipps <- 100000
+  }
+  
+  # Above Shasta ----------------
   # Battle Creek--------
   
   # BC-1
