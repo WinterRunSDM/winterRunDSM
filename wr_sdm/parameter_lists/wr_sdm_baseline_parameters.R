@@ -192,7 +192,7 @@ wr_sdm_baseline_params <- list(
   
   # winter Run SDM inputs
   adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),
-  incidental_trib_harvest = 0.1
+  incidental_trib_harvest = setNames(rep(0.1, 31), winterRunDSM::watershed_labels)
   
 )
 

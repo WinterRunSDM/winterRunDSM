@@ -21,7 +21,7 @@ create_param_list <- function(action_id) {
   #Hatchery -----
   
   # H1
-  if(action_id %in% c("H-1")) {
+  if(action_id == "H-1") {
     # change hatchery_release
     param_list$hatchery_release["Upper Sacramento River","l",] <- rep(280000, 20)
     param_list$hatchery_release["Upper-mid Sacramento River","l",] <- rep(90000, 20)
@@ -30,13 +30,13 @@ create_param_list <- function(action_id) {
   }
   
   # H-2b
-  if(action_id %in% c("H-2b")) {
+  if(action_id == "H-2b") {
     # change adult removal rate
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.15
   }
   
   # H-2c
-  if(action_id %in% c("H-2c")) {
+  if(action_id == "H-2c") {
     # change adult removal rate
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.25
   }
@@ -70,7 +70,7 @@ create_param_list <- function(action_id) {
   # BC-1
   if(action_id == "BC-1") {
     # change the incidental/illegal harvest rate
-    param_list$incidental_trib_harvest <- 0.05
+    param_list$incidental_trib_harvest["Battle Creek"] <- 0.05
   }
   
   # BC-8
