@@ -169,7 +169,7 @@ winter_run_model <- function(scenario = NULL,
       # HARVEST ----------------------------------------------------------------
       # Incidental harvest percentage 
       hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 
-      adults_after_harvest <- hatch_adults * (1 - .1) # assume 10% hooking mortality 
+      adults_after_harvest <- hatch_adults * (1 - ..params$incidental_trib_harvest) # assume 10% hooking mortality 
       hatch_after_harvest_by_age <- round(unname(adults_after_harvest) * as.matrix(default_hatch_age_dist[2:5]))
       row.names(hatch_after_harvest_by_age) = winterRunDSM::watershed_labels
       colnames(hatch_after_harvest_by_age) = c(2, 3, 4, 5)
