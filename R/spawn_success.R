@@ -44,7 +44,7 @@ spawn_success <- function(escapement,
 
   spawners <- pmin(spawner_potential, capacity)
 
-  # caluclate natural fry
+  # calculate natural fry
   # TODO remove dependencies and clean up code
   total_nat_spawn <- dplyr::tibble(watershed = winterRunDSM::watershed_labels, spawners = round(spawners * proportion_natural)) |>
     dplyr::left_join(natural_age_distribution, by = c("watershed" = "watershed")) |>
