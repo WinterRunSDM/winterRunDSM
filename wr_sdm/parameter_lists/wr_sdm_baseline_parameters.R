@@ -192,14 +192,14 @@ wr_sdm_baseline_params <- list(
   
   # winter Run SDM inputs
   adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),
-  incidental_trib_harvest = setNames(rep(0.1, 31), winterRunDSM::watershed_labels),
+  harvest_rate_ocean = 0.11,
+  harvest_rate_trib = setNames(rep(0.1, 31), winterRunDSM::watershed_labels),
   # survival estimate for adults - volitional passage past Keswick Dam
   effect_upstream_vol_adult_kwk = 0,
   # survival estimate for juveniles - volitional passage past Keswick Dam
   effect_upstream_vol_juv_kwk = 0
   
-  
-  
+
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)
