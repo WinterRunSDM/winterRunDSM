@@ -197,9 +197,8 @@ wr_sdm_baseline_params <- list(
   # survival estimate for adults - volitional passage past Keswick Dam
   effect_upstream_vol_adult_kwk = 0,
   # survival estimate for juveniles - volitional passage past Keswick Dam
-  effect_upstream_vol_juv_kwk = 0
-  
-
+  effect_upstream_vol_juv_kwk = 0,
+  addl_juv_chipps = 0
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)
