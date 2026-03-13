@@ -199,17 +199,17 @@ winter_run_model <- function(scenario = NULL,
       output$harvested_adults <- dplyr::bind_rows(output$harvested_adults, harvest)
       
       # STRAY --------------------------------------------------------------------
-      adults_after_stray <- apply_straying(year, adults_after_harvest$natural_adults,
-                                           adults_after_harvest$hatchery_adults,
-                                           total_releases = ..params$hatchery_release[, , year],
-                                           release_month = 1,
-                                           flows_oct_nov = ..params$flows_oct_nov,
-                                           flows_apr_may = ..params$flows_apr_may,
-                                           winterRunDSM::monthly_mean_pdo)
+      # adults_after_stray <- apply_straying(year, adults_after_harvest$natural_adults,
+      #                                      adults_after_harvest$hatchery_adults,
+      #                                      total_releases = ..params$hatchery_release[, , year],
+      #                                      release_month = 1,
+      #                                      flows_oct_nov = ..params$flows_oct_nov,
+      #                                      flows_apr_may = ..params$flows_apr_may,
+      #                                      winterRunDSM::monthly_mean_pdo)
       
       # APPLY EN ROUTE SURVIVAL ---------------------------------------------------
       spawners <- apply_enroute_survival(year,
-                                         adults = adults_after_stray,
+                                         adults = adults_after_harvest,
                                          month_return_proportions = ..params$month_return_proportions,
                                          gates_overtopped = ..params$gates_overtopped,
                                          tisdale_bypass_watershed = ..params$tisdale_bypass_watershed,
