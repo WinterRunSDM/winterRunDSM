@@ -87,7 +87,7 @@ winter_run_model <- function(scenario = NULL,
     natural_adults <- round(adults * (1 - ..params$proportion_hatchery))
     
     avg_ocean_transition_month <- ocean_transition_month(stochastic = stochastic) # 2
-    
+
     # R2R logic updates #
     # R2R logic to add fish size as an input -----------------------------------
     default_hatch_age_dist <- tibble::tibble(watershed = winterRunDSM::watershed_labels,
@@ -314,6 +314,12 @@ winter_run_model <- function(scenario = NULL,
     juveniles <- juveniles + sweep(..params$hatchery_release[, , year], 
                                    MARGIN=2, 
                                    (1 - ..params$hatchery_release_proportion_bay), "*")
+    
+    # For use in WR SDM: Add juveniles in drought years
+    # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
+    if (year %in% c(9:13)) {
+      juveniles[ , 4] <- juveniles[ , 4] + ..params$addl_juv_chipps
+    }
     
     fish_list <- lapply(1:8, function(i) list(juveniles = juveniles,
                                               lower_mid_sac_fish = lower_mid_sac_fish,
@@ -641,6 +647,11 @@ winter_run_model <- function(scenario = NULL,
           fish_8_df
         )
       }
+      
+      
+      
+      
+      
       # # For use in the r2r metrics ---------------------------------------------
       juveniles_at_chipps <-
         ..params$movement_hypo_weights[1] * fish_list$route_1_fish$juveniles_at_chipps +
