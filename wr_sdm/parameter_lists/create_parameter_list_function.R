@@ -77,8 +77,8 @@ create_param_list <- function(action_id) {
   }
   
   if(action_id == "SR-5") {
-    # reduce effect by 10%
-    param_list$.surv_juv_rear_prop_diversions <- param_list$.surv_juv_rear_prop_diversions * 0.9
+    # reduce effect by 75%
+    param_list$.surv_juv_rear_prop_diversions <- param_list$.surv_juv_rear_prop_diversions * 0.75
   }
   
   if(action_id == "SR-8a") {
@@ -103,9 +103,10 @@ create_param_list <- function(action_id) {
   # Battle Creek--------
   
   # BC-1
+  # Right now we are only including ocean harvest
   if(action_id == "BC-1") {
     # change the incidental/illegal harvest rate
-    param_list$incidental_trib_harvest["Battle Creek"] <- 0.05
+    param_list$harvest_rate_trib["Battle Creek"] <- 0.05
   }
   
   # BC-8
@@ -120,6 +121,13 @@ create_param_list <- function(action_id) {
     param_list$natural_adult_removal_rate["Battle Creek"] <- 0.25
     #TODO modify stray rate (scale down by 10%)
   }
+  
+  # Other ---------------------
+  # O-2
+  if(action_id == "O-2") {
+  # change the incidental/illegal harvest rate
+    param_list$harvest_rate_ocean <- param_list$harvest_rate_ocean * 0.99
+    }
   
   
   
