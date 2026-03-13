@@ -16,7 +16,7 @@ This is to document each update we make to the model in the course of the SDM.
 
 ## New parameters
 
-* Converted the hard coded 0.1 incidental harvest rate to a watershed object `incidental_trib_harvest` and changed individual values for specific actions 
+* Converted the hard coded 0.1 incidental harvest rate to watershed object `harvest_rate_trib` and `harvest_rate_ocean` and changed individual values for specific actions. Added reduction from harvest in `model.R`. 
 
 ## Multiplier requiring code changes
 
