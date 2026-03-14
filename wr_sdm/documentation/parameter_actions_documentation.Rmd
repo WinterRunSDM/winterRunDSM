@@ -23,3 +23,11 @@ This is to document each update we make to the model in the course of the SDM.
 * Added multiplier `adult_enroute_surv_mult` to change adult enroute survival. Multiplier applied to function `surv_adult_enroute`. Additionally called as function input for `apply_enroute_survival` and in `model.R` under the spawners section.
 
 ## Structural change to model logic
+
+## Changes to baseline conditions
+
+Throughout the process there were certain aspects of the baseline model that did not accurately reflect the true baseline. We made these changes:
+
+* Changed `adult_seeds` in `cache-data.R` to have Battle Creek seeds set to 500, effectively setting the spawner population to 0 in the model. Also changed `proportion_hatchery` in `cache-data.R` to be 100% from 20% for Battle Creek to reflect that there is currently no self-sustaining natural population in Battle Creek.
+
+* Removed the `adult_stray()` function call in the model. This reflects the belief that there is no straying of WRCS currently. In tests this showed minimal effect (i.e. removing the straying function showed about 30 more spawners in year 20 in the Upper Sacramento River when compared to the model run with straying included).

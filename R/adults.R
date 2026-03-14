@@ -97,18 +97,18 @@ apply_enroute_survival <- function(year,
   # Natural Adults
   natural_adults_by_month <- t(sapply(1:31, function(watershed) {
     if (stochastic) {
-      rmultinom(1, rowSums(adults$natural)[watershed], month_return_proportions)
+      rmultinom(1, rowSums(adults$natural_adults)[watershed], month_return_proportions)
     } else {
-      round(rowSums(adults$natural)[watershed] * month_return_proportions)
+      round(rowSums(adults$natural_adults)[watershed] * month_return_proportions)
     }
   }))
   
   # Hatchery Adults
   hatchery_adults_by_month <- t(sapply(1:31, function(watershed) {
     if (stochastic) {
-      rmultinom(1, rowSums(adults$hatchery)[watershed], month_return_proportions)
+      rmultinom(1, rowSums(adults$hatchery_adults)[watershed], month_return_proportions)
     } else {
-      round(rowSums(adults$hatchery)[watershed] * month_return_proportions)
+      round(rowSums(adults$hatchery_adults)[watershed] * month_return_proportions)
     }
   }))
   

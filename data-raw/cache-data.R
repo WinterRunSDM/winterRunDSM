@@ -29,9 +29,7 @@ adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 |>
 rownames(adult_seeds) <- watershed_labels
 
 adult_seeds[ , 1] <- adult_seed_values
-adult_seeds["Battle Creek", 1] <- 1200
-
-usethis::use_data(adult_seeds, overwrite = TRUE)
+adult_seeds["Battle Creek", 1] <- 500 # 1200
 
 rownames(adult_seeds) <- watershed_labels
 usethis::use_data(adult_seeds, overwrite = TRUE)
@@ -41,7 +39,7 @@ usethis::use_data(adult_seeds, overwrite = TRUE)
 proportion_hatchery <- rep(0, 31) #proportion hatchery based on CWT reports
 names(proportion_hatchery) <- watershed_labels
 proportion_hatchery["Upper Sacramento River"] <- 0.1759966
-proportion_hatchery["Battle Creek"] <- .2
+proportion_hatchery["Battle Creek"] <- 1 #.2
 
 usethis::use_data(proportion_hatchery, overwrite = TRUE)
 
