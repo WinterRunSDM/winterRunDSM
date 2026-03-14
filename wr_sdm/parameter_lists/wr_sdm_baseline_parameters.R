@@ -1,6 +1,6 @@
-remotes::install_github("winterRunSDM/DSMhabitat")
-remotes::install_github("winterRunSDM/DSMflow")
-remotes::install_github("winterRunSDM/DSMtemperature")
+# remotes::install_github("winterRunSDM/DSMhabitat")
+# remotes::install_github("winterRunSDM/DSMflow")
+# remotes::install_github("winterRunSDM/DSMtemperature")
 library(DSMhabitat)
 library(DSMflow)
 library(DSMtemperature)
@@ -182,8 +182,8 @@ wr_sdm_baseline_params <- list(
   # TODO
   # Change biop to Action5
   # Flows for stray 
-  flows_oct_nov = DSMflow::hatchery_oct_nov_flows$action_5,
-  flows_apr_may = DSMflow::hatchery_apr_may_flows$action_5,
+  # flows_oct_nov = DSMflow::hatchery_oct_nov_flows$action_5,
+  # flows_apr_may = DSMflow::hatchery_apr_may_flows$action_5,
   
   # multi route
   movement_hypo_weights = c(1, rep(0, 7)), # rep(1/8, 8),

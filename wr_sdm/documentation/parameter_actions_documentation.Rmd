@@ -12,7 +12,11 @@ This is to document each update we make to the model in the course of the SDM.
 
 ## Removal of parameters
 
-* Commented out `stray_rate` and `cross_channel_stray_rate` as they do not appear to be used in this version of the model
+* Commented out STRAY part of `model.R`
+  * Commented out `stray_rate` and `cross_channel_stray_rate` in baseline params as they do not appear to be used in this version of the model
+  * Commented out `flows_oct_nov` and `flows_apr_may` in baseline params associated with straying
+
+
 
 ## New parameters
 
