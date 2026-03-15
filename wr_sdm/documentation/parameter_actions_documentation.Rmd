@@ -16,17 +16,17 @@ This is to document each update we make to the model in the course of the SDM.
   * Commented out `stray_rate` and `cross_channel_stray_rate` in baseline params as they do not appear to be used in this version of the model
   * Commented out `flows_oct_nov` and `flows_apr_may` in baseline params associated with straying
 
-
-
 ## New parameters
 
 * Converted the hard coded 0.1 incidental harvest rate to watershed object `harvest_rate_trib` and `harvest_rate_ocean` and changed individual values for specific actions. Added reduction from harvest in `model.R`. 
+* Created `addl_juv_chipps` to add very large juveniles to the juvenile object in `model.R` during drought years (years 9:13), defined as 2+ dry years in a row
 
 ## Multiplier requiring code changes
 
 * Added multiplier `adult_enroute_surv_mult` to change adult enroute survival. Multiplier applied to function `surv_adult_enroute`. Additionally called as function input for `apply_enroute_survival` and in `model.R` under the spawners section.
 
 ## Structural change to model logic
+
 
 ## Changes to baseline conditions
 
