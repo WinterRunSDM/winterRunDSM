@@ -179,8 +179,7 @@ wr_sdm_baseline_params <- list(
   hatchery_release_proportion_bay = winterRunDSM::hatchery_release_proportion_bay, 
   fecundity_lookup = winterRunDSM::fecundity_by_age,
   
-  # TODO
-  # Change biop to Action5
+
   # Flows for stray 
   # flows_oct_nov = DSMflow::hatchery_oct_nov_flows$action_5,
   # flows_apr_may = DSMflow::hatchery_apr_may_flows$action_5,
@@ -198,6 +197,7 @@ wr_sdm_baseline_params <- list(
   effect_upstream_vol_adult_kwk = 0,
   # survival estimate for juveniles - volitional passage past Keswick Dam
   effect_upstream_vol_juv_kwk = 0,
+  # applied in drought years
   addl_juv_chipps = 0
 )
 
