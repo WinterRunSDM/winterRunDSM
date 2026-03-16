@@ -318,7 +318,7 @@ winter_run_model <- function(scenario = NULL,
     # For use in WR SDM: Add juveniles in drought years
     # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
     if (year %in% c(9:13)) {
-      juveniles[ , 4] <- juveniles[ , 4] + ..params$addl_juv_chipps
+      juveniles[,"vl"] <- juveniles[ ,"vl"] - ..params$addl_juv_chipps
     }
     
     fish_list <- lapply(1:8, function(i) list(juveniles = juveniles,
@@ -624,7 +624,17 @@ winter_run_model <- function(scenario = NULL,
           movement_months = 1:2,
           movement_args = list(movement_month = 3, movement_temp = 15, stochastic = stochastic)
         )
+        
+     
       }
+      
+        # For use in WR SDM: Add juveniles in drought years
+        # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
+        if (year %in% c(9:13)) {
+          fish_list$route_1_fish$juveniles_at_chipps[,"vl"] <- fish_list$route_1_fish$juveniles_at_chipps[,"vl"] + ..params$addl_juv_chipps
+        }
+
+      
       if (FALSE) {
         fish_1_df <- create_fish_df(fish_df = fish_list$route_1_fish, month = month, year = year)
         fish_2_df <- create_fish_df(fish_df = fish_list$route_2_fish, month = month, year = year)
@@ -671,6 +681,10 @@ winter_run_model <- function(scenario = NULL,
       d$year <- year
       d$month <- month
       output$juveniles_at_chipps <- dplyr::bind_rows(output$juveniles_at_chipps, d)
+      
+      # Add juveniles at chipps here 
+      
+      
       # end R2R metric -----------------------------------------------------------
       adults_in_ocean <-
         ..params$movement_hypo_weights[1] * fish_list$route_1_fish$adults_in_ocean +
