@@ -456,15 +456,8 @@ winter_run_model <- function(scenario = NULL,
         migratory_survival$delta[which(migratory_survival$delta * 2 > 1)] <- 1
       }
       
-      # hypothesis are layed out as follows:
-      # 1. base filling + base
-      # 2. base filling + snow
-      # 3. base filling + genetics
-      # 4. base filling + temperature
-      # 5. dens filling + base
-      # 6. dens filling + snow
-      # 7. dens filling + genetics
-      # 8. dens filling + temperature
+      # removed movement hypothesis logic from R2R - can easily
+      # re-implement. Movement hypothesis is 1: base filling + base
       
       # if (..params$movement_hypo_weights[1] != 0){
         fish_list$route_1_fish <- juvenile_month_dynamic(
@@ -479,155 +472,6 @@ winter_run_model <- function(scenario = NULL,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta
         )
-      # }
-      
-      # if (..params$movement_hypo_weights[2] != 0) {
-      #   fish_list$route_2_fish <- juvenile_month_dynamic(
-      #     fish_list$route_2_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     movement_fn = snow_globe_movement,
-      #     movement_months = 1:2,
-      #     movement_args = list(freeport_flow = ..params$freeport_flows[month, year],
-      #                          vernalis_flow = ..params$vernalis_flows[month, year],
-      #                          threshold = 1000, p_leave = 0.3, stochastic = stochastic)
-      #   )
-      # }
-      # if (..params$movement_hypo_weights[3] != 0) {
-      #   fish_list$route_3_fish <- juvenile_month_dynamic(
-      #     fish_list$route_3_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     movement_fn = genetic_movement,
-      #     movement_months = 1:2,
-      #     movement_args = list(p_leave = 0.25, stochastic = stochastic)
-      #   )
-      # }
-      # if (..params$movement_hypo_weights[4] != 0) {
-      #   fish_list$route_4_fish <- juvenile_month_dynamic(
-      #     fish_list$route_4_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     movement_fn = temperature_movement,
-      #     movement_months = 1:2,
-      #     movement_args = list(movement_month = 3, movement_temp = 15, stochastic = stochastic)
-      #   )
-      # }
-      # if (..params$movement_hypo_weights[5] != 0) {
-      #   fish_list$route_5_fish <- juvenile_month_dynamic(
-      #     fish_list$route_5_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     filling_fn = fill_natal_dens_depend, # filling using density dependence
-      #     filling_args = list(up_to_size_class = 2,
-      #                         ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                         ..habitat_capacity = ..params$..habitat_capacity),
-      #     filling_regional_fn = fill_regional_dens_depend,
-      #     filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                                  ..habitat_capacity = ..params$..habitat_capacity)
-      #   )
-      # }
-      # if (..params$movement_hypo_weights[6] != 0) {
-      #   fish_list$route_6_fish <- juvenile_month_dynamic(
-      #     fish_list$route_6_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     filling_fn = fill_natal_dens_depend, # filling using density dependence
-      #     filling_args = list(up_to_size_class = 2, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                         ..habitat_capacity = ..params$..habitat_capacity),
-      #     filling_regional_fn = fill_regional_dens_depend,
-      #     filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                                  ..habitat_capacity = ..params$..habitat_capacity),
-      #     movement_fn = snow_globe_movement,
-      #     movement_months = 1:2,
-      #     movement_args = list(freeport_flow = ..params$freeport_flows[month, year],
-      #                          vernalis_flow = ..params$vernalis_flows[month, year],
-      #                          threshold = 1000, p_leave = 0.3, stochastic = stochastic)
-      #   )
-      # }
-      # if (..params$movement_hypo_weights[7] != 0) {
-      #   fish_list$route_7_fish <- juvenile_month_dynamic(
-      #     fish_list$route_7_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     filling_fn = fill_natal_dens_depend, # filling using density dependence
-      #     filling_args = list(up_to_size_class = 2, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                         ..habitat_capacity = ..params$..habitat_capacity),
-      #     filling_regional_fn = fill_regional_dens_depend,
-      #     filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                                  ..habitat_capacity = ..params$..habitat_capacity),
-      #     movement_fn = genetic_movement,
-      #     movement_months = 1:2,
-      #     movement_args = list(p_leave = 0.25, stochastic = stochastic)
-      #   )
-      # }
-      # if (..params$movement_hypo_weights[8] != 0) {
-      #   fish_list$route_8_fish <- juvenile_month_dynamic(
-      #     fish_list$route_8_fish,
-      #     year = year, month = month,
-      #     rearing_survival = rearing_survival,
-      #     migratory_survival = migratory_survival,
-      #     habitat = habitat, ..params = ..params,
-      #     avg_ocean_transition_month = avg_ocean_transition_month,
-      #     stochastic = stochastic,
-      #     ic_growth = growth_rates_ic,
-      #     fp_growth = growth_rates_fp,
-      #     delta_growth = growth_rates_delta,
-      #     filling_fn = fill_natal_dens_depend, # filling using density dependence
-      #     filling_args = list(up_to_size_class = 2, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                         ..habitat_capacity = ..params$..habitat_capacity),
-      #     filling_regional_fn = fill_regional_dens_depend,
-      #     filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
-      #                                  ..habitat_capacity = ..params$..habitat_capacity),
-      #     movement_fn = temperature_movement,
-      #     movement_months = 1:2,
-      #     movement_args = list(movement_month = 3, movement_temp = 15, stochastic = stochastic)
-      #   )
-      #   
-     
-      # }
       
         # For use in WR SDM: Add juveniles in drought years
         # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
@@ -638,24 +482,10 @@ winter_run_model <- function(scenario = NULL,
       
       if (FALSE) {
         fish_1_df <- create_fish_df(fish_df = fish_list$route_1_fish, month = month, year = year)
-        # fish_2_df <- create_fish_df(fish_df = fish_list$route_2_fish, month = month, year = year)
-        # fish_3_df <- create_fish_df(fish_df = fish_list$route_3_fish, month = month, year = year)
-        # fish_4_df <- create_fish_df(fish_df = fish_list$route_4_fish, month = month, year = year)
-        # fish_5_df <- create_fish_df(fish_df = fish_list$route_5_fish, month = month, year = year)
-        # fish_6_df <- create_fish_df(fish_df = fish_list$route_6_fish, month = month, year = year)
-        # fish_7_df <- create_fish_df(fish_df = fish_list$route_7_fish, month = month, year = year)
-        # fish_8_df <- create_fish_df(fish_df = fish_list$route_8_fish, month = month, year = year)
         
         output$north_delta_fish <- dplyr::bind_rows(
           output$north_delta_fish,
-          fish_1_df,
-          # fish_2_df,
-          # fish_3_df,
-          # fish_4_df,
-          # fish_5_df,
-          # fish_6_df,
-          # fish_7_df,
-          # fish_8_df
+          fish_1_df
         )
       }
       
@@ -665,14 +495,7 @@ winter_run_model <- function(scenario = NULL,
       
       # # For use in the r2r metrics ---------------------------------------------
       juveniles_at_chipps <-
-        ..params$movement_hypo_weights[1] * fish_list$route_1_fish$juveniles_at_chipps 
-        # ..params$movement_hypo_weights[2] * fish_list$route_2_fish$juveniles_at_chipps +
-        # ..params$movement_hypo_weights[3] * fish_list$route_3_fish$juveniles_at_chipps +
-        # ..params$movement_hypo_weights[4] * fish_list$route_4_fish$juveniles_at_chipps +
-        # ..params$movement_hypo_weights[5] * fish_list$route_5_fish$juveniles_at_chipps +
-        # ..params$movement_hypo_weights[6] * fish_list$route_6_fish$juveniles_at_chipps +
-        # ..params$movement_hypo_weights[7] * fish_list$route_7_fish$juveniles_at_chipps +
-        # ..params$movement_hypo_weights[8] * fish_list$route_8_fish$juveniles_at_chipps
+        ..params$movement_hypo_weights[1] * fish_list$route_1_fish$juveniles_at_chipps
       
       d <- data.frame(juveniles_at_chipps)
       colnames(d) <- c("s", "m", "l", "vl")
@@ -689,13 +512,6 @@ winter_run_model <- function(scenario = NULL,
       # end R2R metric -----------------------------------------------------------
       adults_in_ocean <-
         ..params$movement_hypo_weights[1] * fish_list$route_1_fish$adults_in_ocean 
-        # ..params$movement_hypo_weights[2] * fish_list$route_2_fish$adults_in_ocean +
-        # ..params$movement_hypo_weights[3] * fish_list$route_3_fish$adults_in_ocean +
-        # ..params$movement_hypo_weights[4] * fish_list$route_4_fish$adults_in_ocean +
-        # ..params$movement_hypo_weights[5] * fish_list$route_5_fish$adults_in_ocean +
-        # ..params$movement_hypo_weights[6] * fish_list$route_6_fish$adults_in_ocean +
-        # ..params$movement_hypo_weights[7] * fish_list$route_7_fish$adults_in_ocean +
-        # ..params$movement_hypo_weights[8] * fish_list$route_8_fish$adults_in_ocean
     } # end month loop
     
     output$juvenile_biomass[ , year] <- juveniles_at_chipps %*% winterRunDSM::wr_sdm_baseline_params$mass_by_size_class
