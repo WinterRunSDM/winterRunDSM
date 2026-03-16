@@ -36,7 +36,7 @@ wr_sdm_scen_intro_params$contact_points["Upper Sacramento River"] <- round(wr_sd
 
 # SR11
 # Add chipps juveniles in drought years
-wr_sdm_scen_intro_params$addl_juv_chipps <- 100000
+wr_sdm_scen_intro_params$addl_juv_chipps <- 50000
 
 ## Other -------------
 
