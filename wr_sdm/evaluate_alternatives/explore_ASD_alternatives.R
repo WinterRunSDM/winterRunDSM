@@ -1,6 +1,7 @@
 library(winterRunDSM)
 library(tidyverse)
 library(plotly)
+library(ggplot2)
 
 # baseline
 baseline_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
@@ -14,7 +15,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
 
 # test out adult enroute survival multiplier
 test_params <- winterRunDSM::wr_sdm_baseline_params
-test_params$.surv_juv_rear_prop_diversions <- test_params$.surv_juv_rear_prop_diversions * 0.75
+test_params$addl_juv_chipps <- 50000
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
@@ -43,3 +44,27 @@ baseline_results$spawners |>
              color = scenario)) +
   geom_line() +
   facet_wrap(~watershed)
+
+
+
+
+baseline_results$juveniles_at_chipps |> 
+  as.data.frame() |> 
+  mutate(scenario = "baseline") |> 
+  bind_rows(alt_results$juveniles_at_chipps |> 
+              as.data.frame() |> 
+              mutate(scenario = "alt")) |> 
+  filter(watershed %in% c("Upper Sacramento River")) |> 
+  mutate(year = as.numeric(year)) |> 
+  ggplot(aes(x = factor(year),
+             y = juveniles_at_chipps,
+             color = scenario)) +
+  geom_boxplot()
+  # facet_wrap(~watershed)
+
+
+
+jac <- alt_results$juveniles_at_chipps
+jac |> filter(juveniles_at_chipps!=0, grepl("Sacramento", watershed)) |> 
+  ggplot() + 
+  geom_col(aes(year, juveniles_at_chipps, fill = factor(month))) 
