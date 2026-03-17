@@ -18,9 +18,6 @@ wr_sdm_scen_intro_params$hatchery_release["Lower Sacramento River","l",] <- rep(
 # Baseline is 0.086
 wr_sdm_scen_intro_params$natural_adult_removal_rate["Upper Sacramento River"] <- 0.15
 
-# H2c
-wr_sdm_scen_intro_params$natural_adult_removal_rate["Upper Sacramento River"] <- 0.25
-
 # H3
 wr_sdm_scen_intro_params$adult_enroute_surv_mult["Upper Sacramento River"] <- wr_sdm_scen_intro_params$adult_enroute_surv_mult["Upper Sacramento River"] * 1.1
 
