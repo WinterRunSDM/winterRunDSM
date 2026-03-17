@@ -7,16 +7,16 @@ editor: visual
 
 ## Description of included actions
 
-- **H1 LSNFH modified release practices:** Release hatchery-reared salmon in locations or at times that differ from traditional practices to improve survival and support population recovery. This may include releasing fish at different life stages, in alternative river reaches, or under specific environmental conditions to reduce predation, improve imprinting, and enhance ocean survival.
-- **H2 LSNFH facility upgrades and production improvements:** Combines all proposed hatchery upgrades and production improvements, and will be reflected by bookend estimates (high and low) of changes. Major upgrades and improvements reflected include a pathogenic filtration system to allow reintroduction of WRCS above Shasta to spawn, brood fish collection facility (e.g., in-river pound net) on the Sacramento River to collect natural origin fish and maintain fitness wtihin the integrated (hatchery-natural) WRCS population, addition of a secondary trapping location, upgrades to the Keswick Fish Trap, installation of permanent water chiller to provide the hatchery with cold water during drought years, and electrical and plumbing upgrades.
-  - **H2a LSNFH facility upgrades**
-  - **H2b Upgrades to Keswick Dam adult collection system**
-- **H3 CNFH trapping and sorting improvements:** Non-water supply improvements, including construction of an automated fish sorting and trapping facilitie to allow for daily real-time sorting that can reduce excess holding/handling and migration delays for WRCS and passage blockage, and improvements to water treatment infrastructure.
-- **SR4a Reduce predation on Sacramento River:** Implement projects to minimize predation at weirs, diversions, and related structures in the Sacramento River.
-- **SR11 Captive rearing and assisted migration of juveniles in drought years:** Provide a temporary refuge for a portion of natural-origin juveniles in years when conditions are predicted to be poor and release them back into the wild. From Sep-Nov,capture 10k juvenile WRCS (expandable to 100k fish over time) at USFWS’s Red Bluff Diversion Dam rotary screw traps, transport fish to a contained, protected (from predators) and productive off-channel rearing environment (e.g. artificial floodplain, or net pen). When mean fish size is 90mm or by March (whichever comes first), collect fish from the rearing environment.  Apply fin clips and coded wire tags to all fish (PBT won’t work because parents are unknown). Transfer fish into a boat equipped with continuously recirculating river water.  Over 5-7 days transport fish from Red Bluff to Horseshoe Bay (near GG Bridge).  Fish will be fed natural prey while in transport (cultured dipterans, cladocerans or similar). Fish will be continuously bathed in ambient waters with a clear view of the sky (for imprinting and orientation). Upon arrival at Horseshoe Bay, fish will be transferred into a net pen for ~24 hours prior to release.  Release will occur on a strong outgoing tide at night. NOTE: When migratory conditions are favorable, some or all of refuge rearing WRCS could be released into the Sacramento River rather than being transported (with imprinting) for downstream release. 
-- **O2 Increase distance from shoreline to "International" designation:** If the distance from shoreline of the International designation is increases, there could be less fish extracted from the ocean.
-- **BC1 Control illegal harvest and/or poaching in Battle Creek:** Fund an increased level of effort for agencies to reduce the potential for illegal harvest and poaching
-- **BC8 Battle Creek egg incubation:** Place fertilized eggs directly into natural streambed habitats within Battle Creek. This method allows eggs to develop in a more natural environment, improving imprinting and potentially increasing survival rates compared to traditional hatchery rearing. 
+-   **H-1: LSNFH modified release practices:** Release hatchery-reared salmon in locations or at times that differ from traditional practices to improve survival and support population recovery. This may include releasing fish at different life stages, in alternative river reaches, or under specific environmental conditions to reduce predation, improve imprinting, and enhance ocean survival.
+-   **H-2: LSNFH facility upgrades and production improvements:** Combines all proposed hatchery upgrades and production improvements, and will be reflected by bookend estimates (high and low) of changes. Major upgrades and improvements reflected include a pathogenic filtration system to allow reintroduction of WRCS above Shasta to spawn, brood fish collection facility (e.g., in-river pound net) on the Sacramento River to collect natural origin fish and maintain fitness wtihin the integrated (hatchery-natural) WRCS population, addition of a secondary trapping location, upgrades to the Keswick Fish Trap, installation of permanent water chiller to provide the hatchery with cold water during drought years, and electrical and plumbing upgrades.
+    -   **H-2a: LSNFH facility upgrades**
+    -   **H-2b: Upgrades to Keswick Dam adult collection system**
+-   **H-3: CNFH trapping and sorting improvements:** Non-water supply improvements, including construction of an automated fish sorting and trapping facilitie to allow for daily real-time sorting that can reduce excess holding/handling and migration delays for WRCS and passage blockage, and improvements to water treatment infrastructure.
+-   **SR-4a: Reduce predation on Sacramento River:** Implement projects to minimize predation at weirs, diversions, and related structures in the Sacramento River.
+-   **SR-11: Captive rearing and assisted migration of juveniles in drought years:** Provide a temporary refuge for a portion of natural-origin juveniles in years when conditions are predicted to be poor and release them back into the wild. From Sep-Nov, capture 10k juvenile WRCS (expandable to 100k fish over time) at USFWS’s Red Bluff Diversion Dam rotary screw traps, transport fish to a contained, protected (from predators) and productive off-channel rearing environment (e.g. artificial floodplain, or net pen). When mean fish size is 90mm or by March (whichever comes first), collect fish from the rearing environment. Apply fin clips and coded wire tags to all fish (PBT won’t work because parents are unknown). Transfer fish into a boat equipped with continuously recirculating river water. Over 5-7 days transport fish from Red Bluff to Horseshoe Bay (near GG Bridge). Fish will be fed natural prey while in transport (cultured dipterans, cladocerans or similar). Fish will be continuously bathed in ambient waters with a clear view of the sky (for imprinting and orientation). Upon arrival at Horseshoe Bay, fish will be transferred into a net pen for \~24 hours prior to release. Release will occur on a strong outgoing tide at night. NOTE: When migratory conditions are favorable, some or all of refuge rearing WRCS could be released into the Sacramento River rather than being transported (with imprinting) for downstream release.
+-   **O-2: Increase distance from shoreline to "International" designation:** If the distance from shoreline of the International designation is increases, there could be less fish extracted from the ocean.
+-   **BC-1: Control illegal harvest and/or poaching in Battle Creek:** Fund an increased level of effort for agencies to reduce the potential for illegal harvest and poaching
+-   **BC-8: Battle Creek egg incubation:** Place fertilized eggs directly into natural streambed habitats within Battle Creek. This method allows eggs to develop in a more natural environment, improving imprinting and potentially increasing survival rates compared to traditional hatchery rearing.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -65,6 +65,7 @@ portfolio_eg_results <- winterRunDSM::winter_run_model(mode = "simulate",
 ```
 
 ## Summary of Results
+
 ```{r Abundance_calculations}
 # Spawners ----------------------------
 
@@ -189,6 +190,23 @@ juv_chipps <- baseline_results$juveniles_at_chipps |>
          size %in% c("l", "vl")) |> 
   group_by(scenario, year) |> 
   summarize(jac = sum(juveniles_at_chipps)) |> 
+  ungroup()
+
+prop_nat_juv_at_chipps <- tibble("year" = 1:20,
+                                 "prop_nat_jac" = baseline_results$proportion_natural_juves_in_tribs["Upper Sacramento River",],
+                                 scenario = "baseline") |> 
+  bind_rows(tibble("year" = 1:20,
+                   "prop_nat_jac" = portfolio_eg_results$proportion_natural_juves_in_tribs["Upper Sacramento River",],
+                                 scenario = "portfolio_eg"))
+
+nat_juv_at_chipps <- juv_chipps |> 
+  left_join(prop_nat_juv_at_chipps, 
+            by = c("year", "scenario")) |> 
+  mutate(nat_jac = jac * prop_nat_jac)
+
+mean_nat_jac <- nat_juv_at_chipps |> 
+  group_by(scenario) |> 
+  summarize(mean_nat_jac = round(mean(nat_jac))) |> 
   ungroup()
 
 mean_jac <- juv_chipps |> 
@@ -442,7 +460,6 @@ summary_metrics_table <- bind_rows(metrics_table, watershed_metrics) |>
 kable(summary_metrics_table)
 ```
 
-
 ## Abundance
 
 ### Spawners
@@ -451,7 +468,7 @@ kable(summary_metrics_table)
 plotly::ggplotly(ggplot(spawners_split) + 
   geom_line(aes(sim_year, spawners, color = scenario)) +
   geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
-    labs(title = "Spawners by Watershed")+
+    labs(title = "Spawners by watershed")+
     facet_wrap(~watershed, nrow = 2) + 
   scale_color_manual(values = colors)+
   theme_plots)
@@ -461,7 +478,7 @@ plotly::ggplotly(ggplot(spawners_split) +
 plotly::ggplotly(ggplot(spawners) + 
   geom_line(aes(sim_year, spawners, color = scenario)) +
   geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
-    labs(title = "Spawners across Watershed")+
+    labs(title = "Spawners across watersheds")+
   scale_color_manual(values = colors)+
   theme_plots)
 ```
@@ -472,7 +489,7 @@ kable(mean_spawners)
 
 ### Natural origin WR returning to spawn
 
-Natural origin spawners - each year and tributary has a different proportion natural based on hatchery allocations Total combines applicable watersheds
+Natural origin spawners - each year and tributary has a different proportion natural based on hatchery allocations in previous years. Total combines applicable watersheds.
 
 ```{r, echo = FALSE, out.width = '100%'}
 ggplot(returns) +
@@ -490,7 +507,7 @@ kable(mean_natural_return)
 
 ### Hatchery origin WR returning to spawn
 
-Hatchery origin spawners - each year has a different proportion natural based on hatchery allocations Total combines applicable watersheds
+Hatchery origin spawners - each year has a different proportion natural based on hatchery allocations in previous years. Total combines applicable watersheds.
 
 ```{r, echo = FALSE, out.width = '100%'}
 ggplot(returns) +
@@ -508,9 +525,7 @@ kable(mean_hatchery_return)
 
 ### Frequency of population decline
 
-Number of years of decline in spawners
-
-**Can we add an extra year of spawners to help with calculating change in abundance for all years?**
+Number of years of decline in spawners.
 
 ```{r}
 kable(total_declines)
@@ -518,7 +533,7 @@ kable(total_declines)
 
 ### Frequency of catastrophic decline
 
-Maximum 3-year average change in spawners across dataset
+Maximum 3-year average change in spawners across model time series.
 
 ```{r}
 kable(max_declines)
@@ -528,7 +543,7 @@ kable(max_declines)
 
 ### Number of juveniles emigrating from upper Sacramento River
 
-Number of juveniles coming out of Upper Sacramento River before rear, grow, migrate, moving to other watersheds
+Number of juveniles originating from the Upper Sacramento River watershed. Numbers shown are juveniles before they undergo rearing, growth, migration, etc.
 
 ```{r}
 ggplot(juvs_us) +
@@ -545,15 +560,13 @@ kable(mean_juv_us)
 
 ### Number of natural origin smolts surviving to reach the ocean
 
-This metric calculates juveniles at Chipps using large and very large fish (smolts) originating from the Upper Sacramento River.
-
-**Do we need to multiple this by proportion_natural? **
+This metric calculates natural-origin juveniles at Chipps, showing only "large" and "very large" size classes to represent smolts. We apply proportion of natural-origin juveniles to integers to obtain the result.
 
 ```{r, out.width = '100%'}
-ggplot(juv_chipps) + 
-  geom_line(aes(year, jac, color = scenario)) +
-  geom_point(aes(year, jac, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Juveniles at Chipps", y = "Juveniles at Chipps") +
+ggplot(nat_juv_at_chipps) + 
+  geom_line(aes(year, nat_jac, color = scenario)) +
+  geom_point(aes(year, nat_jac, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Natural-origin Smolts at Chipps", y = "Smolts at Chipps") +
   scale_color_manual(values = colors)+
   theme_plots
 ```
@@ -564,9 +577,7 @@ kable(mean_jac)
 
 ### Cohort Replacement Rate
 
-Battle Creek does not have baseline so keeping both for now
-
-**Can we add an extra 2 years of spawners to help with calculating change in abundance for all years?**
+Battle Creek does not have a baseline value for this performance metric.
 
 ```{r, out.width = '100%'}
 ggplot(crr) + 
@@ -585,18 +596,16 @@ kable(crr_summary)
 
 ## Life history diversity and fitness
 
-Add labels to the y axis
-
 ### pHOS
 
 ```{r, out.width = '100%'}
-ggplot(phos) + 
+plotly::ggplotly(ggplot(phos) + 
   geom_line(aes(sim_year, phos, color = scenario)) +
   geom_point(aes(sim_year, phos, color = scenario, shape = scenario), size = 3) +
   scale_color_manual(values = colors2)+
   labs(title = "pHOS") +
   facet_wrap(~watershed, nrow = 2) + 
-  theme_plots
+  theme_plots)
 ```
 
 ```{r}
@@ -605,15 +614,14 @@ kable(mean(phos_summary))
 
 ### Size class diversity
 
-Shannon diversity measures evenness and diversity. A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, size class).
+We show two plots: one shows the Shannon Diversity Index calculated for size class, and one shows the proportions per year. The Shannon Diversity Index measures evenness and diversity: a higher value indicates greater evenness and diversity, while a low number may indicate domination by one group (in this case, very large individuals in the portfolio scenario).
 
 ```{r, out.width = '100%'}
 
-  
-  ggplot(shannon_di_size) + 
+ggplot(shannon_di_size) + 
   geom_line(aes(year, shannon_index, color = scenario)) +
   geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Size Diversity")+
+  labs(title = "Size Class Diversity")+
   scale_color_manual(values = colors)+
   theme_plots
 ```
@@ -633,7 +641,7 @@ kable(mean_shannon_di_size)
 
 ### Timing diversity
 
-Shannon diversity measures evenness and diversity. A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, month of ocean entry).
+We show two plots: one shows the Shannon Diversity Index calculated for month of entry, and one shows the proportions per year. The Shannon Diversity Index measures evenness and diversity: a higher value indicates greater evenness and diversity, while a low number may indicate domination by one group (month of ocean entry).
 
 ```{r, out.width = '100%'}
 ggplot(shannon_di_timing) + 
@@ -659,7 +667,7 @@ kable(mean_shannon_di_timing)
 
 ### Combined size-timing diversity
 
-Shannon diversity measures evenness and diversity. A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, size and month combination groupings).
+We show two plots: one shows the Shannon Diversity Index calculated for size class and month of ocean entry, and one shows the proportions per year. The Shannon Diversity Index measures evenness and diversity: a higher value indicates greater evenness and diversity, while a low number may indicate domination by one group (in this case, size class and month of ocean entry combination groupings).
 
 ```{r}
 kable(mean_shannon_di_size_timing)
@@ -674,11 +682,11 @@ ggplot(shannon_di_size_timing) +
   theme_plots
 ```
 
-## Increase number of tribs supporting WR
+## Increase number of tributaries supporting WR
 
 ### Number of adults spawning in tributaries
 
-In this case, just Battle Creek
+Results shown for Battle Creek.
 
 ```{r}
 ggplot(spawners_in_tribs) + 
@@ -695,7 +703,7 @@ kable(mean_spawners_in_tribs)
 
 ### Number of juveniles rearing in tributaries
 
-This tracks juveniles in the tributary, right before they grow and rear.
+This shows the number of juveniles present in a tributary before they grow, rear, and migrate.
 
 ```{r, out.width = '100%'}
 ggplot(juvs_trib) +
@@ -712,7 +720,15 @@ kable(mean_juv_trib)
 
 ### Number of independent populations
 
-Independent populations, also named viable populations, include those with \* greater than 500 spawners \* pHOS less than 5% \* CRR \> 1 \* Growth rate (spawner change) \> 1
+Independent populations, also named viable populations, include those with:
+
+\* greater than 500 spawners
+
+\* pHOS less than 5%
+
+\* CRR \> 1
+
+\* Growth rate (spawner change) \> 1
 
 ```{r, out.width = '100%'}
 ggplot(ind_pop_long) + 
@@ -726,21 +742,16 @@ kable(ind_pop_summary)
 
 ### Number of independent populations in historic habitats
 
-Not relevant for this portfolio since only Battle Creek included. Historic habitats include Pit River, Little Sacramento River, and McCloud River.
+This PM is not relevant for this portfolio since Battle Creek is the only tributary included. Historic habitats include Pit River, Little Sacramento River, and McCloud River.
 
 ```{r}
 kable(ind_pop_historic)
 ```
 
-
 ### Number of dependent populations
 
-Defined as populations not meeting independent population criteria
-
-**Currently first year is NA**
+Defined as populations not meeting independent population criteria. This cannot be calculated for the first year of the time series as it requires a previous year of data to calculate growth rate and CRR.
 
 ```{r}
 kable(dep_pop_summary)
 ```
-
-
