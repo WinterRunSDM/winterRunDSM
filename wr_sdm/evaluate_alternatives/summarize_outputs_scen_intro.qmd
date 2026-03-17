@@ -1,23 +1,23 @@
 ---
-title: "Explore Intro Scenario"
+title: "Winter Run SDM Example Portfolio Results"
 author: "Cat Pien, Liz Stebbins, Flowwest"
 format: html
 editor: visual
 ---
 
-# Example Portfolio Model Results
-
 ## Description of included actions
 
-* H1: 
-* H2b: 
-* H2c: 
-* H3:
-* SR4a: 
-* SR11:
-* O2: 
-* BC1:
-* BC8: 
+- **H1 LSNFH modified release practices:** Release hatchery-reared salmon in locations or at times that differ from traditional practices to improve survival and support population recovery. This may include releasing fish at different life stages, in alternative river reaches, or under specific environmental conditions to reduce predation, improve imprinting, and enhance ocean survival.
+- **H2 LSNFH facility upgrades and production improvements:** Combines all proposed hatchery upgrades and production improvements, and will be reflected by bookend estimates (high and low) of changes. Major upgrades and improvements reflected include a pathogenic filtration system to allow reintroduction of WRCS above Shasta to spawn, brood fish collection facility (e.g., in-river pound net) on the Sacramento River to collect natural origin fish and maintain fitness wtihin the integrated (hatchery-natural) WRCS population, addition of a secondary trapping location, upgrades to the Keswick Fish Trap, installation of permanent water chiller to provide the hatchery with cold water during drought years, and electrical and plumbing upgrades.
+  - **H2a LSNFH facility upgrades**
+  - **H2b Upgrades to Keswick Dam adult collection system**
+  - **H2c New adult collection facility on Upper Sacramento River** 
+- **H3 CNFH trapping and sorting improvements:** Non-water supply improvements, including construction of an automated fish sorting and trapping facilitie to allow for daily real-time sorting that can reduce excess holding/handling and migration delays for WRCS and passage blockage, and improvements to water treatment infrastructure.
+- **SR4a Reduce predation on Sacramento River:** Implement projects to minimize predation at weirs, diversions, and related structures in the Sacramento River.
+- **SR11 Captive rearing and assisted migration of juveniles in drought years:** Provide a temporary refuge for a portion of natural-origin juveniles in years when conditions are predicted to be poor and release them back into the wild. From Sep-Nov,capture 10k juvenile WRCS (expandable to 100k fish over time) at USFWS’s Red Bluff Diversion Dam rotary screw traps, transport fish to a contained, protected (from predators) and productive off-channel rearing environment (e.g. artificial floodplain, or net pen). When mean fish size is 90mm or by March (whichever comes first), collect fish from the rearing environment.  Apply fin clips and coded wire tags to all fish (PBT won’t work because parents are unknown). Transfer fish into a boat equipped with continuously recirculating river water.  Over 5-7 days transport fish from Red Bluff to Horseshoe Bay (near GG Bridge).  Fish will be fed natural prey while in transport (cultured dipterans, cladocerans or similar). Fish will be continuously bathed in ambient waters with a clear view of the sky (for imprinting and orientation). Upon arrival at Horseshoe Bay, fish will be transferred into a net pen for ~24 hours prior to release.  Release will occur on a strong outgoing tide at night. NOTE: When migratory conditions are favorable, some or all of refuge rearing WRCS could be released into the Sacramento River rather than being transported (with imprinting) for downstream release. 
+- **O2 Increase distance from shoreline to "International" designation:** If the distance from shoreline of the International designation is increases, there could be less fish extracted from the ocean.
+- **BC1 Control illegal harvest and/or poaching in Battle Creek:** Fund an increased level of effort for agencies to reduce the potential for illegal harvest and poaching
+- **BC8 Battle Creek egg incubation:** Place fertilized eggs directly into natural streambed habitats within Battle Creek. This method allows eggs to develop in a more natural environment, improving imprinting and potentially increasing survival rates compared to traditional hatchery rearing. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -43,7 +43,6 @@ colors <- c("#96C8A2", "#006A4E")
 colors2 <- c("darkgoldenrod2", "coral4")
 ```
 
-
 ```{r, warning = FALSE}
 # baseline
 baseline_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
@@ -66,14 +65,11 @@ portfolio_eg_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                               seeds = portfolio_eg_seeds)
 ```
 
-## Summary Table of all the metrics 
+## Summary of Results
+```{r Abundance_calculations}
+# Spawners ----------------------------
 
-
-## Abundance 
-
-### Spawners
-
-```{r, out.width = '100%'}
+# by watershed
 spawners_split <- baseline_results$spawners |> 
   as.data.frame() |> 
   mutate(watershed = winterRunDSM::watershed_labels,
@@ -88,43 +84,18 @@ spawners_split <- baseline_results$spawners |>
   filter(watershed %in% c("Upper Sacramento River", "Battle Creek")) |> 
   mutate(sim_year = as.numeric(sim_year)) 
 
+# combined
 spawners <- spawners_split |> 
   group_by(sim_year, scenario) |> 
   summarize(spawners = sum(spawners))
 
+# summary 
 mean_spawners <- spawners |> 
   group_by(scenario) |> 
-  summarize(mean_spawners = round(mean(spawners)))
+  summarize(mean_spawners = round(mean(spawners))) |> 
+  ungroup()
 
-plotly::ggplotly(ggplot(spawners_split) + 
-  geom_line(aes(sim_year, spawners, color = scenario)) +
-  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
-    facet_wrap(~watershed, nrow = 2) + 
-  scale_color_manual(values = colors)+
-  theme_plots)
-```
-
-
-```{r}
-plotly::ggplotly(ggplot(spawners) + 
-  geom_line(aes(sim_year, spawners, color = scenario)) +
-  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
-  scale_color_manual(values = colors)+
-  theme_plots)
-```
-
-
-```{r}
-kable(mean_spawners)
-```
-
-
-### Natural origin WR returning to spawn
-
-Natural origin spawners - each year and tributary has a different proportion natural based on hatchery allocations 
-Total combines applicable watersheds
-
-```{r, echo = FALSE, out.width = '100%'}
+# Natural and Hatchery Proportion Spawners -----------------
 spawn_prop <- portfolio_eg_results$proportion_natural_at_spawning[c("Upper Sacramento River", "Battle Creek"),] |> 
   as.data.frame() |> 
   mutate(watershed = c("Upper Sacramento River", "Battle Creek")) |> 
@@ -142,53 +113,19 @@ returns <- returns_split |>
   summarize(nat_returns = sum(nat_returns),
             hatchery_returns = sum(hatchery_returns))
 
+# natural
 mean_natural_return <- returns |>
   group_by(scenario) |>
-  summarize(mean_natural_return = round(mean(nat_returns))) 
+  summarize(mean_natural_return = round(mean(nat_returns))) |> 
+  ungroup()
 
-ggplot(returns) +
-  # geom_col(aes(return_sim_year, returns, fill = scenario), color = "black", position = position_dodge2()) +
-  geom_line(aes(sim_year, nat_returns, color = scenario)) +
-  geom_point(aes(sim_year, nat_returns, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Natural Origin Returning Adults") +
-  # facet_wrap(~watershed, nrow = 2) + 
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-
-```{r}
-kable(mean_natural_return)
-```
-
-### Hatchery origin WR returning to spawn
-
-Hatchery origin spawners - each year has a different proportion natural based on hatchery allocations 
-Total combines applicable watersheds
-
-```{r, echo = FALSE, out.width = '100%'}
+# hatchery
 mean_hatchery_return <- returns |>
   group_by(scenario) |>
-  summarize(mean_hatchery_return = round(mean(hatchery_returns))) 
+  summarize(mean_hatchery_return = round(mean(hatchery_returns))) |> 
+  ungroup()
 
-ggplot(returns) +
-  # geom_col(aes(return_sim_year, returns, fill = scenario), color = "black", position = position_dodge2()) +
-  geom_line(aes(sim_year, hatchery_returns, color = scenario)) +
-  geom_point(aes(sim_year, hatchery_returns, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Hatchery Origin Returning Adults") +
-  # facet_wrap(~watershed, nrow = 2) + 
-  scale_color_manual(values = colors2)+
-  theme_plots
-```
-
-```{r}
-kable(mean_hatchery_return)
-```
-
-### Frequency of population decline
-
-Number of years of decline in spawners
-
-```{r}
+# Decline -------------------------
 decline <- spawners |> 
   group_by(scenario) |> 
   mutate(decline = if_else(spawners < lag(spawners,1), 1L, 0L)) |> 
@@ -196,20 +133,11 @@ decline <- spawners |>
 
 total_declines <- decline |> 
   group_by(scenario) |> 
-  summarize(total_declines = sum(decline, na.rm = TRUE))
-```
+  summarize(total_declines = round(sum(decline, na.rm = TRUE))) |> 
+  ungroup()
 
+# Catastrophic decline 
 
-```{r}
-kable(total_declines)
-```
-
-
-### Frequency of catastrophic decline
-
-Greatest 3-year average change in spawners (escapement)
-
-```{r}
 change_spawn <- spawners |> 
   group_by(scenario) |> 
   mutate(change_abund = spawners-lag(spawners, 1),
@@ -220,21 +148,25 @@ change_spawn <- spawners |>
 
 max_declines <- change_spawn |> 
   group_by(scenario) |> 
-  summarize(max_decline = round(min(avg_prop_change, na.rm = TRUE),3)) 
+  summarize(max_decline = round(min(avg_prop_change, na.rm = TRUE),3))
+
+
+
+# Combine ------------------
+abund_table <- mean_spawners |> 
+  left_join(mean_natural_return) |> left_join(mean_hatchery_return) |> 
+  left_join(total_declines) |> left_join(max_declines) |> 
+  pivot_longer(cols = mean_spawners:max_decline,
+               names_to = "metric", 
+               values_to = "value") |> 
+  pivot_wider(names_from = scenario,
+              values_from = value) |> 
+  mutate(objective = "abundance")
 ```
 
-```{r}
-kable(max_declines)
-```
+```{r Productivity_calculations}
 
-
-## Productivity
-
-### Number of juveniles emigrating from upper Sacramento River
-
-Number of juveniles coming out of Upper Sacramento River before rear, grow, migrate, moving to other watersheds
-
-```{r}
+# Juveniles leaving Upper Sac -------------------
 juvs_us <- baseline_results$juveniles |>
   mutate( scenario = "baseline") |>
   bind_rows(portfolio_eg_results$juveniles |> mutate(scenario = "portfolio_eg")) |> 
@@ -244,27 +176,10 @@ juvs_us <- baseline_results$juveniles |>
   
 mean_juv_us <- juvs_us |> 
   group_by(scenario) |> 
-  summarize(mean_juv = mean(total_juv))
+  summarize(mean_juv = mean(total_juv)) |> 
+  ungroup()
 
-ggplot(juvs_us) +
-  # geom_col(aes(return_sim_year, returns, fill = scenario), color = "black", position = position_dodge2()) +
-  geom_line(aes(year, total_juv, color = scenario)) +
-  geom_point(aes(year, total_juv, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Juveniles in Upper Sac", y = "Juveniles in Upper Sac") +
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-
-```{r}
-kable(mean_juv_us)
-```
-
-
-### Number of natural origin smolts surviving to reach the ocean 
-
-This metric calculates juveniles at Chipps using large and very large fish (smolts) originating from the Upper Sacramento River.
-
-```{r, out.width = '100%'}
+# Juveniles emigrating to ocean ------------------
 juv_chipps <- baseline_results$juveniles_at_chipps |> 
   as.data.frame() |> 
   mutate(scenario = "baseline") |> 
@@ -273,33 +188,17 @@ juv_chipps <- baseline_results$juveniles_at_chipps |>
               mutate(scenario = "portfolio_eg")) |>  
   filter(watershed %in% c("Upper Sacramento River"),
          size %in% c("l", "vl")) |> 
-  group_by(watershed, scenario, year) |> 
+  group_by(scenario, year) |> 
   summarize(jac = sum(juveniles_at_chipps)) |> 
   ungroup()
 
 mean_jac <- juv_chipps |> 
-  group_by(scenario, watershed) |> 
-  summarize(mean_jac = round(mean(jac)))
+  group_by(scenario) |> 
+  summarize(mean_jac = round(mean(jac))) |> 
+  ungroup()
+ 
+# CRR -------------------------------
 
-ggplot(juv_chipps) + 
-  # geom_col(aes(return_sim_year, returns, fill = scenario), color = "black", position = position_dodge2()) +
-  geom_line(aes(year, jac, color = scenario)) +
-  geom_point(aes(year, jac, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Juveniles at Chipps", y = "Juveniles at Chipps") +
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-
-```{r}
-kable(mean_jac)
-```
-
-
-### Cohort Replacement Rate
-
-Battle Creek does not have baseline so keeping both for now
-
-```{r, out.width = '100%'}
 crr <- spawners_split |> 
   group_by(scenario, watershed) |> 
   mutate(crr = spawners/lag(spawners, 3),
@@ -312,26 +211,18 @@ crr_summary <- crr |>
          mean_crr = round(mean(crr, na.rm = TRUE),3)) |> 
   ungroup() 
 
-ggplot(crr) + 
-  geom_line(aes(sim_year, crr, color = scenario)) +
-  geom_point(aes(sim_year, crr, color = scenario, shape = scenario), size = 3) +
-  geom_hline(yintercept = 1, linetype = "dashed") + 
-  labs(title = "Cohort Replacement Rate", y = "Cohort Replacement Rate") +
-  facet_wrap(~watershed, nrow = 2) + 
-  scale_color_manual(values = colors)+
-  theme_plots
+# Combine ------------------
+prod_table <- mean_juv_us |> 
+  left_join(mean_jac) |>  
+  pivot_longer(cols = -scenario,
+               names_to = "metric", 
+               values_to = "value") |> 
+  pivot_wider(names_from = scenario,
+              values_from = value) |> 
+  mutate(objective = "productivity")
 ```
 
-```{r}
-kable(crr_summary)
-```
-
-
-## Life history diversity and fitness
-Add labels to the y axis 
-
-### pHOS
-```{r, out.width = '100%'}
+```{r Life history diversity}
 phos <- baseline_results$phos |> 
   as.data.frame() |> 
   mutate(watershed = winterRunDSM::watershed_labels,
@@ -345,22 +236,13 @@ phos <- baseline_results$phos |>
                values_to = "phos") |> 
   filter(watershed %in% c("Upper Sacramento River", "Battle Creek")) |> 
   mutate(sim_year = as.numeric(sim_year)) 
-  
-ggplot(phos) + 
-  geom_line(aes(sim_year, phos, color = scenario)) +
-  geom_point(aes(sim_year, phos, color = scenario, shape = scenario), size = 3) +
-  scale_color_manual(values = colors2)+
-  labs(title = "pHOS") +
-  facet_wrap(~watershed, nrow = 2) + 
-  theme_plots
-```
 
-### Size class diversity
+phos_summary <- phos |> 
+  group_by(scenario, watershed) |> 
+  summarize(mean_phos = mean(phos, na.rm = TRUE)) |> 
+  ungroup()
 
-Shannon diversity measures evenness and diversity.
-A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, size class). 
-
-```{r, out.width = '100%'}
+# Size class diversity ---------------
 juvenile_size_ocean_entry <- baseline_results$juveniles_at_chipps |>
     group_by(year, watershed, size_or_age = size) |>
     summarise(value = sum(juveniles_at_chipps, na.rm = TRUE)) |>
@@ -390,38 +272,12 @@ juvenile_size_ocean_entry <- baseline_results$juveniles_at_chipps |>
   
   mean_shannon_di_size <- shannon_di_size |>
     group_by(scenario) |>
-    summarise(avg_annual_shannon_di = round(mean(shannon_index),2)) |> 
+    summarise(avg_annual_shannon_di_size = round(mean(shannon_index),2)) |> 
     ungroup()
+
+# Timing diversity-------------
   
-  ggplot(shannon_di_size) + 
-  geom_line(aes(year, shannon_index, color = scenario)) +
-  geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Size Diversity")+
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-
-```{r, out.width = '100%'}
-ggplot(juvenile_size_ocean_entry)+
-  geom_col(aes(year, value, fill = factor(size_or_age)), position = "fill", color = "black") +
-  labs(y = "proportion of juveniles", title = "Size Diversity") +
-  facet_wrap(~scenario, nrow = 2) + 
-  viridis::scale_fill_viridis(option= "mako", discrete = TRUE)  + 
-  theme_bw()
-```
-
-```{r}
-kable(mean_shannon_di_size)
-```
-
-
-### Timing diversity 
-
-Shannon diversity measures evenness and diversity.
-A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, month of ocean entry).
-
-```{r, out.width = '100%'}
-juvenile_month_ocean_entry <- baseline_results$juveniles_at_chipps |>
+  juvenile_month_ocean_entry <- baseline_results$juveniles_at_chipps |>
     group_by(year, watershed, month) |>
     summarise(value = sum(juveniles_at_chipps, na.rm = TRUE)) |>
     mutate(scenario = "baseline") |> bind_rows(
@@ -449,38 +305,12 @@ juvenile_month_ocean_entry <- baseline_results$juveniles_at_chipps |>
   
   mean_shannon_di_timing <- shannon_di_timing |>
     group_by(scenario) |>
-    summarise(avg_annual_shannon_di = round(mean(shannon_index),2)) |> 
+    summarise(avg_annual_shannon_di_timing = round(mean(shannon_index),2)) |> 
     ungroup() 
-    
   
-  ggplot(shannon_di_timing) + 
-  geom_line(aes(year, shannon_index, color = scenario)) +
-  geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Timing Diversity")+
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-```{r, out.width = '100%'}
-ggplot(juvenile_month_ocean_entry)+
-  geom_col(aes(year, value, fill = factor(month)), position = "fill", color = "black") +
-  labs(y = "proportion of juveniles", title = "Timing Diversity") +
-  facet_wrap(~scenario, nrow = 2) + 
-  viridis::scale_fill_viridis(option= "turbo", discrete = TRUE)  + 
-  theme_bw()
-```
 
-```{r}
-kable(mean_shannon_di_timing)
-```
-
-
-### Combined size-timing diversity 
-
-Shannon diversity measures evenness and diversity.
-A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, size and month combination groupings).
-
-```{r, out.width = '100%'}
-juvenile_size_timing_ocean_entry <- baseline_results$juveniles_at_chipps |>
+# Size and Timing Diversity-----------------
+  juvenile_size_timing_ocean_entry <- baseline_results$juveniles_at_chipps |>
     group_by(year, month, watershed, size_or_age = size) |>
     summarise(value = sum(juveniles_at_chipps, na.rm = TRUE)) |>
     mutate(scenario = "baseline") |> bind_rows(
@@ -505,56 +335,32 @@ shannon_di_size_timing <- juvenile_size_timing_ocean_entry |>
     group_by(year, scenario) |>
     summarize(shannon_index = -1 * sum(pi_ln_pi, na.rm = T)) |>
     ungroup()
-  
+
 mean_shannon_di_size_timing <- shannon_di_size_timing |>
     group_by(scenario) |>
-    summarise(avg_annual_shannon_di = round(mean(shannon_index),2))
+    summarise(avg_annual_shannon_di_size_timing = round(mean(shannon_index),2))
+
+# Combine ----------------
+diversity_table <- mean_shannon_di_size |> 
+  left_join(mean_shannon_di_timing) |> left_join(mean_shannon_di_size_timing) |> 
+  pivot_longer(cols = -scenario,
+               names_to = "metric", 
+               values_to = "value") |> 
+  pivot_wider(names_from = scenario,
+              values_from = value) |> 
+  mutate(objective = "diversity and fitness")
 ```
 
-```{r}
-kable(mean_shannon_di_size_timing)
-```
+```{r populations}
 
-```{r, out.width = '100%'}
-ggplot(shannon_di_size_timing) + 
-  geom_line(aes(year, shannon_index, color = scenario)) +
-  geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
-  scale_color_manual(values = colors2)+
-  labs(title = "Shannon Diversity for Timing and Size") +
-  theme_plots
-  
-```
-
-## Increase number of tribs supporting WR
-
-### Number of adults spawning in tributaries
-
-In this case, just Battle Creek
-
-```{r}
+# Spawners in tribs
 spawners_in_tribs <- spawners_split  |>  filter(watershed == "Battle Creek")
 
 mean_spawners_in_tribs <- spawners_in_tribs |> 
   group_by(scenario) |> 
-  summarize(mean_spawners = round(mean(spawners)))
+  summarize(mean_spawners_trib = round(mean(spawners)))
 
-ggplot(spawners_in_tribs) + 
-  geom_line(aes(sim_year, spawners, color = scenario)) +
-  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Spawners in Battle Creek")+
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-
-```{r}
-kable(mean_spawners_in_tribs)
-```
-
-### Number of juveniles rearing in tributaries
-
-This tracks juveniles in the tributary, right before they grow and rear. 
-
-```{r, out.width = '100%'}
+# Juveniles in tribs
 juvs_trib <- baseline_results$juveniles |>
   mutate(scenario = "baseline") |>
   bind_rows(portfolio_eg_results$juveniles |> mutate(scenario = "portfolio_eg")) |> 
@@ -564,31 +370,9 @@ juvs_trib <- baseline_results$juveniles |>
   
 mean_juv_trib <- juvs_trib |> 
   group_by(scenario) |> 
-  summarize(mean_juv = mean(total_juv))
+  summarize(mean_juv_trib = mean(total_juv))
 
-ggplot(juvs_trib) +
-  # geom_col(aes(return_sim_year, returns, fill = scenario), color = "black", position = position_dodge2()) +
-  geom_line(aes(year, total_juv, color = scenario)) +
-  geom_point(aes(year, total_juv, color = scenario, shape = scenario), size = 3) +
-  labs(title = "Juveniles in Battle Creek", y = "Juveniles in Battle Creek") +
-  scale_color_manual(values = colors)+
-  theme_plots
-```
-
-```{r}
-kable(mean_juv_trib)
-```
-
-
-### Number of independent populations
-
-Independent populations, also named viable populations, include those with
-* greater than 500 spawners
-* pHOS less than 5%
-* CRR > 1
-* Growth rate (spawner change) > 1
-
-```{r, out.width = '100%'}
+# Independent populations
 ind_pop <- spawners |> left_join(phos) |> left_join(crr) |> left_join(change_spawn) |> 
   mutate(growth_rate = change_abund/lag(spawners)) |> 
   mutate(above_500_spawners = if_else(spawners > 500, 1L, 0L),
@@ -605,23 +389,359 @@ ind_pop_summary <- ind_pop |>
   group_by(scenario, watershed) |> 
   summarize(independence_years = sum(independent_population)) |> 
   arrange(watershed)
+
+# Independent populations in Historic Habitat --------------------
+# This is currently manual
+
+ind_pop_historic <- data.frame(scenario = c("baseline", "portfolio_eg"),
+                               ind_pop_historic = c(0,0))
+
+# Dependent populations --------------------
+dep_pop_summary <- ind_pop_summary |> 
+  mutate(dependence_years = 19-independence_years) |> 
+  select(-independence_years)
+
+# Combine ----------------
+populations_table <- mean_spawners_in_tribs |> 
+  left_join(mean_juv_trib) |> 
+  left_join(ind_pop_historic) |> 
+  pivot_longer(cols = -scenario,
+               names_to = "metric", 
+               values_to = "value") |> 
+  pivot_wider(names_from = scenario,
+              values_from = value) |> 
+  mutate(objective = "number of populations")
 ```
+
+```{r}
+metrics_table <- abund_table |> 
+  bind_rows(prod_table,diversity_table,populations_table) |> 
+  mutate(watershed = "combined") |> 
+  select(objective, metric, watershed, baseline, portfolio_eg)
+
+watershed_metrics <- crr_summary |> left_join(phos_summary) |> left_join(ind_pop_summary) |> left_join(dep_pop_summary) |> 
+  pivot_longer(cols = -c(scenario,watershed),
+               names_to = "metric", 
+               values_to = "value") |> 
+  pivot_wider(names_from = scenario,
+              values_from = value) |> 
+  filter(metric != "years_over_one")  |> 
+  mutate(objective = case_when(metric == "mean_crr" ~ "productivity",
+                             metric == "mean_phos" ~ "diversity and fitness",
+                             metric %in% c("independence_years", "dependence_years") ~ "number of populations")) |> 
+  select(objective, metric, watershed, baseline, portfolio_eg)
+
+summary_metrics_table <- bind_rows(metrics_table, watershed_metrics) |> 
+  mutate(objective = factor(objective, levels = c("abundance", "productivity", "diversity and fitness", "number of populations"))) |> 
+  arrange(objective) |> 
+  mutate(baseline = format(round(baseline,3), scientific = FALSE),
+         portfolio_eg = format(round(portfolio_eg,3), scientific = FALSE))
+  
+```
+
+```{r}
+kable(summary_metrics_table)
+```
+
+
+## Abundance
+
+### Spawners
+
+```{r, out.width = '100%'}
+plotly::ggplotly(ggplot(spawners_split) + 
+  geom_line(aes(sim_year, spawners, color = scenario)) +
+  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
+    labs(title = "Spawners by Watershed")+
+    facet_wrap(~watershed, nrow = 2) + 
+  scale_color_manual(values = colors)+
+  theme_plots)
+```
+
+```{r}
+plotly::ggplotly(ggplot(spawners) + 
+  geom_line(aes(sim_year, spawners, color = scenario)) +
+  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
+    labs(title = "Spawners across Watershed")+
+  scale_color_manual(values = colors)+
+  theme_plots)
+```
+
+```{r}
+kable(mean_spawners)
+```
+
+### Natural origin WR returning to spawn
+
+Natural origin spawners - each year and tributary has a different proportion natural based on hatchery allocations Total combines applicable watersheds
+
+```{r, echo = FALSE, out.width = '100%'}
+ggplot(returns) +
+  geom_line(aes(sim_year, nat_returns, color = scenario)) +
+  geom_point(aes(sim_year, nat_returns, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Natural Origin Returning Adults") +
+  # facet_wrap(~watershed, nrow = 2) + 
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r}
+kable(mean_natural_return)
+```
+
+### Hatchery origin WR returning to spawn
+
+Hatchery origin spawners - each year has a different proportion natural based on hatchery allocations Total combines applicable watersheds
+
+```{r, echo = FALSE, out.width = '100%'}
+ggplot(returns) +
+  geom_line(aes(sim_year, hatchery_returns, color = scenario)) +
+  geom_point(aes(sim_year, hatchery_returns, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Hatchery Origin Returning Adults") +
+  # facet_wrap(~watershed, nrow = 2) + 
+  scale_color_manual(values = colors2)+
+  theme_plots
+```
+
+```{r}
+kable(mean_hatchery_return)
+```
+
+### Frequency of population decline
+
+Number of years of decline in spawners
+
+**Can we add an extra year of spawners to help with calculating change in abundance for all years?**
+
+```{r}
+kable(total_declines)
+```
+
+### Frequency of catastrophic decline
+
+Maximum 3-year average change in spawners across dataset
+
+```{r}
+kable(max_declines)
+```
+
+## Productivity
+
+### Number of juveniles emigrating from upper Sacramento River
+
+Number of juveniles coming out of Upper Sacramento River before rear, grow, migrate, moving to other watersheds
+
+```{r}
+ggplot(juvs_us) +
+  geom_line(aes(year, total_juv, color = scenario)) +
+  geom_point(aes(year, total_juv, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Juveniles in Upper Sac", y = "Juveniles in Upper Sac") +
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r}
+kable(mean_juv_us)
+```
+
+### Number of natural origin smolts surviving to reach the ocean
+
+This metric calculates juveniles at Chipps using large and very large fish (smolts) originating from the Upper Sacramento River.
+
+**Do we need to multiple this by proportion_natural? **
+
+```{r, out.width = '100%'}
+ggplot(juv_chipps) + 
+  geom_line(aes(year, jac, color = scenario)) +
+  geom_point(aes(year, jac, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Juveniles at Chipps", y = "Juveniles at Chipps") +
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r}
+kable(mean_jac)
+```
+
+### Cohort Replacement Rate
+
+Battle Creek does not have baseline so keeping both for now
+
+**Can we add an extra 2 years of spawners to help with calculating change in abundance for all years?**
+
+```{r, out.width = '100%'}
+ggplot(crr) + 
+  geom_line(aes(sim_year, crr, color = scenario)) +
+  geom_point(aes(sim_year, crr, color = scenario, shape = scenario), size = 3) +
+  geom_hline(yintercept = 1, linetype = "dashed") + 
+  labs(title = "Cohort Replacement Rate", y = "Cohort Replacement Rate") +
+  facet_wrap(~watershed, nrow = 2) + 
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r}
+kable(crr_summary)
+```
+
+## Life history diversity and fitness
+
+Add labels to the y axis
+
+### pHOS
+
+```{r, out.width = '100%'}
+ggplot(phos) + 
+  geom_line(aes(sim_year, phos, color = scenario)) +
+  geom_point(aes(sim_year, phos, color = scenario, shape = scenario), size = 3) +
+  scale_color_manual(values = colors2)+
+  labs(title = "pHOS") +
+  facet_wrap(~watershed, nrow = 2) + 
+  theme_plots
+```
+
+```{r}
+kable(mean(phos_summary))
+```
+
+### Size class diversity
+
+Shannon diversity measures evenness and diversity. A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, size class).
+
+```{r, out.width = '100%'}
+
+  
+  ggplot(shannon_di_size) + 
+  geom_line(aes(year, shannon_index, color = scenario)) +
+  geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Size Diversity")+
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r, out.width = '100%'}
+ggplot(juvenile_size_ocean_entry)+
+  geom_col(aes(year, value, fill = factor(size_or_age)), position = "fill", color = "black") +
+  labs(y = "proportion of juveniles", title = "Size Diversity") +
+  facet_wrap(~scenario, nrow = 2) + 
+  viridis::scale_fill_viridis(option= "mako", discrete = TRUE)  + 
+  theme_bw()
+```
+
+```{r}
+kable(mean_shannon_di_size)
+```
+
+### Timing diversity
+
+Shannon diversity measures evenness and diversity. A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, month of ocean entry).
+
+```{r, out.width = '100%'}
+ggplot(shannon_di_timing) + 
+geom_line(aes(year, shannon_index, color = scenario)) +
+geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
+labs(title = "Timing Diversity")+
+scale_color_manual(values = colors)+
+theme_plots
+```
+
+```{r, out.width = '100%'}
+ggplot(juvenile_month_ocean_entry)+
+  geom_col(aes(year, value, fill = factor(month)), position = "fill", color = "black") +
+  labs(y = "proportion of juveniles", title = "Timing Diversity") +
+  facet_wrap(~scenario, nrow = 2) + 
+  viridis::scale_fill_viridis(option= "turbo", discrete = TRUE)  + 
+  theme_bw()
+```
+
+```{r}
+kable(mean_shannon_di_timing)
+```
+
+### Combined size-timing diversity
+
+Shannon diversity measures evenness and diversity. A higher number indicates greater evenness and diversity. A low number may indicate domination by one group (in this case, size and month combination groupings).
+
+```{r}
+kable(mean_shannon_di_size_timing)
+```
+
+```{r, out.width = '100%'}
+ggplot(shannon_di_size_timing) + 
+  geom_line(aes(year, shannon_index, color = scenario)) +
+  geom_point(aes(year, shannon_index, color = scenario, shape = scenario), size = 3) +
+  scale_color_manual(values = colors2)+
+  labs(title = "Shannon Diversity for Timing and Size") +
+  theme_plots
+```
+
+## Increase number of tribs supporting WR
+
+### Number of adults spawning in tributaries
+
+In this case, just Battle Creek
+
+```{r}
+ggplot(spawners_in_tribs) + 
+  geom_line(aes(sim_year, spawners, color = scenario)) +
+  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Spawners in Battle Creek")+
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r}
+kable(mean_spawners_in_tribs)
+```
+
+### Number of juveniles rearing in tributaries
+
+This tracks juveniles in the tributary, right before they grow and rear.
+
+```{r, out.width = '100%'}
+ggplot(juvs_trib) +
+  geom_line(aes(year, total_juv, color = scenario)) +
+  geom_point(aes(year, total_juv, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Juveniles in Battle Creek", y = "Juveniles in Battle Creek") +
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+```{r}
+kable(mean_juv_trib)
+```
+
+### Number of independent populations
+
+Independent populations, also named viable populations, include those with \* greater than 500 spawners \* pHOS less than 5% \* CRR \> 1 \* Growth rate (spawner change) \> 1
 
 ```{r, out.width = '100%'}
 ggplot(ind_pop_long) + 
   geom_tile(aes(sim_year, metric, fill = value), color = "black")+
   facet_grid(watershed~scenario)
 ```
+
 ```{r}
 kable(ind_pop_summary)
 ```
 
 ### Number of independent populations in historic habitats
 
-- Not relevant for this portfolio since only Battle Creek included. Historic habitats include Pit River, Little Sacramento River, and McCloud River. 
+Not relevant for this portfolio since only Battle Creek included. Historic habitats include Pit River, Little Sacramento River, and McCloud River.
 
-### Number of dependent populations 
+```{r}
+kable(ind_pop_historic)
+```
+
+
+### Number of dependent populations
 
 Defined as populations not meeting independent population criteria
 
-- 2 populations 
+**Currently first year is NA**
+
+```{r}
+kable(dep_pop_summary)
+```
+
+
