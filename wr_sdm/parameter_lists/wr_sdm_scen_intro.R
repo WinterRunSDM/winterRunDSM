@@ -46,7 +46,7 @@ wr_sdm_scen_intro_params$harvest_rate_ocean <- wr_sdm_scen_intro_params$harvest_
 
 # BC1
 # Decrease river harvest by 50% 
-wr_sdm_scen_intro_params$harvest_rate_trib["Battle Creek"] <- wr_sdm_scen_intro_params$harvest_rate_trib["Battle Creek"] * 0.05
+wr_sdm_scen_intro_params$harvest_rate_trib["Battle Creek"] <- wr_sdm_scen_intro_params$harvest_rate_trib["Battle Creek"] * 0.5
 
 # BC8
 wr_sdm_scen_intro_params$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
