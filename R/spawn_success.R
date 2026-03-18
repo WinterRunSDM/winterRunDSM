@@ -20,6 +20,7 @@ spawn_success <- function(escapement,
                           adult_prespawn_survival, 
                           adult_prespawn_survival_abv_dam, # ADDS NEW PARAM for abv dam
                           abv_dam_spawn_proportion, # ADDS NEW PARAM for abv dam
+                          harvest_rate_abv_dam  = ..params$harvest_rate_abv_dam, # WR SDM addition
                           egg_to_fry_survival,
                           prob_scour, spawn_habitat,
                           stochastic,
@@ -35,10 +36,10 @@ spawn_success <- function(escapement,
     abv_dam <- rbinom(31, round(escapement), (abv_dam_spawn_proportion * adult_prespawn_survival * sex_ratio))
     blw_dam + abv_dam
   } else {
-    # R2R Adds abv dam logic 
-    # round(escapement * adult_prespawn_survival * sex_ratio)
+    # R2R Adds abv dam logic, WR SDM adds harvest rate logic
+    # round(escapement * harvest_rate_abv_dam * adult_prespawn_survival * sex_ratio)
     blw_dam <- round((1 - abv_dam_spawn_proportion) * escapement * adult_prespawn_survival * sex_ratio, 0) 
-    abv_dam <- round(abv_dam_spawn_proportion * escapement * adult_prespawn_survival_abv_dam * sex_ratio, 0)
+    abv_dam <- round(abv_dam_spawn_proportion * escapement * harvest_rate_abv_dam * adult_prespawn_survival_abv_dam * sex_ratio, 0)
     blw_dam + abv_dam
   }
 
