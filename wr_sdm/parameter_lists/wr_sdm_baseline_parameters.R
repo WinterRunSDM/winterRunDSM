@@ -199,7 +199,11 @@ wr_sdm_baseline_params <- list(
   # survival estimate for juveniles - volitional passage past Keswick Dam
   effect_upstream_vol_juv_kwk = 0,
   # applied in drought years
-  addl_juv_chipps = 0
+  addl_juv_chipps = 0,
+  harvest_rate_abv_dam = 0.025,
+  juvenile_capture_efficiency = 0,
+  effect_downstream_trap_juvenile_abv_dam = NA,
+  effect_habitat_size_class_abv_dam = NA,
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)

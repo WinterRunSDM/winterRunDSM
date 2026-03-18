@@ -16,6 +16,7 @@ spawn_success(
   adult_prespawn_survival,
   adult_prespawn_survival_abv_dam,
   abv_dam_spawn_proportion,
+  harvest_rate_abv_dam = ..params$harvest_rate_abv_dam,
   egg_to_fry_survival,
   prob_scour,
   spawn_habitat,
