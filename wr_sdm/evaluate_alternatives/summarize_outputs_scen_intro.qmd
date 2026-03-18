@@ -10,7 +10,7 @@ editor: visual
 
 -   **H-1: LSNFH modified release practices:** Release hatchery-reared salmon in locations or at times that differ from traditional practices to improve survival and support population recovery. This may include releasing fish at different life stages, in alternative river reaches, or under specific environmental conditions to reduce predation, improve imprinting, and enhance ocean survival.
 -   **H-2: LSNFH facility upgrades and production improvements:** Combines all proposed hatchery upgrades and production improvements, and will be reflected by bookend estimates (high and low) of changes. Major upgrades and improvements reflected include a pathogenic filtration system to allow reintroduction of WRCS above Shasta to spawn, brood fish collection facility (e.g., in-river pound net) on the Sacramento River to collect natural origin fish and maintain fitness wtihin the integrated (hatchery-natural) WRCS population, addition of a secondary trapping location, upgrades to the Keswick Fish Trap, installation of permanent water chiller to provide the hatchery with cold water during drought years, and electrical and plumbing upgrades.
-    -   **H-2a: LSNFH facility upgrades**
+    -   **H-2a: LSNFH facility and adult collection upgrades**
     -   **H-2b: Upgrades to Keswick Dam adult collection system**
 -   **H-3: CNFH trapping and sorting improvements:** Non-water supply improvements, including construction of an automated fish sorting and trapping facilitie to allow for daily real-time sorting that can reduce excess holding/handling and migration delays for WRCS and passage blockage, and improvements to water treatment infrastructure.
 -   **SR-4a: Reduce predation on Sacramento River:** Implement projects to minimize predation at weirs, diversions, and related structures in the Sacramento River.
@@ -41,9 +41,10 @@ theme_plots <-
         legend.title = element_text(size = 13),
         legend.position = "top")
 
-colors <- c("#96C8A2", "#006A4E")
-colors2 <- c("darkgoldenrod2", "coral4")
+colors <- c("#93c47d", "#009E73")
+colors2 <- c("goldenrod", "#D55E00")
 
+# Formats summary table with commas and decimals
 format_metric <- function(x) {
   dplyr::case_when(
     is.na(x)        ~ "NA",
@@ -86,6 +87,14 @@ portfolio_eg_results <- winterRunDSM::winter_run_model(mode = "simulate",
 #                                               seeds = baseline_seeds)
 ```
 
+
+```{r}
+#TODO
+
+# Why are there 2 spawners in years 1:3 for Battle Creek baseline? 
+# Something weird with juveniles in years 5, 9, 13, 15, 19 with Battle Creek juveniles and pHOS (had to change to 0), could be to do with natural_proportion_with_renat
+```
+
 ## Summary of Results
 
 ```{r Abundance_calculations}
@@ -104,7 +113,9 @@ spawners_split <- baseline_results$spawners |>
                names_to = "sim_year",
                values_to = "spawners") |> 
   filter(watershed %in% c("Upper Sacramento River", "Battle Creek")) |> 
-  mutate(sim_year = as.numeric(sim_year)) 
+  mutate(sim_year = as.numeric(sim_year),
+         # Figure this part out
+         spawners = replace(spawners, watershed == "Battle Creek" & scenario == "baseline", 0)) 
 
 # combined
 spawners <- spawners_split |> 
@@ -249,6 +260,7 @@ mean_jac <- juv_chipps |>
 crr <- spawners_split |> 
   group_by(scenario, watershed) |> 
   mutate(crr = spawners/lag(spawners, 3),
+         # crr = replace(crr, watershed == "Battle Creek" & scenario == "baseline", 0),
          crr_over_one = if_else(crr > 1, 1L, 0L)) |> 
   ungroup() |> 
   mutate(crr = replace(crr, is.nan(crr), NA))
@@ -388,7 +400,7 @@ juvs_trib <- baseline_results$juveniles |>
   group_by(watershed, scenario, year) |> 
   summarize(total_juv = sum(juveniles)) |> 
   ungroup() |> 
-  mutate(total_juv = replace(total_juv, watershed == "Battle Creek" & scenario == "baseline", 0))
+  mutate(total_juv = replace(total_juv, watershed=="Battle Creek"  & scenario == "baseline", 0))
   
 mean_juv_trib <- juvs_trib |> 
   group_by(scenario) |> 
@@ -485,7 +497,7 @@ kbl(summary_metrics_table, booktabs = T) |>
 
 ## A note about seeds
 
-The model spins up using several years of data (years 1-6) to seed the model before producing results for year 1. This allows the model to produce more results for the limited time series. Thus you can see differences between the baseline and portfolio starting in simulation year 1. 
+The model spins up using several years of data (years 1-6) to seed the model before producing results for year 1. This allows the model to produce more results for the limited time series. For the portfolio, this seeding period takes into account the actions in the portfolio. Thus you can see differences between the baseline and portfolio starting in simulation year 1.
 
 ```{r}
 #| fig-cap: "Baseline scenario seeds"
