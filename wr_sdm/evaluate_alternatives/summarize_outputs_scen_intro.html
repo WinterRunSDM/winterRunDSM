@@ -53,10 +53,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#description-of-included-actions" id="toc-description-of-included-actions" class="nav-link active" data-scroll-target="#description-of-included-actions">Description of included actions</a></li>
-  <li><a href="#summary-of-results" id="toc-summary-of-results" class="nav-link" data-scroll-target="#summary-of-results">Summary of Results</a>
-  <ul class="collapse">
-  <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table">Summary Table</a></li>
-  </ul></li>
+  <li><a href="#summary-of-results" id="toc-summary-of-results" class="nav-link" data-scroll-target="#summary-of-results">Summary of Results</a></li>
   <li><a href="#a-note-about-seeds" id="toc-a-note-about-seeds" class="nav-link" data-scroll-target="#a-note-about-seeds">A note about seeds</a></li>
   <li><a href="#abundance" id="toc-abundance" class="nav-link" data-scroll-target="#abundance">Abundance</a>
   <ul class="collapse">
@@ -135,8 +132,6 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="summary-of-results" class="level2">
 <h2 class="anchored" data-anchor-id="summary-of-results">Summary of Results</h2>
-<section id="summary-table" class="level3">
-<h3 class="anchored" data-anchor-id="summary-table">Summary Table</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table caption-top table-sm table-striped small">
@@ -155,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean spawners</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">829</td>
-<td style="text-align: left;">1,736</td>
+<td style="text-align: left;">1,720</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Increase abundance</td>
@@ -169,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean hatchery spawners</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">218</td>
-<td style="text-align: left;">1,030</td>
+<td style="text-align: left;">1,014</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Increase abundance</td>
@@ -246,14 +241,14 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean spawners in tributaries</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">0</td>
-<td style="text-align: left;">777</td>
+<td style="text-align: left;">762</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Increase number of tribs supporting WRCS</td>
 <td style="text-align: left;">Mean juveniles in tributaries</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">0</td>
-<td style="text-align: left;">708,184</td>
+<td style="text-align: left;">699,459</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Increase number of tribs supporting WRCS</td>
@@ -281,7 +276,6 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-</section>
 <section id="a-note-about-seeds" class="level2">
 <h2 class="anchored" data-anchor-id="a-note-about-seeds">A note about seeds</h2>
 <p>The model spins up using several years of data (years 1-6) to seed the model before producing results for year 1. This allows the model to produce more results for the limited time series. For the portfolio, this seeding period takes into account the actions in the portfolio. Thus you can see differences between the baseline and portfolio starting in simulation year 1.</p>
@@ -290,7 +284,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="spawners_baseline_seeds.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption>Baseline scenario seeds</figcaption>
+<figcaption>Spawner results using baseline scenario seeds (does not include portfolio actions)</figcaption>
 </figure>
 </div>
 </div>
@@ -300,7 +294,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="spawners_portfolio_seeds.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption>Portfolio scenario seeds</figcaption>
+<figcaption>Spawner results using portfolio scenario seeds (includes portfolio actions)</figcaption>
 </figure>
 </div>
 </div>
@@ -346,7 +340,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean spawners</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">829</td>
-<td style="text-align: left;">1,736</td>
+<td style="text-align: left;">1,720</td>
 </tr>
 </tbody>
 </table>
@@ -420,7 +414,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean hatchery spawners</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">218</td>
-<td style="text-align: left;">1,030</td>
+<td style="text-align: left;">1,014</td>
 </tr>
 </tbody>
 </table>
@@ -775,7 +769,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean spawners in tributaries</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">0</td>
-<td style="text-align: left;">777</td>
+<td style="text-align: left;">762</td>
 </tr>
 </tbody>
 </table>
@@ -812,7 +806,7 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Mean juveniles in tributaries</td>
 <td style="text-align: left;">combined</td>
 <td style="text-align: left;">0</td>
-<td style="text-align: left;">708,184</td>
+<td style="text-align: left;">699,459</td>
 </tr>
 </tbody>
 </table>

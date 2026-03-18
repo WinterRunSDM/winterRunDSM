@@ -93,6 +93,7 @@ portfolio_eg_results <- winterRunDSM::winter_run_model(mode = "simulate",
 
 # Why are there 2 spawners in years 1:3 for Battle Creek baseline? 
 # Something weird with juveniles in years 5, 9, 13, 15, 19 with Battle Creek juveniles and pHOS (had to change to 0), could be to do with natural_proportion_with_renat
+# Why does reducing harvest decrease spawners and juveniles?
 ```
 
 ## Summary of Results
@@ -488,7 +489,6 @@ summary_metrics_table <- bind_rows(metrics_table, watershed_metrics) |>
   
 ```
 
-### Summary Table 
 ```{r}
 kbl(summary_metrics_table, booktabs = T) |> 
   kable_styling() |> 
@@ -500,18 +500,19 @@ kbl(summary_metrics_table, booktabs = T) |>
 The model spins up using several years of data (years 1-6) to seed the model before producing results for year 1. This allows the model to produce more results for the limited time series. For the portfolio, this seeding period takes into account the actions in the portfolio. Thus you can see differences between the baseline and portfolio starting in simulation year 1.
 
 ```{r}
-#| fig-cap: "Baseline scenario seeds"
+#| fig-cap: "Spawner results using baseline scenario seeds (does not include portfolio actions)"
 #| out-width: "80%"
 #| fig-align: center
 knitr::include_graphics("spawners_baseline_seeds.png")
 ```
 
 ```{r}
-#| fig-cap: "Portfolio scenario seeds"
+#| fig-cap: "Spawner results using portfolio scenario seeds (includes portfolio actions)"
 #| out-width: "80%"
 #| fig-align: center
 knitr::include_graphics("spawners_portfolio_seeds.png")
 ```
+
 
 
 ## Abundance
