@@ -155,7 +155,7 @@ wr_sdm_baseline_params <- list(
   prob_strand_early = DSMhabitat::prob_strand_early,
   prob_strand_late = DSMhabitat::prob_strand_late,
   prob_nest_scoured = DSMhabitat::prob_nest_scoured,
-  above_dam_spawn_proportion = DSMhabitat::above_dam_spawn_proportion$wr, # R2R - above dam proportion 
+  # above_dam_spawn_proportion = DSMhabitat::above_dam_spawn_proportion$wr, # R2R - above dam proportion 
   above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$wr, # R2R - above dam proportion
   
   # Calibration Variables (vary by run)
@@ -204,6 +204,12 @@ wr_sdm_baseline_params <- list(
   juvenile_capture_efficiency = 0,
   effect_downstream_trap_juvenile_abv_dam = NA,
   effect_habitat_size_class_abv_dam = NA,
+  # above dam actions - if you change any one of these, you should change them all
+  above_dam_spawn_proportion = 0, # should be 0 for baseline due to restructuring of spawn_success
+  prespawn_survival_abv_dam  = 0.95, # R2R was using max fall run survival here
+  egg_to_fry_survival_abv_dam = 0, # baseline is 0
+  # abv_dam_spawn_habitat_proportion NEEDS to be calculated based on habitat input data
+  abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels) # this should specifically be about the amount of additional habitat above dam
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)

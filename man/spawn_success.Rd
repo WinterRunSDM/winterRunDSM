@@ -12,18 +12,20 @@ spawn_success(
   proportion_natural,
   hatchery_age_distribution,
   natural_age_distribution,
-  fecundity_lookup = fallRunDSM::params$fecundity_lookup,
+  fecundity_lookup,
   adult_prespawn_survival,
   adult_prespawn_survival_abv_dam,
   abv_dam_spawn_proportion,
-  harvest_rate_abv_dam = ..params$harvest_rate_abv_dam,
+  abv_dam_spawn_habitat_proportion,
+  harvest_rate_abv_dam,
   egg_to_fry_survival,
+  egg_to_fry_survival_abv_dam,
   prob_scour,
   spawn_habitat,
   stochastic,
-  sex_ratio = springRunDSM::params$spawn_success_sex_ratio,
-  redd_size = springRunDSM::params$spawn_success_redd_size,
-  fecundity = springRunDSM::params$spawn_success_fecundity
+  sex_ratio,
+  redd_size,
+  fecundity
 )
 }
 \arguments{
