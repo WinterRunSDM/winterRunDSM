@@ -244,7 +244,7 @@ route_regional <- function(month, year, migrants,
       if (stochastic) {
         rbinom(n = 4, size = regional_fish$migrants[i, ], prob = migration_survival_rate)
       } else {
-        round(regional_fish$migrants[i, ] * migration_survival_rate)
+        suppressWarnings(round(regional_fish$migrants[i, ] * migration_survival_rate))
       }
     }))
 
