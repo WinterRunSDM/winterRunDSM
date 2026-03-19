@@ -15,7 +15,11 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
 
 # test out adult enroute survival multiplier
 test_params <- winterRunDSM::wr_sdm_baseline_params
-test_params$addl_juv_chipps <- 50000
+test_params$above_dam_spawn_proportion <- 0.5
+test_params$spawning_habitat["Upper Sacramento River",,] <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
+test_params$egg_to_fry_survival_abv_dam <- .37
+test_params$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean((DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]) / DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,])
+test_params$hatchery_release["Upper Sacramento River","xl",] <- rep(100000, 20)
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
@@ -41,6 +45,25 @@ baseline_results$spawners |>
   mutate(sim_year = as.numeric(sim_year)) |> 
   ggplot(aes(x = sim_year,
              y = spawners,
+             color = scenario)) +
+  geom_line() +
+  facet_wrap(~watershed)
+
+baseline_results$total_fry_from_dam |> 
+  as.data.frame() |> 
+  mutate(watershed = winterRunDSM::watershed_labels,
+         scenario = "baseline") |> 
+  bind_rows(alt_results$total_fry_from_dam |>
+              as.data.frame() |>
+              mutate(watershed = winterRunDSM::watershed_labels,
+                     scenario = "alt")) |>
+  pivot_longer(`1`:`20`,
+               names_to = "sim_year",
+               values_to = "fry") |> 
+  filter(watershed %in% c("Upper Sacramento River")) |> 
+  mutate(sim_year = as.numeric(sim_year)) |> 
+  ggplot(aes(x = sim_year,
+             y = fry,
              color = scenario)) +
   geom_line() +
   facet_wrap(~watershed)

@@ -59,7 +59,12 @@ winter_run_model <- function(scenario = NULL,
     proportion_natural_at_spawning = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     proportion_natural_juves_in_tribs = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     phos = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
-    harvested_adults = data.frame()
+    harvested_adults = data.frame(),
+    
+    # WR SDM metrics
+    prop_fry_abv_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
+    total_fry_from_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
+    pct_abv_dam_habitat_used = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
   )
   
   if (mode == 'calibrate') {
@@ -276,6 +281,7 @@ winter_run_model <- function(scenario = NULL,
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, ..params$month_return_proportions)
     
     # R2R: above and below degree days
+    # WR SDM comment: note, we don't use this
     average_degree_days_abv_dam <- apply(cbind(jan = rowSums(..params$degree_days_abv_dam[ , 1:4, year]),
                                                feb = rowSums(..params$degree_days_abv_dam[ , 2:4, year]),
                                                march = rowSums(..params$degree_days_abv_dam[ , 3:4, year]),
@@ -284,9 +290,6 @@ winter_run_model <- function(scenario = NULL,
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              .adult_prespawn_int = ..params$.adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
-    # R2R: above and below prespawn
-    prespawn_survival_abv_dam <- .95 #TODO confirm with tech team, use max fall run surv
-    
     
     # calculate juveniles 
     juveniles <- spawn_success(escapement = init_adults,
@@ -295,15 +298,23 @@ winter_run_model <- function(scenario = NULL,
                                natural_age_distribution = natural_age_dist, # R2R ADDS NEW PARAM
                                fecundity_lookup = ..params$fecundity_lookup, # R2R ADDS NEW PARAM
                                adult_prespawn_survival = prespawn_survival, 
-                               adult_prespawn_survival_abv_dam = prespawn_survival_abv_dam, # R2R: ADDS NEW PARAM for abv dam
+                               adult_prespawn_survival_abv_dam = ..params$prespawn_survival_abv_dam , # WR SDM
                                abv_dam_spawn_proportion = ..params$above_dam_spawn_proportion, # R2R: ADDS NEW PARAM for abv dam
+                               abv_dam_spawn_habitat_proportion = ..params$abv_dam_spawn_habitat_proportion, # WR SDM adds param for habitat proportion
+                               harvest_rate_abv_dam  = ..params$harvest_rate_abv_dam, # WR SDM adds new param
                                egg_to_fry_survival = egg_to_fry_surv,
+                               egg_to_fry_survival_abv_dam = ..params$egg_to_fry_survival_abv_dam, # WR DSM adds new param for abv dam
                                prob_scour = ..params$prob_nest_scoured,
                                spawn_habitat = min_spawn_habitat,
                                sex_ratio = ..params$spawn_success_sex_ratio,
                                redd_size = ..params$spawn_success_redd_size,
                                fecundity = ..params$spawn_success_fecundity,
                                stochastic = stochastic)
+    
+    output$pct_abv_dam_habitat_used[, year] <- juveniles$pct_abv_dam_habitat_used
+    output$prop_fry_abv_dam[, year] <- juveniles$prop_abv_dam
+    output$total_fry_from_dam[, year] <- juveniles$total_fry[,1] + juveniles$total_fry[,2]
+    juveniles <- juveniles$total_fry
   
     # R2R hatchery logic -------------------------------------------------------
     # Currently adds only on major hatchery rivers (American, Battle, Feather, Merced, Moke)
