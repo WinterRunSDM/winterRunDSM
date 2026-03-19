@@ -291,8 +291,6 @@ winter_run_model <- function(scenario = NULL,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     
     # calculate juveniles 
-    # TODO REMOVE! 
-    init_adults <- init_adults + 50000
     juveniles <- spawn_success(escapement = init_adults,
                                proportion_natural = natural_proportion_with_renat, # R2R ADDS NEW PARAM
                                hatchery_age_distribution = hatch_age_dist, # R2R ADDS NEW PARAM
