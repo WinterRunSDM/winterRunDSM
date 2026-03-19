@@ -17,7 +17,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
 test_params <- winterRunDSM::wr_sdm_baseline_params
 test_params$above_dam_spawn_proportion <- 0.5
 test_params$spawning_habitat["Upper Sacramento River",,] <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
-test_params$egg_to_fry_survival_abv_dam <- 1
+test_params$egg_to_fry_survival_abv_dam <- .37
 test_params$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean((DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]) / DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,])
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
@@ -52,10 +52,10 @@ baseline_results$total_fry_from_dam |>
   as.data.frame() |> 
   mutate(watershed = winterRunDSM::watershed_labels,
          scenario = "baseline") |> 
-  bind_rows(alt_results$total_fry_from_dam |> 
-              as.data.frame() |> 
+  bind_rows(alt_results$total_fry_from_dam |>
+              as.data.frame() |>
               mutate(watershed = winterRunDSM::watershed_labels,
-                     scenario = "alt")) |> 
+                     scenario = "alt")) |>
   pivot_longer(`1`:`20`,
                names_to = "sim_year",
                values_to = "fry") |> 

@@ -183,8 +183,11 @@ spawn_success <- function(escapement,
       zeros <- matrix(0, nrow = length(escapement), ncol = 3)
 
       fry_abv_dam_final <- cbind(fry_abv_dam, zeros)
-      total_fry_final <- fry_blw_dam_final + fry_abv_dam_final
-      colnames(total_fry_final)[1] <- "total_fry"
+      
+      total_fry_final <- matrix(0, nrow = length(escapement), ncol = 4)
+      total_fry_final[, 1] <- fry_blw_dam
+      # add above dam fish to a bigger size class
+      total_fry_final[, 2] <- fry_abv_dam
 
       prop_abv_dam <- fry_abv_dam / (fry_abv_dam + fry_blw_dam)
       prop_abv_dam[is.nan(prop_abv_dam)] <- 0

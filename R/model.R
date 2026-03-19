@@ -311,7 +311,7 @@ winter_run_model <- function(scenario = NULL,
                                stochastic = stochastic)
     
     output$prop_fry_abv_dam[, year] <- juveniles$prop_abv_dam
-    output$total_fry_from_dam[, year] <- juveniles$total_fry[,1]
+    output$total_fry_from_dam[, year] <- juveniles$total_fry[,1] + juveniles$total_fry[,2]
     juveniles <- juveniles$total_fry
   
     # R2R hatchery logic -------------------------------------------------------
