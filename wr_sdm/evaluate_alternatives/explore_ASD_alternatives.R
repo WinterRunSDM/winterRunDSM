@@ -19,6 +19,7 @@ test_params$above_dam_spawn_proportion <- 0.5
 test_params$spawning_habitat["Upper Sacramento River",,] <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
 test_params$egg_to_fry_survival_abv_dam <- .37
 test_params$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean((DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]) / DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,])
+test_params$hatchery_release["Upper Sacramento River","xl",] <- rep(100000, 20)
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",

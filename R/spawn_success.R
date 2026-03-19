@@ -136,7 +136,8 @@ spawn_success <- function(escapement,
     if(abv_dam_spawn_habitat_proportion["Upper Sacramento River"] == 0) {
       # if no above dam action, return the below dam fry as total amount
       return(list("total_fry" = fry_blw_dam_final,
-                  "prop_abv_dam" = rep(0, 31)))
+                  "prop_abv_dam" = rep(0, 31),
+                  "pct_abv_dam_habitat_used" = 0))
     } else {
       # natural fry
       nat_spawn_abv_dam <- tibble(watershed = winterRunDSM::watershed_labels,
@@ -192,8 +193,11 @@ spawn_success <- function(escapement,
       prop_abv_dam <- fry_abv_dam / (fry_abv_dam + fry_blw_dam)
       prop_abv_dam[is.nan(prop_abv_dam)] <- 0
 
+      pct_abv_dam_habitat_used <- (spawner_capacity_abv_dam * redd_size) / spawn_habitat_abv_dam
+      pct_abv_dam_habitat_used[is.nan(pct_abv_dam_habitat_used)] <- 0
       return(list("total_fry" = total_fry_final,
-                  "prop_abv_dam" = prop_abv_dam))
+                  "prop_abv_dam" = prop_abv_dam,
+                  "pct_abv_dam_habitat_used" = pct_abv_dam_habitat_used))
     }
 
 }
