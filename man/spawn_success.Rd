@@ -17,6 +17,8 @@ spawn_success(
   adult_prespawn_survival_abv_dam,
   abv_dam_spawn_proportion,
   abv_dam_spawn_habitat_proportion,
+  dam_passage_survival,
+  juvenile_capture_efficiency_dam_transport,
   harvest_rate_abv_dam,
   egg_to_fry_survival,
   egg_to_fry_survival_abv_dam,

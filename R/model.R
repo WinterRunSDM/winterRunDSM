@@ -299,8 +299,10 @@ winter_run_model <- function(scenario = NULL,
                                fecundity_lookup = ..params$fecundity_lookup, # R2R ADDS NEW PARAM
                                adult_prespawn_survival = prespawn_survival, 
                                adult_prespawn_survival_abv_dam = ..params$prespawn_survival_abv_dam , # WR SDM
-                               abv_dam_spawn_proportion = ..params$above_dam_spawn_proportion, # R2R: ADDS NEW PARAM for abv dam
+                               abv_dam_spawn_proportion = ..params$abv_dam_spawn_proportion, # R2R: ADDS NEW PARAM for abv dam
                                abv_dam_spawn_habitat_proportion = ..params$abv_dam_spawn_habitat_proportion, # WR SDM adds param for habitat proportion
+                               dam_passage_survival = ..params$dam_passage_survival, # WR SDM adds new param
+                               juvenile_capture_efficiency_dam_transport = ..params$juvenile_capture_efficiency_dam_transport, # WR SDM adds new param
                                harvest_rate_abv_dam  = ..params$harvest_rate_abv_dam, # WR SDM adds new param
                                egg_to_fry_survival = egg_to_fry_surv,
                                egg_to_fry_survival_abv_dam = ..params$egg_to_fry_survival_abv_dam, # WR DSM adds new param for abv dam
@@ -322,10 +324,18 @@ winter_run_model <- function(scenario = NULL,
     total_juves_pre_hatchery <- rowSums(juveniles)
     natural_juveniles <- total_juves_pre_hatchery  * natural_proportion_with_renat
     total_juves_pre_hatchery <- rowSums(juveniles)
-    juveniles <- juveniles + sweep(..params$hatchery_release[, , year], 
+    # added if else for above dam actions to account for when adults are not sent above dam but hatchery releases
+    # are subject to capture efficiency
+    if(..params$abv_dam_spawn_proportion == 0) {
+    juveniles <- juveniles + sweep(..params$hatchery_release[, , year] * ..params$juvenile_capture_efficiency_dam_transport, 
                                    MARGIN=2, 
                                    (1 - ..params$hatchery_release_proportion_bay), "*")
-    
+    }
+    else {
+     juveniles <- juveniles + sweep(..params$hatchery_release[, , year], 
+                                     MARGIN=2, 
+                                     (1 - ..params$hatchery_release_proportion_bay), "*") 
+    }
     # For use in WR SDM: Add juveniles in drought years
     # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
     # remove fish as fry and add back in as vl smolt
@@ -458,6 +468,7 @@ winter_run_model <- function(scenario = NULL,
                                                    .surv_juv_outmigration_san_joaquin_medium = ..params$.surv_juv_outmigration_san_joaquin_medium,
                                                    .surv_juv_outmigration_san_joaquin_large = ..params$.surv_juv_outmigration_san_joaquin_large,
                                                    min_survival_rate = ..params$min_survival_rate,
+                                                   delta_survival_multiplier = ..params$delta_survival_multiplier,
                                                    stochastic = stochastic)
       
       if (delta_surv_inflation == TRUE){

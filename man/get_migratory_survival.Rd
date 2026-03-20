@@ -26,6 +26,7 @@ get_migratory_survival(
   ..surv_juv_outmigration_sj_int,
   .surv_juv_outmigration_san_joaquin_medium,
   .surv_juv_outmigration_san_joaquin_large,
+  delta_survival_multiplier,
   min_survival_rate,
   stochastic
 )

@@ -21,6 +21,8 @@ spawn_success <- function(escapement,
                           adult_prespawn_survival_abv_dam, # ADDS NEW PARAM for abv dam
                           abv_dam_spawn_proportion, # ADDS NEW PARAM for abv dam
                           abv_dam_spawn_habitat_proportion, # WR DSM adds param for calculating spawing habitat potential
+                          dam_passage_survival, # WR SDM addition
+                          juvenile_capture_efficiency_dam_transport, # WR SDM addition
                           harvest_rate_abv_dam, # WR SDM addition
                           egg_to_fry_survival,
                           egg_to_fry_survival_abv_dam, # WR SDM addition
@@ -57,7 +59,7 @@ spawn_success <- function(escapement,
     spawner_potential_abv_dam <- if(stochastic) {
       rbinom(31, round(escapement), (abv_dam_spawn_proportion * adult_prespawn_survival_abv_dam * sex_ratio))
     } else {
-      round(abv_dam_spawn_proportion * escapement * (1 - harvest_rate_abv_dam) * adult_prespawn_survival_abv_dam * sex_ratio, 0)
+      round(abv_dam_spawn_proportion * escapement * (1 - harvest_rate_abv_dam) * adult_prespawn_survival_abv_dam * dam_passage_survival$adult * sex_ratio, 0)
     }
     spawner_capacity_abv_dam <- pmin(spawner_potential_abv_dam, capacity_abv_dam)
     if(capacity_abv_dam["Upper Sacramento River"] < spawner_potential_abv_dam["Upper Sacramento River"]) {
@@ -132,8 +134,8 @@ spawn_success <- function(escapement,
 
 # above dam ------------------------------------------------------------
 
-    # this is hard-coded for Upper Sac here
-    if(abv_dam_spawn_habitat_proportion["Upper Sacramento River"] == 0) {
+    # abv dam logic triggered when explicitly send spawners above the dam
+    if(abv_dam_spawn_proportion == 0) {
       # if no above dam action, return the below dam fry as total amount
       return(list("total_fry" = fry_blw_dam_final,
                   "prop_abv_dam" = rep(0, 31),
@@ -178,7 +180,7 @@ spawn_success <- function(escapement,
       fry_abv_dam <- if(stochastic) {
         pmax(round(rnorm(31, fry_abv_dam, (sqrt(fry_abv_dam) / 2))), 0)
       } else {
-        round(fry_abv_dam)
+        round(fry_abv_dam * dam_passage_survival$juv * juvenile_capture_efficiency_dam_transport)
       }
 
       zeros <- matrix(0, nrow = length(escapement), ncol = 3)
