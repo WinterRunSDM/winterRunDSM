@@ -15,11 +15,12 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
 
 # test out adult enroute survival multiplier
 test_params <- winterRunDSM::wr_sdm_baseline_params
-test_params$above_dam_spawn_proportion <- 0.5
-test_params$spawning_habitat["Upper Sacramento River",,] <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
-test_params$egg_to_fry_survival_abv_dam <- .37
-test_params$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean((DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]) / DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,])
-test_params$hatchery_release["Upper Sacramento River","xl",] <- rep(100000, 20)
+test_params$hatchery_release["Upper Sacramento River", "l",] <- 250000
+# test_params$above_dam_spawn_proportion <- 0.5
+#test_params$spawning_habitat["Upper Sacramento River",,] <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
+# test_params$egg_to_fry_survival_abv_dam <- .37
+# test_params$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean((DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]) / DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,])
+# test_params$hatchery_release["Upper Sacramento River","xl",] <- rep(100000, 20)
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
@@ -33,11 +34,11 @@ alt_results <- winterRunDSM::winter_run_model(mode = "simulate",
 baseline_results$spawners |> 
   as.data.frame() |> 
   mutate(watershed = winterRunDSM::watershed_labels,
-         scenario = "baseline") |> 
+         scenario = "500K dry years") |> 
   bind_rows(alt_results$spawners |> 
               as.data.frame() |> 
               mutate(watershed = winterRunDSM::watershed_labels,
-                     scenario = "alt")) |> 
+                     scenario = "250K all years")) |> 
   pivot_longer(`1`:`20`,
                names_to = "sim_year",
                values_to = "spawners") |> 

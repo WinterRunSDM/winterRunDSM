@@ -20,6 +20,8 @@ This is to document each update we make to the model in the course of the SDM.
 
 * Converted the hard coded 0.1 incidental harvest rate to watershed object `harvest_rate_trib` and `harvest_rate_ocean` and changed individual values for specific actions. Added reduction from harvest in `model.R`. 
 * Created `addl_juv_chipps` to add very large juveniles to the juvenile object in `model.R` during drought years (years 9:13), defined as 2+ dry years in a row
+* Created `juvenile_capture_efficiency_dam_transport` to represent the efficiency of capturing/routing juveniles for trap and haul or volitional passage. 
+* Created `dam_passage_survival` to represent the effects of passage (either trap and haul or volitional) on adults and juveniles.
 
 ## Multiplier requiring code changes
 

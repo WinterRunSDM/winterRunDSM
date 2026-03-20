@@ -200,11 +200,13 @@ wr_sdm_baseline_params <- list(
   effect_upstream_vol_juv_kwk = 0,
   # applied in drought years
   addl_juv_chipps = 0,
-  harvest_rate_abv_dam = 0.025,
-  juvenile_capture_efficiency = 0,
-  effect_downstream_trap_juvenile_abv_dam = NA,
   effect_habitat_size_class_abv_dam = NA,
-  # above dam actions - if you change any one of these, you should change them all
+  # above dam actions - 
+  juvenile_capture_efficiency_dam_transport = 0,
+  effect_downstream_trap_juvenile_abv_dam = NA, # TODO clarify
+  dam_passage_survival = list("adult" = 0.8, "juv" = 0.8), 
+  harvest_rate_abv_dam = 0.025,
+  # if you change any one of the params below, you should change them all
   above_dam_spawn_proportion = 0, # should be 0 for baseline due to restructuring of spawn_success
   prespawn_survival_abv_dam  = 0.95, # R2R was using max fall run survival here
   egg_to_fry_survival_abv_dam = 0, # baseline is 0

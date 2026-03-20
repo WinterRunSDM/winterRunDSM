@@ -206,7 +206,7 @@ create_param_list <- function(action_id) {
     # TODO add egg to fry survival
     param_list$hatchery_release["Upper Sacramento River","s",] <- rep(c(800000, 10), c(150000, 10))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + upper_mccloud_addition
-    param_list$juvenile_capture_efficiency <- 0.25
+    param_list$juvenile_capture_efficiency_dam_transport <- 0.25
     param_list$effect_downstream_trap_juvenile_abv_dam <- 0.8
   }
   
@@ -217,7 +217,7 @@ create_param_list <- function(action_id) {
     # TODO add egg to fry survival
     param_list$hatchery_release["Upper Sacramento River","s",] <- rep(c(800000, 10), c(150000, 10))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
-    param_list$juvenile_capture_efficiency <- 0.25
+    param_list$juvenile_capture_efficiency_dam_transport <- 0.25
     param_list$effect_downstream_trap_juvenile_abv_dam <- 0.8
   }
 
