@@ -32,6 +32,7 @@ library(zoo)
 library(kableExtra)
 library(knitr)
 library(here)
+library(readxl)
 
 theme_plots <- 
   theme_bw() + 
@@ -57,8 +58,8 @@ format_metric <- function(x) {
 }
 ```
 
-```{r}
-obj_metrics <- read_csv(here("wr_sdm/documentation/objectives_metrics.csv"))
+```{r, warning = FALSE, message = FALSE}
+obj_metrics <- read_excel(here("wr_sdm/documentation/objectives_metrics.xlsx"))
 source("calculate_performance_metrics_scen_intro.R")
 ```
 
@@ -86,20 +87,51 @@ knitr::include_graphics("spawners_baseline_seeds.png")
 knitr::include_graphics("spawners_portfolio_seeds.png")
 ```
 
-
-
 ## Abundance
 
 ### Spawners
 
 ```{r, out.width = '100%'}
-(spawner_plot <- ggplot(spawners_split) + 
+
+spawners_split2 <- baseline_results$spawners |> 
+  as.data.frame() |> 
+  mutate(watershed = winterRunDSM::watershed_labels,
+         scenario = "baseline") |> 
+  bind_rows(portfolio_eg_results2$spawners |> 
+              as.data.frame() |> 
+              mutate(watershed = winterRunDSM::watershed_labels,
+                     scenario = "portfolio_eg")) |> 
+  pivot_longer(`1`:`20`,
+               names_to = "sim_year",
+               values_to = "spawners") |> 
+  filter(watershed %in% c("Upper Sacramento River", "Battle Creek")) |> 
+  mutate(sim_year = as.numeric(sim_year),
+         # Figure this part out
+         spawners = replace(spawners, watershed == "Battle Creek" & scenario == "baseline", 0)) 
+
+p1 <- (spawner_plot <- ggplot(spawners_split) + 
   geom_line(aes(sim_year, spawners, color = scenario)) +
   geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
     labs(title = "Spawners by watershed")+
     facet_wrap(~watershed, nrow = 2) + 
   scale_color_manual(values = colors)+
   theme_plots)
+
+p2 <- (spawner_plot <- ggplot(spawners_split2) + 
+  geom_line(aes(sim_year, spawners, color = scenario)) +
+  geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
+    labs(title = "Spawners by watershed")+
+    facet_wrap(~watershed, nrow = 2) + 
+  scale_color_manual(values = colors)+
+  theme_plots)
+```
+
+```{r}
+# plotly::ggplotly(p1)
+```
+
+```{r}
+# plotly::ggplotly(p2)
 ```
 
 ```{r, out.width = '100%'}
@@ -295,6 +327,17 @@ kbl(summary_metrics_table |> filter(Metric == "Mean juvenile timing diversity at
 
 ## Increase number of tributaries supporting WR
 
+### Proportion of Above Shasta habitat occupied
+```{r}
+ggplot(abv_dam_habitat_used) + 
+  geom_line(aes(sim_year, abv_dam_habitat_used, color = scenario)) +
+  geom_point(aes(sim_year, abv_dam_habitat_used, color = scenario, shape = scenario), size = 3) +
+  labs(title = "Proportion of above Shasta habitat used", y = "Proportion habitat")+
+  scale_color_manual(values = colors)+
+  theme_plots
+```
+
+
 ### Number of adults spawning in tributaries
 
 Results shown for Battle Creek.
@@ -333,10 +376,10 @@ kbl(summary_metrics_table |> filter(Metric == "Mean juveniles in tributaries"))
 
 Independent populations, also named viable populations, include those with:
 
-* greater than 500 spawners
-* pHOS less than 5%
-* CRR > 1
-* Growth rate (spawner change) > 1
+-   greater than 500 spawners
+-   pHOS less than 5%
+-   CRR \> 1
+-   Growth rate (spawner change) \> 1
 
 We sum up the number of populations (tributaries) that meet the criteria for the 3 last years of the time series.
 
@@ -361,7 +404,7 @@ kbl(summary_metrics_table |> filter(Metric == "Number of independent pops in his
 
 ### Number of dependent populations
 
-Defined as populations not meeting independent population criteria. 
+Defined as populations not meeting independent population criteria.
 
 ```{r}
 kbl(summary_metrics_table |> filter(Metric == "Number of dependent pops"))

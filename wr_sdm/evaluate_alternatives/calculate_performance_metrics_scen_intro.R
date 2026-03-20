@@ -1,6 +1,9 @@
 # Script to pair with summarize_outputs_scen_intro.qmd. 
 # Adapt to have this work for all portfolios, or model others after this. 
 # Creates table of all the performance metrics for portfolio. 
+library(zoo)
+library(dplyr)
+library(tidyr)
 
 # Run models ----------------------------------------------------
 
@@ -23,9 +26,9 @@ portfolio_eg_seeds <- winterRunDSM::winter_run_model(scenario = NULL,
 portfolio_eg_results <- winterRunDSM::winter_run_model(mode = "simulate", 
                                                        ..params = winterRunDSM::wr_sdm_scen_intro_params,
                                                        seeds = portfolio_eg_seeds)
-# portfolio_eg_results <- winterRunDSM::winter_run_model(mode = "simulate", 
-#                                               ..params = winterRunDSM::wr_sdm_scen_intro_params,
-#                                               seeds = baseline_seeds)
+portfolio_eg_results2 <- winterRunDSM::winter_run_model(mode = "simulate",
+                                              ..params = winterRunDSM::wr_sdm_scen_intro_params,
+                                              seeds = baseline_seeds)
 
 
 #TODO
@@ -128,7 +131,8 @@ change_spawn <- spawners |>
 
 max_declines <- change_spawn |> 
   group_by(scenario) |> 
-  summarize(max_decline = round(min(avg_prop_change, na.rm = TRUE),3))
+  summarize(max_decline = round(min(avg_prop_change, na.rm = TRUE),3)) |> 
+  ungroup()
 
 ### Combined abundance metrics-----------------
 abund_table <- mean_spawners |> 
@@ -322,6 +326,25 @@ diversity_table <- mean_shannon_di_size |>
 
 ## Populations in tribs ------------------------
 
+### Proportion habitat occupied above dam --------------------
+abv_dam_habitat_used <- baseline_results$pct_abv_dam_habitat_used |> 
+  as.data.frame() |> 
+  mutate(watershed = winterRunDSM::watershed_labels,
+         scenario = "baseline") |> 
+  bind_rows(portfolio_eg_results$pct_abv_dam_habitat_used |> as.data.frame() |> 
+              mutate(watershed = winterRunDSM::watershed_labels,
+                     scenario = "portfolio_eg")) |> 
+  pivot_longer(`1`:`20`,
+               names_to = "sim_year",
+               values_to = "abv_dam_habitat_used") |> 
+  filter(watershed == "Upper Sacramento River") |> 
+  mutate(sim_year = as.numeric(sim_year))
+
+mean_abv_dam_habitat_used <- abv_dam_habitat_used |> 
+  group_by(scenario) |> 
+  summarize(mean_habitat_used = round(mean(abv_dam_habitat_used))) |> 
+  ungroup()
+
 ### Spawners in tribs------------------
 spawners_in_tribs <- spawners_split  |>  filter(watershed == "Battle Creek")
 
@@ -386,6 +409,7 @@ populations_table <- mean_spawners_in_tribs |>
   left_join(ind_pop_historic) |> 
   left_join(ind_pop_summary) |> 
   left_join(dep_pop_summary) |> 
+  left_join(mean_abv_dam_habitat_used) |> 
   pivot_longer(cols = -scenario,
                names_to = "metric", 
                values_to = "value") |> 
