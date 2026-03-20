@@ -43,6 +43,41 @@ proportion_hatchery["Battle Creek"] <- 1 #.2
 
 usethis::use_data(proportion_hatchery, overwrite = TRUE)
 
+# hatchery releases
+# in R2R, this object is created in hatchery_update_documentation.Rmd
+hatchery_releases <- tibble(
+  Hatchery = c("Livingston Stone"),
+  Tributary = c("Upper Sacramento River"),
+  Run = c("Winter"),
+  `Number Released` = c(250000) # 2 max released
+)
+# prep for model 
+summarized_release <- hatchery_releases |>
+  filter(Run == "Winter") |> 
+  select(watershed = Tributary, release_number = `Number Released`) |> 
+  right_join(winterRunDSM::watershed_attributes |> 
+               select(watershed, order)) |>
+  arrange(order) |>
+  mutate(release_number = ifelse(is.na(release_number), 0, release_number)) 
+
+winter_hatchery_release = matrix(0, nrow = 31, ncol = 4, 
+                                 dimnames = list(winterRunDSM::watershed_labels,
+                                                 c("s", "m", "l", "xl")))
+
+# convert to 3d matrix (one 2D matrix for 20 years) to allow hatchery releases to vary annually
+winter_hatchery_release<- array(rep(winter_hatchery_release, 20), 
+                                c(31, 4, 20),
+                                dimnames = list(springRunDSM::watershed_labels,
+                                                c("s", "m", "l", "xl"),
+                                                1:20))
+
+winter_hatchery_release["Upper Sacramento River", "l", ] <- summarized_release$release_number[1]
+# populate hatchery release as larger fish based on avg hatchery release data
+dry_years <- c(2, 6, 8:13, 15) # WR DSM update - for dry years to reflect data from Emily USBR, release numbers are higher
+winter_hatchery_release["Upper Sacramento River", "l", dry_years] <- 500000
+
+usethis::use_data(winter_hatchery_release, overwrite = TRUE)
+
 # @title Proportion of Adults Spawning January to April
 # @export
 # month_return_proportions differs based on run
