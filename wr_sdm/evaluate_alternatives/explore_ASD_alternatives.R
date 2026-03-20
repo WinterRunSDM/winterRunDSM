@@ -2,6 +2,7 @@ library(winterRunDSM)
 library(tidyverse)
 library(plotly)
 library(ggplot2)
+source(here::here("wr_sdm", "parameter_lists", "create_parameter_list_function.R"))
 
 # baseline
 baseline_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
@@ -14,31 +15,25 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                     seeds = baseline_seeds)
 
 # test out adult enroute survival multiplier
-test_params <- winterRunDSM::wr_sdm_baseline_params
-test_params$hatchery_release["Upper Sacramento River", "l",] <- 250000
-# test_params$above_dam_spawn_proportion <- 0.5
-#test_params$spawning_habitat["Upper Sacramento River",,] <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
-# test_params$egg_to_fry_survival_abv_dam <- .37
-# test_params$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean((DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]) / DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,])
-# test_params$hatchery_release["Upper Sacramento River","xl",] <- rep(100000, 20)
+alt_params <- create_param_list("SR-1")
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
                                                  seeds = NULL, 
-                                                 ..params = test_params)
+                                                 ..params = alt_params)
 
 alt_results <- winterRunDSM::winter_run_model(mode = "simulate", 
-                                                   ..params = test_params,
+                                                   ..params = alt_params,
                                                    seeds = alt_seeds)
 
 baseline_results$spawners |> 
   as.data.frame() |> 
   mutate(watershed = winterRunDSM::watershed_labels,
-         scenario = "500K dry years") |> 
+         scenario = "baseline") |> 
   bind_rows(alt_results$spawners |> 
               as.data.frame() |> 
               mutate(watershed = winterRunDSM::watershed_labels,
-                     scenario = "250K all years")) |> 
+                     scenario = "alt")) |> 
   pivot_longer(`1`:`20`,
                names_to = "sim_year",
                values_to = "spawners") |> 
