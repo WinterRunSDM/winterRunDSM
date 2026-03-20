@@ -156,7 +156,7 @@ wr_sdm_baseline_params <- list(
   prob_strand_late = DSMhabitat::prob_strand_late,
   prob_nest_scoured = DSMhabitat::prob_nest_scoured,
   # above_dam_spawn_proportion = DSMhabitat::above_dam_spawn_proportion$wr, # R2R - above dam proportion 
-  above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$wr, # R2R - above dam proportion
+  # above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$wr, # R2R - above dam proportion
   
   # Calibration Variables (vary by run)
   # TODO Liz replace the ..surv_egg_to_fry_mean_egg_temp_effect with the correct calibration parameter
@@ -200,15 +200,15 @@ wr_sdm_baseline_params <- list(
   effect_upstream_vol_juv_kwk = 0,
   # applied in drought years
   addl_juv_chipps = 0,
+  delta_survival_multiplier = 1,
   effect_habitat_size_class_abv_dam = NA,
   # above dam actions - 
-  juvenile_capture_efficiency_dam_transport = 0,
-  effect_downstream_trap_juvenile_abv_dam = NA, # TODO clarify
-  dam_passage_survival = list("adult" = 0.8, "juv" = 0.8), 
+  juvenile_capture_efficiency_dam_transport = 1,
+  dam_passage_survival = list("adult" = 1, "juv" = 1), 
   harvest_rate_abv_dam = 0.025,
   # if you change any one of the params below, you should change them all
-  above_dam_spawn_proportion = 0, # should be 0 for baseline due to restructuring of spawn_success
-  prespawn_survival_abv_dam  = 0.95, # R2R was using max fall run survival here
+  abv_dam_spawn_proportion = 0, # should be 0 for baseline due to restructuring of spawn_success
+  prespawn_survival_abv_dam  = 0, # R2R was using max fall run survival here
   egg_to_fry_survival_abv_dam = 0, # baseline is 0
   # abv_dam_spawn_habitat_proportion NEEDS to be calculated based on habitat input data
   abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels) # this should specifically be about the amount of additional habitat above dam
