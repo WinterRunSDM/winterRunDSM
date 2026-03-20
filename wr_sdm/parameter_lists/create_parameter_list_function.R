@@ -19,11 +19,19 @@ create_param_list <- function(action_id) {
   param_list <- wr_sdm_baseline_params
   
   # Data prep
+  # TODO rename with _rear or _inchannel
   upper_sac_w_mccloud <- DSMhabitat::wr_fry$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
   upper_sac_wo_mccloud <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,]
   mccloud_addition <- upper_sac_w_mccloud - upper_sac_wo_mccloud
   upper_mccloud_addition <- mccloud_addition * 0.3
   lower_mccloud_addition <- mccloud_addition * 0.7
+  
+  upper_sac_w_mccloud_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
+  upper_sac_wo_mccloud_spawn <- DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]
+  mccloud_addition_spawn <- upper_sac_w_mccloud_spawn - upper_sac_wo_mccloud_spawn
+  upper_mccloud_addition_spawn <- mccloud_addition_spawn * 0.3
+  lower_mccloud_addition_spawn <- mccloud_addition_spawn * 0.7
+  
   # ds3_inchannel_hab <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,] + upper_mccloud_addition
   # ds4_inchannel_hab <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,] + lower_mccloud_addition
   
@@ -103,7 +111,7 @@ create_param_list <- function(action_id) {
   
   if(action_id == "SR_6"){
     # Change routing for Georgiana Slough
-    # TODO decide on parameter
+    # TODO @Liz decide on parameter
   }
   
   # TODO waiting on response from Sarah - likely to not model
@@ -167,10 +175,11 @@ create_param_list <- function(action_id) {
   }
   
   # Other ---------------------
-  # TODO figure out if someone really wants this action
-  # Why are salvaged fish trucked to the South Delta and not Chipps? 
+  # TODO Why are salvaged fish trucked to the South Delta and not Chipps? 
   # O-1 
-  
+  if(action_id == "O-1") {
+    param_list$delta_survival_multiplier <- 1.01
+  }
   
   # O-2
   if(action_id == "O-2") {
@@ -179,6 +188,7 @@ create_param_list <- function(action_id) {
     }
   
   # O-3 
+  # TODO 
   # percent of age class harvested 
   # if(action_id == "O-3"){
   #   
@@ -190,8 +200,7 @@ create_param_list <- function(action_id) {
   if(action_id == "ASD-1") {
     param_list$hatchery_release["Upper Sacramento River","m",] <- rep(300000, 20)
     param_list$hatchery_release["Upper Sacramento River","l",] <- rep(200000, 20)
-    
-    #TODO add egg-to-fry survival 
+    param_list$egg_to_fry_survival_abv_dam <- 0.6
   }
   
   # ASD-2
@@ -201,29 +210,79 @@ create_param_list <- function(action_id) {
   
   # ASD-3
   if(action_id == "ASD-3") {
-    # TODO may change hatchery release to reflect a portion of fish emigrating as smolts due to yearling behavior
-    # TODO figure out how to shift juvenile rearing size class distribution
-    # TODO add egg to fry survival
-    param_list$hatchery_release["Upper Sacramento River","s",] <- rep(c(800000, 10), c(150000, 10))
+    param_list$hatchery_release["Upper Sacramento River","m",] <- c(rep(800000, 8), rep(115000,6), rep(150000, 6))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + upper_mccloud_addition
+    # applied to the hatchery releasesz
     param_list$juvenile_capture_efficiency_dam_transport <- 0.25
-    param_list$effect_downstream_trap_juvenile_abv_dam <- 0.8
+    param_list$dam_passage_survival <- list("adult" = 1, "juv" = 0.8)
+    param_list$abv_dam_spawn_proportion <- 0
   }
   
   # ASD-4
   if(action_id == "ASD-4") {
-    # TODO may change hatchery release to reflect a portion of fish emigrating as smolts due to yearling behavior
-    # TODO figure out how to shift juvenile rearing size class distribution
-    # TODO add egg to fry survival
-    param_list$hatchery_release["Upper Sacramento River","s",] <- rep(c(800000, 10), c(150000, 10))
+    param_list$hatchery_release["Upper Sacramento River","m",] <- c(rep(800000, 8), rep(115000,6), rep(150000, 6))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
+    # applied to the hatchery releases
     param_list$juvenile_capture_efficiency_dam_transport <- 0.25
-    param_list$effect_downstream_trap_juvenile_abv_dam <- 0.8
+    param_list$dam_passage_survival <- list("adult" = 1, "juv" = 0.8)
+    param_list$abv_dam_spawn_proportion <- 0
   }
 
+  # ASD-5 Trap and haul
+  if(action_id == "ASD-5") {
+    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + lower_mccloud_addition_spawn
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
+    # applied to spawn success
+    param_list$juvenile_capture_efficiency_dam_transport <- 0.9
+    # juvenile survival includes transport survival
+    param_list$dam_passage_survival <- list("adult" = 0.8, "juv" = 0.8)
+    param_list$abv_dam_spawn_proportion <- 0.5
+    param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
+    param_list$egg_to_fry_survival_abv_dam <- 0.6
+  }
+  
+  
+  # TODO Decide between the two
+  
+  # ASD-6a Volitional on the way up only 
+  if(action_id == "ASD-6a") {
+    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + lower_mccloud_addition_spawn
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
+    # applied to spawn success
+    param_list$juvenile_capture_efficiency_dam_transport <- 0.25
+    # juvenile survival includes transport survival
+    # adult survival represents transport survival
+    param_list$dam_passage_survival <- list("adult" = 0.8, "juv" = 0.8)
+    param_list$abv_dam_spawn_proportion <- 0.5
+    param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
+    param_list$egg_to_fry_survival_abv_dam <- 0.6
+  }
+  
+  # ASD-6b Volitional both directions
+  if(action_id == "ASD-6b") {
+    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + lower_mccloud_addition_spawn
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
+    # applied to spawn success
+    # juvenile survival includes swimming through Lake Shasta
+    # adult survival represents survival with volitional challenges
+    param_list$dam_passage_survival <- list("adult" = 0.8, "juv" = 0.4)
+    param_list$abv_dam_spawn_proportion <- 0.5
+    param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
+    param_list$egg_to_fry_survival_abv_dam <- 0.6
+  }
+  
+  # ASD-7 Remove McCloud
+  if(action_id == "ASD-7") {
+    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + mccloud_addition_spawn
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + mccloud_addition
+    param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+mccloud_addition_spawn))
+    param_list$egg_to_fry_survival_abv_dam <- 0.7
+  }
   
   # Facilities -------
+
+  # F-1
+  # TODO waiting for HEC-5Q
   
-  # Other -----------
-  
+  return(param_list)
 }
