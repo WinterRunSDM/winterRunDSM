@@ -305,6 +305,7 @@ winter_run_model <- function(scenario = NULL,
                                juvenile_capture_efficiency_dam_transport = ..params$juvenile_capture_efficiency_dam_transport, # WR SDM adds new param
                                harvest_rate_abv_dam  = ..params$harvest_rate_abv_dam, # WR SDM adds new param
                                egg_to_fry_survival = egg_to_fry_surv,
+                               egg_to_fry_survival_mult = ..params$egg_to_fry_survival_mult, # WR DSM adds new param for SR-3
                                egg_to_fry_survival_abv_dam = ..params$egg_to_fry_survival_abv_dam, # WR DSM adds new param for abv dam
                                prob_scour = ..params$prob_nest_scoured,
                                spawn_habitat = min_spawn_habitat,

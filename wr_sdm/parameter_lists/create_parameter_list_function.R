@@ -42,14 +42,14 @@ create_param_list <- function(action_ids) {
   # H1
   if("H-1" %in% action_ids) {
     # change hatchery_release
-    param_list$hatchery_release["Upper Sacramento River","l",] <- rep(280000, 20)
-    param_list$hatchery_release["Upper-mid Sacramento River","l",] <- rep(90000, 20)
-    param_list$hatchery_release["Lower-mid Sacramento River","l",] <- rep(90000, 20)
-    param_list$hatchery_release["Lower Sacramento River","l",] <- rep(90000, 20)
+    param_list$hatchery_release["Upper Sacramento River","l",] <- param_list$hatchery_release["Upper Sacramento River","l",] + 30000
+    param_list$hatchery_release["Upper-mid Sacramento River","l",] <- param_list$hatchery_release["Upper-mid Sacramento River","l",] + 90000
+    param_list$hatchery_release["Lower-mid Sacramento River","l",] <- param_list$hatchery_release["Lower-mid Sacramento River","l",] + 90000
+    param_list$hatchery_release["Lower Sacramento River","l",] <- param_list$hatchery_release["Lower Sacramento River","l",] + 90000
   }
   
   # H-2b
-  if("H-2a" %in% action_ids) {
+  if("H-2b" %in% action_ids) {
     # change adult removal rate
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.15
   }
@@ -57,6 +57,7 @@ create_param_list <- function(action_ids) {
   # H-2c
   if("H-2c" %in% action_ids) {
     # change adult removal rate
+    # will default to H-2c rate (not additive with H-2b)
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.25
   }
   
@@ -69,6 +70,7 @@ create_param_list <- function(action_ids) {
   # Sacramento River ----------------
   if("SR-1" %in% action_ids) {
     # triple floodplain habitat in Upper-mid Sacramento River
+    # TODO this causes a negative effect in years 13:15 that reduces overall spawners in final years
     param_list$floodplain_habitat["Upper-mid Sacramento River",,] <- param_list$floodplain_habitat["Upper-mid Sacramento River",,]*3
   }
   
@@ -92,7 +94,8 @@ create_param_list <- function(action_ids) {
     }
   
   if("SR-3" %in% action_ids) {
-    # TODO add spawning habitat; adjust for temperature
+    # TODO add spawning habitat; adjust for temperature?
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- 1.1
   }
   
   if("SR-4a" %in% action_ids) {
@@ -101,9 +104,11 @@ create_param_list <- function(action_ids) {
   }
   
   if("SR-4b" %in% action_ids) {
-    # reduce prop high predation
-    # TODO compare with 4a and make a decision
-    param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
+    # reduce prop high predation - effect of modifying regulations on striped bass fishery
+    param_list$prop_high_predation["Upper Sacramento River"] <- param_list$prop_high_predation["Upper Sacramento River"] * 0.7
+    param_list$prop_high_predation["Upper-mid Sacramento River"] <- param_list$prop_high_predation["Upper-mid Sacramento River"] * 0.7
+    param_list$prop_high_predation["Lower-mid Sacramento River"] <- param_list$prop_high_predation["Lower-mid Sacramento River"] * 0.7
+    param_list$prop_high_predation["Lower Sacramento River"] <- param_list$prop_high_predation["Lower Sacramento River"] * 0.7
   }
   
   if("SR-5" %in% action_ids) {
@@ -116,10 +121,7 @@ create_param_list <- function(action_ids) {
     # TODO @Liz decide on parameter
   }
   
-  # TODO waiting on response from Sarah - likely to not model
-  if("SR_7" %in% action_ids){
-    # DCC gates 
-  }
+  # SR-7 (DCC gates) got deleted by proponent
   
   if("SR-8a" %in% action_ids) {
     # TODO TBD on the reduction percentage

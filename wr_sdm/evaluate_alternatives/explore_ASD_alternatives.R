@@ -15,7 +15,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                     seeds = baseline_seeds)
 
 # test out adult enroute survival multiplier
-alt_params <- create_param_list("SR-1")
+alt_params <- create_param_list(action_ids = c("SR-3"))
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
@@ -63,8 +63,6 @@ baseline_results$total_fry_from_dam |>
              color = scenario)) +
   geom_line() +
   facet_wrap(~watershed)
-
-
 
 
 baseline_results$juveniles_at_chipps |> 

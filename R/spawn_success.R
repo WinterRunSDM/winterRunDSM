@@ -25,6 +25,7 @@ spawn_success <- function(escapement,
                           juvenile_capture_efficiency_dam_transport, # WR SDM addition
                           harvest_rate_abv_dam, # WR SDM addition
                           egg_to_fry_survival,
+                          egg_to_fry_survival_mult, # WR SDM addition
                           egg_to_fry_survival_abv_dam, # WR SDM addition
                           prob_scour, spawn_habitat,
                           stochastic,
@@ -114,9 +115,10 @@ spawn_success <- function(escapement,
     dimnames(hatch_spawn_blw_dam) <- list(c(winterRunDSM::watershed_labels), c("2", "3", "4", "5"))
 
     # calculate hatchery fry
+    egg_to_fry_survival <- pmin(egg_to_fry_survival * egg_to_fry_survival_mult, 1)
     hatchery_fry_blw_dam <- suppressWarnings(rowSums(sweep(hatch_spawn_blw_dam *
                                                              (1 - prob_scour), 2, fecundity_hatch, "*") *
-                                                       egg_to_fry_survival))
+                                                       (egg_to_fry_survival)))
 
     # combine
     fry_blw_dam <- natural_fry_blw_dam + hatchery_fry_blw_dam
