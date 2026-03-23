@@ -328,6 +328,7 @@ kbl(summary_metrics_table |> filter(Metric == "Mean juvenile timing diversity at
 ## Increase number of tributaries supporting WR
 
 ### Proportion of Above Shasta habitat occupied
+
 ```{r}
 ggplot(abv_dam_habitat_used) + 
   geom_line(aes(sim_year, abv_dam_habitat_used, color = scenario)) +
@@ -336,7 +337,6 @@ ggplot(abv_dam_habitat_used) +
   scale_color_manual(values = colors)+
   theme_plots
 ```
-
 
 ### Number of adults spawning in tributaries
 
