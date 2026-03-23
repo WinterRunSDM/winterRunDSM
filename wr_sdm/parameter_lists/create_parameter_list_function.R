@@ -13,10 +13,12 @@ action_params <- read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.c
 
 action_params |> filter(action_id == "SR-3")
 
+impossible_combinations <- c()
 
-
-create_param_list <- function(action_id) {
+create_param_list <- function(action_ids) {
   param_list <- wr_sdm_baseline_params
+  
+  # TODO check that "action_ids" argument does not have any of the impossible combinations
   
   # Data prep
   # TODO rename with _rear or _inchannel
@@ -38,7 +40,7 @@ create_param_list <- function(action_id) {
   #Hatchery -----
   
   # H1
-  if(action_id == "H-1") {
+  if("H-1" %in% action_ids) {
     # change hatchery_release
     param_list$hatchery_release["Upper Sacramento River","l",] <- rep(280000, 20)
     param_list$hatchery_release["Upper-mid Sacramento River","l",] <- rep(90000, 20)
@@ -47,89 +49,89 @@ create_param_list <- function(action_id) {
   }
   
   # H-2b
-  if(action_id == "H-2b") {
+  if("H-2a" %in% action_ids) {
     # change adult removal rate
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.15
   }
   
   # H-2c
-  if(action_id == "H-2c") {
+  if("H-2c" %in% action_ids) {
     # change adult removal rate
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.25
   }
   
   # H3
-  if(action_id == "H-3") {
+  if("H-3" %in% action_ids) {
     # through explorations, this has a significant effect on adult returns. need to be cautious
     param_list$adult_enroute_surv_mult["Upper Sacramento River"] <- param_list$adult_enroute_surv_mult["Upper Sacramento River"] * 1.1
   }
   
   # Sacramento River ----------------
-  if(action_id == "SR-1") {
+  if("SR-1" %in% action_ids) {
     # triple floodplain habitat in Upper-mid Sacramento River
     param_list$floodplain_habitat["Upper-mid Sacramento River",,] <- param_list$floodplain_habitat["Upper-mid Sacramento River",,]*3
   }
   
-  if(action_id == "SR-2a") {
+  if("SR-2a" %in% action_ids) {
     # double instream habitat in Upper-mid Sacramento River
     # TODO do we need to do anything with temperature suitability here? 
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
     param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
   }
   
-  if(action_id == "SR-2b") {
+  if("SR-2b" %in% action_ids) {
     # double instream habitat in Upper-mid Sacramento River
     # TODO do we need to do anything with temperature suitability here? 
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
     param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
   }
   
-  if(action_id == "SR-2c") {
+  if("SR-2c" %in% action_ids) {
     # TODO add rearing habitat
     # TODO move up size class
     }
   
-  if(action_id == "SR-3") {
+  if("SR-3" %in% action_ids) {
     # TODO add spawning habitat; adjust for temperature
   }
   
-  if(action_id == "SR-4a") {
+  if("SR-4a" %in% action_ids) {
     # reduce predator contact points by 25%
     param_list$contact_points <- round(param_list$contact_points * 0.75)
   }
   
-  if(action_id == "SR-4b") {
+  if("SR-4b" %in% action_ids) {
     # reduce prop high predation
     # TODO compare with 4a and make a decision
     param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
   }
   
-  if(action_id == "SR-5") {
+  if("SR-5" %in% action_ids) {
     # reduce effect by 75% - we saw some effect in the spawners but not too drastic
     param_list$.surv_juv_rear_prop_diversions <- param_list$.surv_juv_rear_prop_diversions * 0.75
   }
   
-  if(action_id == "SR_6"){
+  if("SR_6" %in% action_ids){
     # Change routing for Georgiana Slough
     # TODO @Liz decide on parameter
   }
   
   # TODO waiting on response from Sarah - likely to not model
-  if(action_id == "SR_7"){
+  if("SR_7" %in% action_ids){
     # DCC gates 
   }
   
-  if(action_id == "SR-8a") {
+  if("SR-8a" %in% action_ids) {
     # TODO TBD on the reduction percentage
     param_list$contact_points <- round(param_list$contact_points * 0.5)
   }
   
-  if(action_id == "SR-8b") {
+  if("SR-8b" %in% action_ids) {
     # reduce prop high predation
     param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
   }
  
-  if(action_id == "SR-9") {
+  if("SR-9" %in% action_ids) {
     # TODO implement this change in model script? or spawn_success? 
     param_list$effect_upstream_vol_adult_kwk <- 0.99
     param_list$effect_upstream_vol_juv_kwk <- 0.97
@@ -138,12 +140,12 @@ create_param_list <- function(action_id) {
   }
   
   
-  if(action_id == "SR-11") {
+  if("SR-11" %in% action_ids) {
     param_list$addl_juv_chipps <- 50000
   }
   
   # TODO wait on Rene
-  if(action_id == "SR-12") {
+  if("SR-12" %in% action_ids) {
   }
   
   # Above Shasta ----------------
@@ -151,7 +153,7 @@ create_param_list <- function(action_id) {
   
   # BC-1
   # Right now we are only including ocean harvest
-  if(action_id == "BC-1") {
+  if("BC-1" %in% action_ids) {
     # change the incidental/illegal harvest rate
     param_list$harvest_rate_trib["Battle Creek"] <- param_list$harvest_rate_trib["Battle Creek"] * 0.5
   }
@@ -161,14 +163,14 @@ create_param_list <- function(action_id) {
   
   
   # BC-8
-  if(action_id == "BC-8") {
+  if("BC-8" %in% action_ids) {
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
   }
  
   
    # TODO modify model code based on a threshold of adults returning to Battle Creek
   # BC-9
-  if(action_id == "BC-9") {
+  if("BC-9" %in% action_ids) {
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
     
     param_list$natural_adult_removal_rate["Battle Creek"] <- 0.25
@@ -177,12 +179,12 @@ create_param_list <- function(action_id) {
   # Other ---------------------
   # TODO Why are salvaged fish trucked to the South Delta and not Chipps? 
   # O-1 
-  if(action_id == "O-1") {
+  if("O-1" %in% action_ids) {
     param_list$delta_survival_multiplier <- 1.01
   }
   
   # O-2
-  if(action_id == "O-2") {
+  if("O-2" %in% action_ids) {
   # change the incidental/illegal harvest rate
     param_list$harvest_rate_ocean <- param_list$harvest_rate_ocean * 0.99
     }
@@ -190,26 +192,26 @@ create_param_list <- function(action_id) {
   # O-3 
   # TODO 
   # percent of age class harvested 
-  # if(action_id == "O-3"){
+  # if("O-3"){
   #   
   # }
   
   # ASD ------------------
   
   # ASD-1
-  if(action_id == "ASD-1") {
+  if("ASD-1" %in% action_ids) {
     param_list$hatchery_release["Upper Sacramento River","m",] <- rep(300000, 20)
     param_list$hatchery_release["Upper Sacramento River","l",] <- rep(200000, 20)
     param_list$egg_to_fry_survival_abv_dam <- 0.6
   }
   
   # ASD-2
-  if(action_id == "ASD-2") {
+  if("ASD-2" %in% action_ids) {
     param_list$harvest_rate_abv_dam <- param_list$harvest_rate_abv_dam * 0.5
   }
   
   # ASD-3
-  if(action_id == "ASD-3") {
+  if("ASD-3" %in% action_ids) {
     param_list$hatchery_release["Upper Sacramento River","m",] <- c(rep(800000, 8), rep(115000,6), rep(150000, 6))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + upper_mccloud_addition
     # applied to the hatchery releasesz
@@ -219,7 +221,7 @@ create_param_list <- function(action_id) {
   }
   
   # ASD-4
-  if(action_id == "ASD-4") {
+  if("ASD-4" %in% action_ids) {
     param_list$hatchery_release["Upper Sacramento River","m",] <- c(rep(800000, 8), rep(115000,6), rep(150000, 6))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
     # applied to the hatchery releases
@@ -229,7 +231,7 @@ create_param_list <- function(action_id) {
   }
 
   # ASD-5 Trap and haul
-  if(action_id == "ASD-5") {
+  if("ASD-5" %in% action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + lower_mccloud_addition_spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
     # applied to spawn success
@@ -245,7 +247,7 @@ create_param_list <- function(action_id) {
   # TODO Decide between the two
   
   # ASD-6a Volitional on the way up only 
-  if(action_id == "ASD-6a") {
+  if("ASD-6a" %in% action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + lower_mccloud_addition_spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
     # applied to spawn success
@@ -259,7 +261,7 @@ create_param_list <- function(action_id) {
   }
   
   # ASD-6b Volitional both directions
-  if(action_id == "ASD-6b") {
+  if("ASD-6b" %in% action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + lower_mccloud_addition_spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + lower_mccloud_addition
     # applied to spawn success
@@ -272,7 +274,7 @@ create_param_list <- function(action_id) {
   }
   
   # ASD-7 Remove McCloud
-  if(action_id == "ASD-7") {
+  if("ASD-7" %in% action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + mccloud_addition_spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + mccloud_addition
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+mccloud_addition_spawn))
