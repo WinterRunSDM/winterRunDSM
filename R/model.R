@@ -64,7 +64,10 @@ winter_run_model <- function(scenario = NULL,
     # WR SDM metrics
     prop_fry_abv_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     total_fry_from_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
-    pct_abv_dam_habitat_used = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
+    pct_abv_dam_habitat_used = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
+    
+    rearing_survival_inchannel = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
+    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20))
   )
   
   if (mode == 'calibrate') {
@@ -450,6 +453,9 @@ winter_run_model <- function(scenario = NULL,
                                                .surv_juv_delta_large = ..params$.surv_juv_delta_large,
                                                min_survival_rate = ..params$min_survival_rate,
                                                stochastic = stochastic)
+      
+      output$rearing_survival_inchannel[,,year] <- rearing_survival$inchannel
+      output$rearing_survival_fp[,,year] <- rearing_survival$floodplain
       
       migratory_survival <- get_migratory_survival(iter_year, month,
                                                    cc_gates_prop_days_closed = ..params$cc_gates_prop_days_closed,
