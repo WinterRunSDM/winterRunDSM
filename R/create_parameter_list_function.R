@@ -1,22 +1,20 @@
 # work through approaches
 
 
-action_params <- read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.csv") |> 
-  janitor::clean_names() |> 
-  select(-short_description) |> 
-  pivot_longer(hatchery_releases:effect_of_downstream_volitional_passage_on_juvenile_salmon,
-               names_to = "parameter_title",
-               values_to = "action_requires") |> 
-  filter(!is.na(action_requires),
-         !is.na(action_id)) |> 
-  arrange(parameter_title)
-
-action_params |> filter(action_id == "SR-3")
+# action_params <- readr::read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.csv") |> 
+#   janitor::clean_names() |> 
+#   dplyr::select(-short_description) |> 
+#   tidyr::pivot_longer(hatchery_releases:effect_of_downstream_volitional_passage_on_juvenile_salmon,
+#                names_to = "parameter_title",
+#                values_to = "action_requires") |> 
+#   dplyr::filter(!is.na(action_requires),
+#          !is.na(action_id)) |> 
+#   dplyr::arrange(parameter_title)
 
 impossible_combinations <- c()
 
 create_param_list <- function(action_ids) {
-  param_list <- wr_sdm_baseline_params
+  param_list <- winterRunDSM::wr_sdm_baseline_params
   
   # TODO check that "action_ids" argument does not have any of the impossible combinations
   
