@@ -260,7 +260,8 @@ create_param_list <- function(action_ids) {
     # juvenile survival includes transport survival
     # adult survival represents transport survival
     param_list$dam_passage_survival <- list("adult" = 0.8, "juv" = 0.8)
-    param_list$abv_dam_spawn_proportion <- 0.5
+    # TODO confirm - we set the abv_dam_spawn_proportion based on habitat for volitional
+    param_list$abv_dam_spawn_proportion <-  mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.6
   }
@@ -273,7 +274,8 @@ create_param_list <- function(action_ids) {
     # juvenile survival includes swimming through Lake Shasta
     # adult survival represents survival with volitional challenges
     param_list$dam_passage_survival <- list("adult" = 0.8, "juv" = 0.4)
-    param_list$abv_dam_spawn_proportion <- 0.5
+    # TODO confirm - we set the abv_dam_spawn_proportion based on habitat for volitional
+    param_list$abv_dam_spawn_proportion <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.6
   }
