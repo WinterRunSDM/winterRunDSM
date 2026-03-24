@@ -100,15 +100,18 @@ create_param_list <- function(action_ids) {
   
   if("SR-4a" %in% action_ids) {
     # reduce predator contact points by 25%
-    param_list$contact_points <- round(param_list$contact_points * 0.75)
+    param_list$contact_points["Upper Sacramento River"] <- round(param_list$contact_points["Upper Sacramento River"] * 1.25) # calibration issue 0.75)
+    param_list$contact_points["Upper-mid Sacramento River"] <- round(param_list$contact_points["Upper-mid Sacramento River"] * 1.25) # calibration issue 0.75)
+    param_list$contact_points["Lower Sacramento River"] <- round(param_list$contact_points["Lower Sacramento River"] * 1.25) # calibration issue 0.75)
+    param_list$contact_points["Lower-mid Sacramento River"] <- round(param_list$contact_points["Lower-mid Sacramento River"] * 1.25) # calibration issue 0.75)
   }
   
   if("SR-4b" %in% action_ids) {
     # reduce prop high predation - effect of modifying regulations on striped bass fishery
-    param_list$prop_high_predation["Upper Sacramento River"] <- param_list$prop_high_predation["Upper Sacramento River"] * 0.7
-    param_list$prop_high_predation["Upper-mid Sacramento River"] <- param_list$prop_high_predation["Upper-mid Sacramento River"] * 0.7
-    param_list$prop_high_predation["Lower-mid Sacramento River"] <- param_list$prop_high_predation["Lower-mid Sacramento River"] * 0.7
-    param_list$prop_high_predation["Lower Sacramento River"] <- param_list$prop_high_predation["Lower Sacramento River"] * 0.7
+    param_list$prop_high_predation["Upper Sacramento River"] <- param_list$prop_high_predation["Upper Sacramento River"] * 1.3 # calibration issue 0.7
+    param_list$prop_high_predation["Upper-mid Sacramento River"] <- param_list$prop_high_predation["Upper-mid Sacramento River"] * 1.3 # calibration issue 0.7
+    param_list$prop_high_predation["Lower-mid Sacramento River"] <- param_list$prop_high_predation["Lower-mid Sacramento River"] * 1.3 # calibration issue 0.7
+    param_list$prop_high_predation["Lower Sacramento River"] <- param_list$prop_high_predation["Lower Sacramento River"] * 1.3 # calibration issue 0.7
   }
   
   if("SR-5" %in% action_ids) {
