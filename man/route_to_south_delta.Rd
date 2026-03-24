@@ -18,7 +18,8 @@ route_to_south_delta(
   .gs_intercept = -2.948145,
   .gs_freeport_discharge = -2.911835,
   .gs_dcc_effect_on_routing = -0.554843,
-  .gs_lower_asymptote = 0.2729845
+  .gs_lower_asymptote = 0.2729845,
+  gs_bubble_curtain_effect_mult
 )
 }
 \arguments{
