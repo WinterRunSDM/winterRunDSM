@@ -21,6 +21,7 @@ spawn_success(
   juvenile_capture_efficiency_dam_transport,
   harvest_rate_abv_dam,
   egg_to_fry_survival,
+  egg_to_fry_survival_mult,
   egg_to_fry_survival_abv_dam,
   prob_scour,
   spawn_habitat,
