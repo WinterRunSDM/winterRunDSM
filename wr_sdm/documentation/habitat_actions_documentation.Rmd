@@ -1,0 +1,78 @@
+---
+title: "habitat_actions_documentation"
+output: html_document
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(DSMhabitat)
+library(winterRunDSM)
+library(knitr)
+library(readxl)
+library(here)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Habitat Action Documentation
+
+## Battle Creek
+
+Additional habitat was required for two Battle Creek actions: `BC-2` and `BC-5`. 
+
+### A note on baseline habitat
+
+The baseline Battle Creek habitat for WRCS took WUA data from a 1995 study that was averaged across all habitat (Lower Battle Creek and the North Fork), and then scaled it to the river lengths. In the original SIT, the river lengths applied for WRCS were Lower Battle Creek and North Fork, whereas for fall run the river lengths were restricted to Lower Battle Creek. We updated the baseline for WRCS to be applied to the same river lengths as fall run, representing anecdotal and scientific support for little spawning and rearing habitat for WRCS above the confluence owing to a natural barrier below Eagle Canyon Diversion Dam. 
+
+### BC-2: Lower Battle Creek rearing habitat
+
+This action modeled the inclusion of several habitat projects designed to increase rearing habitat in Lower Battle Creek. Acreage from proposed projects provided to FlowWest was scaled down by a factor of 0.25 to represent suitability across all flows and added to the flow-to-habitat curve in `DSMhabitat` (habitat inputs for the model) at a representative flow. The percent increase in habitat at a representative flow was then applied across all flows. 
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+bc_proj <- read_xlsx(here("data-raw", "habitat-data-docs", "DRAFT Battle Creek Projects List 0721(1).xlsx"), skip = 1) |> 
+  janitor::clean_names()
+
+bc2_projects_fp <- c("CDFW Tompkins Unit Phase II", 
+                    "Rancho Breisgau Habitat Restoration Phase 1 Field 1",
+                    "Rancho Briesgau Habitat Restoration Phase 2, Fields 2-4", 
+                    "Rancho Breisgau Floodplain Expansion",
+                    "McBartlett Restoration", 
+                    "Jelly's Ferry Mitigation at Rancho Breisgau",
+                    "Battle Creek Levee", 
+                    "Battle Creek Wildlife Area")
+bc2_projects_ic <- c("Battle Creek Wildlife Area",
+                     "Battle Creek Levee")
+
+modeled_hab_clean <- tibble("project" = bc2_projects_fp,
+                            "modeled_fp" = c(15, 32.5, 39, 22.5, 11.25, 4.8, 6.75, 1.25),
+                            "modeled_ic" = c(rep(0, 6), 1.7, 1.3))
+
+bc_proj |> 
+  filter(project %in% c(bc2_projects_fp)) |> 
+  select(project, rearing_habitat_ac, floodplain_habitat_ac) |> 
+  left_join(modeled_hab_clean, by = "project") |> 
+  mutate(logic = c(rep("Instream suitable across all flows; Floodplain scaled down by 0.25", 2),
+                   rep("Floodplain scaled down by 0.25", 5))
+         ) |> 
+  select(Project = project, "Modeled instream habitat (acres)" = modeled_ic,
+         "Modeled floodplain habitat (acres)" = modeled_fp, "Logic" = logic) |> 
+  knitr::kable()
+```
+
+The median flow used to apply the additional habitat, and then scale, to the flow-to-habitat curve for Battle Creek was `550 cfs`, the median flow across a subset of rearing months (Jan-May).
+
+**Technical notes** 
+
+The overall implementation of floodplain and inchannel rearing is different.
+
+Floodplain: adds to the `battle_creek_floodplain` data object by inserting a new row of `112 acres` at `550 cfs`. The reason we did this was because we wanted the floodplain to be activated at a lower flow. Prior activation occurred at `1325 cfs`.
+
+Inchannel: this used the same methodology at TMH and baseline habitat for R2R where we found a representative acreage for a given flow and scaled the DSMhabitat object accordingly. The only difference in methodology is that we used the WUA median flow of `66 cfs` instead of battle creek DSMflow median flow because those flows were outside the range of the existing WUAs.
+
+Documentation lives in `data-raw/battle-creek-habitat` on `DSMhabitat`.
+
+## Sacramento River
+
+## Above Shasta Dam
