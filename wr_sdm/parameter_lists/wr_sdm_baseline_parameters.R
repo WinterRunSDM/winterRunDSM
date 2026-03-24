@@ -193,6 +193,7 @@ wr_sdm_baseline_params <- list(
   adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),
   harvest_rate_ocean = 0.11,
   egg_to_fry_survival_mult = setNames(rep(1, 31), winterRunDSM::watershed_labels),
+  gs_bubble_curtain_effect_mult = 1,
   # Battle Creek set to 0.05; rest of tribs 0.1
   harvest_rate_trib = setNames(c(0.1, 0.1, 0.05, rep(0.1, 28)), winterRunDSM::watershed_labels),
   # survival estimate for adults - volitional passage past Keswick Dam

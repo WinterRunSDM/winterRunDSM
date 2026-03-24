@@ -28,7 +28,8 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                    filling_regional_args = NULL,
                                    movement_fn = NULL,
                                    movement_args = NULL,
-                                   movement_months = NULL) {
+                                   movement_months = NULL,
+                                   gs_bubble_curtain_effect_mult) {
   
   juveniles <- fish$juveniles
   lower_mid_sac_fish <- fish$lower_mid_sac_fish
@@ -75,6 +76,7 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                         juveniles_at_chipps = juveniles_at_chipps,
                                         growth_rates = ..params$growth_rates,
                                         territory_size = ..params$territory_size,
+                                        gs_bubble_curtain_effect_mult = gs_bubble_curtain_effect_mult,
                                         stochastic = stochastic)
     
     juveniles_at_chipps <- delta_fish$juveniles_at_chipps
@@ -383,6 +385,7 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                         juveniles_at_chipps = juveniles_at_chipps,
                                         growth_rates = delta_growth,
                                         territory_size = ..params$territory_size, 
+                                        gs_bubble_curtain_effect_mult = gs_bubble_curtain_effect_mult,
                                         stochastic = stochastic)
     
     migrants_at_golden_gate <- delta_fish$migrants_at_golden_gate

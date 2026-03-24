@@ -499,7 +499,8 @@ winter_run_model <- function(scenario = NULL,
           stochastic = stochastic,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
-          delta_growth = growth_rates_delta
+          delta_growth = growth_rates_delta,
+          gs_bubble_curtain_effect_mult = ..params$gs_bubble_curtain_effect_mult
         )
       
         # For use in WR SDM: Add juveniles in drought years

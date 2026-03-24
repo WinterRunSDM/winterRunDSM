@@ -119,9 +119,9 @@ create_param_list <- function(action_ids) {
     param_list$.surv_juv_rear_prop_diversions <- param_list$.surv_juv_rear_prop_diversions * 0.75
   }
   
-  if("SR_6" %in% action_ids){
+  if("SR-6" %in% action_ids){
     # Change routing for Georgiana Slough
-    # TODO @Liz decide on parameter
+    param_list$gs_bubble_curtain_effect_mult <- 0.8
   }
   
   # SR-7 (DCC gates) got deleted by proponent
