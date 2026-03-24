@@ -90,8 +90,8 @@ create_param_list <- function(action_ids) {
   
   if("SR-2c" %in% action_ids) {
     # TODO add rearing habitat
-    # TODO move up size class
-    }
+    param_list$non_natal_proportion_shift <- 0.6 # could be 45% - 60%
+  }
   
   if("SR-3" %in% action_ids) {
     # TODO add spawning habitat; adjust for temperature?

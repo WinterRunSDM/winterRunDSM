@@ -15,7 +15,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                     seeds = baseline_seeds)
 
 # test out adult enroute survival multiplier
-alt_params <- create_param_list(action_ids = c("SR-3"))
+alt_params <- create_param_list(action_ids = c("SR-2c"))
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
@@ -78,6 +78,24 @@ baseline_results$juveniles_at_chipps |>
              color = scenario)) +
   geom_boxplot()
   # facet_wrap(~watershed)
+
+baseline_results$rearing_survival_inchannel |> 
+  as.data.frame.table(responseName = "value") |> 
+  rename(watershed = Var1, size_class = Var2, year = Var3,
+         rear_surv_fp = value) |> 
+  mutate(scenario = "baseline") |> 
+  bind_rows(alt_results$rearing_survival_inchannel |> 
+              as.data.frame.table(responseName = "value") |> 
+              rename(watershed = Var1, size_class = Var2, year = Var3,
+                     rear_surv_fp = value) |> 
+              mutate(scenario = "alt")) |> 
+  mutate(year = as.integer(year)) |> 
+  filter(watershed == "Upper Sacramento River") |> 
+  ggplot(aes(x = year,
+             y = rear_surv_fp,
+             color = scenario)) +
+  geom_line() +
+  facet_wrap(~size_class)
 
 
 
