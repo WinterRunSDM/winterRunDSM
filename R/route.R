@@ -131,7 +131,7 @@ route_bypass <- function(bypass_fish, bypass_habitat, migration_survival_rate,
       if (stochastic) {
       rbinom(n = 4, size = bypass_fish$migrants[i, ], prob = migration_survival_rate)
       } else {
-        round(bypass_fish$migrants[i, ] * migration_survival_rate)
+        round(bypass_fish$migrants[i, ] * as.vector(migration_survival_rate))
       }
     }))
 
@@ -244,7 +244,7 @@ route_regional <- function(month, year, migrants,
       if (stochastic) {
         rbinom(n = 4, size = regional_fish$migrants[i, ], prob = migration_survival_rate)
       } else {
-        round(regional_fish$migrants[i, ] * migration_survival_rate)
+        round(regional_fish$migrants[i, ] * as.vector(migration_survival_rate))
       }
     }))
 
