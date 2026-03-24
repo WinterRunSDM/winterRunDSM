@@ -65,6 +65,9 @@ winter_run_model <- function(scenario = NULL,
     prop_fry_abv_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     total_fry_from_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     pct_abv_dam_habitat_used = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
+    upper_mid_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
+    lower_mid_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
+    lower_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
     
     rearing_survival_inchannel = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
     rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20))
@@ -503,6 +506,11 @@ winter_run_model <- function(scenario = NULL,
           gs_bubble_curtain_effect_mult = ..params$gs_bubble_curtain_effect_mult,
           non_natal_proportion_shift = ..params$non_natal_proportion_shift
         )
+        
+        # TODO make sure this isn't double counting
+        output$upper_mid_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$upper_mid_sac_fish, na.rm = T)
+        output$lower_mid_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$lower_mid_sac_fish, na.rm = T)
+        output$lower_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$lower_sac_fish, na.rm = T)
       
         # For use in WR SDM: Add juveniles in drought years
         # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
