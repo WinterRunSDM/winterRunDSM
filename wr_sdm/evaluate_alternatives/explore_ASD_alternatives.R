@@ -2,7 +2,8 @@ library(winterRunDSM)
 library(tidyverse)
 library(plotly)
 library(ggplot2)
-source(here::here("wr_sdm", "parameter_lists", "create_parameter_list_function.R"))
+
+# source(here::here("wr_sdm", "parameter_lists", "create_parameter_list_function.R"))
 
 # baseline
 baseline_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
@@ -15,7 +16,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                     seeds = baseline_seeds)
 
 # test out adult enroute survival multiplier
-alt_params <- create_param_list(action_ids = c("SR-2c"))
+alt_params <- winterRunDSM::create_param_list(action_ids = c("SR-4a"))
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
