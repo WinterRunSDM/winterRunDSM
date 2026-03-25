@@ -30,13 +30,13 @@ winter_run_model <- function(scenario = NULL,
   if (mode == "simulate") {
     
       ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
-                                             dimnames = list(DSMscenario::watershed_labels,
+                                             dimnames = list(winterRunDSM::watershed_labels,
                                                              1980:2000))
       }
 
   if (mode == "calibrate") {
     ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
-                                           dimnames = list(DSMscenario::watershed_labels,
+                                           dimnames = list(winterRunDSM::watershed_labels,
                                                            1980:2000))
   }
   simulation_length <- switch(mode,
