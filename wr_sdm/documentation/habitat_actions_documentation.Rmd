@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+our_palette <- viridis::turbo(6)
 ```
 
 # Habitat Action Documentation
@@ -73,7 +74,8 @@ old_hab |>
   labs(x = "Simulation Date",
        y = "Habitat (acres)",
        title = "Baseline habitat update for Battle Creek",
-       subtitle = "Constrained to Lower Battle Creek")
+       subtitle = "Constrained to Lower Battle Creek") +
+  scale_color_manual(values = our_palette)
   
 
 ```
@@ -108,8 +110,8 @@ bc_proj |>
   mutate(logic = c(rep("Instream suitable across all flows; Floodplain scaled down by 0.25", 2),
                    rep("Floodplain scaled down by 0.25", 5))
          ) |> 
-  select(Project = project, "Modeled instream habitat (acres)" = modeled_ic,
-         "Modeled floodplain habitat (acres)" = modeled_fp, "Logic" = logic) |> 
+  select(Project = project, "Additional instream habitat (acres)" = modeled_ic,
+         "Additional floodplain habitat (acres)" = modeled_fp, "Logic" = logic) |> 
   knitr::kable()
 ```
 
@@ -125,6 +127,173 @@ Inchannel: this used the same methodology at TMH and baseline habitat for R2R wh
 
 Documentation lives in `data-raw/battle-creek-habitat` on `DSMhabitat`.
 
+### BC-5: Battle Creek North Fork spawning and in-channel habitat
+
+This involved extracting the WUA from the 1995 report for combined mainstem and north fork of Battle Creek (p. C-1), and scaling it to the full reach. Baseline habitat only extends ~4 miles of spawning and ~6 miles of rearing of the full 18 miles.
+
+### BC-2 and BC-5
+
+For habitat actions that include both BC-2 (Lower Battle Creek) and BC-5 (North Fork), the estimated additional habitat for each action (on top of baseline) was summed and then added to baseline.
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+compare_all_bc <- DSMhabitat::wr_spawn$action_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1979`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "baseline",
+         lifestage = "spawn") |> 
+  bind_rows(DSMhabitat::wr_spawn$action_5_bc_2["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1979`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2",
+         lifestage = "spawn")) |> 
+  bind_rows(DSMhabitat::wr_spawn$action_5_bc_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1979`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-5",
+         lifestage = "spawn")) |> 
+    bind_rows(DSMhabitat::wr_spawn$action_5_bc_2_bc_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1979`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2 + bc-5",
+         lifestage = "spawn")) |> 
+  # juvenile
+  bind_rows(DSMhabitat::wr_juv$action_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "baseline",
+         lifestage = "juv")) |> 
+  bind_rows(DSMhabitat::wr_juv$action_5_bc_2["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2",
+         lifestage = "juv")) |> 
+    bind_rows(DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-5",
+         lifestage = "juv")) |> 
+    bind_rows(DSMhabitat::wr_juv$action_5_bc_2_bc_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2 + bc-5",
+         lifestage = "juv")) |> 
+  # fry
+    bind_rows(DSMhabitat::wr_fry$action_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "baseline",
+         lifestage = "fry")) |> 
+  bind_rows(DSMhabitat::wr_fry$action_5_bc_2["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2",
+         lifestage = "fry")) |> 
+    bind_rows(DSMhabitat::wr_fry$action_5_bc_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-5",
+         lifestage = "fry")) |> 
+  bind_rows(DSMhabitat::wr_fry$action_5_bc_2_bc_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2 + bc-5",
+         lifestage = "fry")) |> 
+  # floodplain
+  bind_rows(DSMhabitat::wr_fp$action_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "baseline",
+         lifestage = "floodplain")) |> 
+  bind_rows(DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1980`:`2000`, 
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(scenario = "bc-2",
+         lifestage = "floodplain")) |> 
+  mutate(fake_date = as.Date(paste0(year, "-", month, "-01")))
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+compare_all_bc |> 
+  mutate(habitat_acres = DSMhabitat::square_meters_to_acres(habitat_sqm)) |> 
+  ggplot(aes(x = fake_date, y = habitat_acres, color = scenario)) + 
+  geom_line() +
+  facet_wrap(~lifestage, scales = "free_y") +
+  theme_minimal() +
+  labs(x = "Simulation date",
+       y = "Habitat (acres)",
+       title = "Battle Creek habitat data by action") +
+  theme(legend.position = "bottom") +
+  scale_color_manual(values = our_palette)
+
+```
+
 ## Sacramento River
 
 ## Above Shasta Dam
+
+# Habitat scaling by temperature
+
+## Temperature threshold data from Mike Deas
+
+The modeling team requested and received a report from Mike Deas and Maya Wood, Watercourse Engineering, Inc. that included a summary of days per month where the mean daily temperature exceeded `53.5 F`. This value was informed by participants during SDM working sessions and represents the critical threshold above which temperature-dependent mortality accures for WRCS eggs. The full report is included and we present the tables in this markdown to show how they were used to scale proposed additional habitat for:
+
+* McCloud River
+* Upper Sacramento River above Shasta Dam
+* Battle Creek
+
+Data provided are below - there are important caveats for some of these cells
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+md_metadata <- read_xlsx(here("data-raw", "habitat-data-docs", "mike_deas_data.xlsx"),
+                         sheet = "metadata") |> 
+  janitor::clean_names()
+md_data <- read_xlsx(here("data-raw", "habitat-data-docs", "mike_deas_data.xlsx"),
+                     sheet = "data") |> 
+  janitor::clean_names()
+
+```
+
+## Scaling approach
+
+## Results
