@@ -65,15 +65,19 @@ create_param_list <- function(action_ids) {
   if("SR-2a" %in% action_ids) {
     # double instream habitat in Upper-mid Sacramento River
     # TODO do we need to do anything with temperature suitability here? 
-    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
-    param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenileenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenileenile["Upper Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenileenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenileenile["Upper-mid Sacramento River",,]*2
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,]*2
+    param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,]*2
   }
   
   if("SR-2b" %in% action_ids) {
     # double instream habitat in Upper-mid Sacramento River
     # TODO do we need to do anything with temperature suitability here? 
-    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
-    param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenileenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenileenile["Upper Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenileenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenileenile["Upper-mid Sacramento River",,]*2
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,]*2
+    param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,]*2
   }
   
   if("SR-2c" %in% action_ids) {
@@ -154,7 +158,8 @@ create_param_list <- function(action_ids) {
   # BC-2
   if("BC-2" %in% action_ids){
     param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,]
-    param_list$inchannel_habitat_juv["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2["Battle Creek",,]
+    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2["Battle Creek",,]
+    param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_2["Battle Creek",,]
   }
   
   # BC-3 
@@ -164,8 +169,17 @@ create_param_list <- function(action_ids) {
   
   # BC-5
   if("BC-5" %in% action_ids) {
-    param_list$inchannel_habitat_juv["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,]
+    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,]
+    param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_5["Battle Creek",,]
     param_list$spawning_habitat["Battle Creek",,] <- DSMhabitat::wr_spawn$action_5_bc_5["Battle Creek",,]
+  }
+  
+  if("BC-5" %in% action_ids && "BC-2" %in% action_ids) {
+    # add both habitat actions
+    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2_bc_5["Battle Creek",,]
+    param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_2_bc_5["Battle Creek",,]
+    param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2_bc_5["Battle Creek",,]
+    param_list$spawning_habitat["Battle Creek",,] <- DSMhabitat::wr_spawn$action_5_bc_2_bc_5["Battle Creek",,]
   }
   
   # BC-6 - are we doing this?
