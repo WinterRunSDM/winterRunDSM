@@ -1,18 +1,9 @@
-# work through approaches
-
-
-# action_params <- readr::read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.csv") |> 
-#   janitor::clean_names() |> 
-#   dplyr::select(-short_description) |> 
-#   tidyr::pivot_longer(hatchery_releases:effect_of_downstream_volitional_passage_on_juvenile_salmon,
-#                names_to = "parameter_title",
-#                values_to = "action_requires") |> 
-#   dplyr::filter(!is.na(action_requires),
-#          !is.na(action_id)) |> 
-#   dplyr::arrange(parameter_title)
-
-impossible_combinations <- c()
-
+#' @title Create new parameter list
+#' @description Creates a new parameter list for input to the winter run model that uses
+#' `winterRunDSM::wr_sdm_baseline_params` as a basis.
+#' @details Actions are passed in as a vector and a new param list is produced for use in `winter_run_model()`
+#' @param action_ids A vector of action IDs to represent in the parameters. 
+#' @export
 create_param_list <- function(action_ids) {
   param_list <- winterRunDSM::wr_sdm_baseline_params
   
@@ -161,17 +152,31 @@ create_param_list <- function(action_ids) {
     param_list$harvest_rate_trib["Battle Creek"] <- param_list$harvest_rate_trib["Battle Creek"] * 0.5
   }
   
+  # BC-2
+  if("BC-2" %in% action_ids){
+    param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,]
+    param_list$inchannel_habitat_juv["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2["Battle Creek",,]
+  }
+  
   # BC-3 
   # No model inputs
   
+  # BC-4 - removed
+  
+  # BC-5
+  if("BC-5" %in% action_ids) {
+    param_list$inchannel_habitat_juv["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,]
+    param_list$spawning_habitat["Battle Creek",,] <- DSMhabitat::wr_spawn$action_5_bc_5["Battle Creek",,]
+  }
+  
+  # BC-6 - are we doing this?
   
   # BC-8
   if("BC-8" %in% action_ids) {
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
   }
  
-  
-   # TODO modify model code based on a threshold of adults returning to Battle Creek
+  # TODO modify model code based on a threshold of adults returning to Battle Creek
   # BC-9
   if("BC-9" %in% action_ids) {
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
