@@ -26,6 +26,58 @@ Additional habitat was required for two Battle Creek actions: `BC-2` and `BC-5`.
 
 The baseline Battle Creek habitat for WRCS took WUA data from a 1995 study that was averaged across all habitat (Lower Battle Creek and the North Fork), and then scaled it to the river lengths. In the original SIT, the river lengths applied for WRCS were Lower Battle Creek and North Fork, whereas for fall run the river lengths were restricted to Lower Battle Creek. We updated the baseline for WRCS to be applied to the same river lengths as fall run, representing anecdotal and scientific support for little spawning and rearing habitat for WRCS above the confluence owing to a natural barrier below Eagle Canyon Diversion Dam. 
 
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+old_hab <- read_csv(here("data-raw", "habitat-data-docs", "wr_habitat_baseline_action5_2026-03-24.csv"))
+
+new_hab <- DSMhabitat::wr_spawn$action_5["Battle Creek",,] |> 
+  as.data.frame() |> 
+  mutate(month = 1:12) |> 
+  pivot_longer(`1979`:`2000`,
+               names_to = "year",
+               values_to = "habitat_sqm") |> 
+  mutate(lifestage = "spawn") |> 
+  bind_rows(DSMhabitat::wr_juv$action_5["Battle Creek",,] |> 
+            as.data.frame() |> 
+            mutate(month = 1:12) |> 
+            pivot_longer(`1980`:`2000`,
+                         names_to = "year",
+                         values_to = "habitat_sqm") |> 
+            mutate(lifestage = "juv")) |> 
+    bind_rows(DSMhabitat::wr_fry$action_5["Battle Creek",,] |> 
+            as.data.frame() |> 
+            mutate(month = 1:12) |> 
+            pivot_longer(`1980`:`2000`,
+                         names_to = "year",
+                         values_to = "habitat_sqm") |> 
+            mutate(lifestage = "fry")) |> 
+    bind_rows(DSMhabitat::wr_fp$action_5["Battle Creek",,] |> 
+            as.data.frame() |> 
+            mutate(month = 1:12) |> 
+            pivot_longer(`1980`:`2000`,
+                         names_to = "year",
+                         values_to = "habitat_sqm") |> 
+            mutate(lifestage = "fp")) |> 
+  mutate(year = as.integer(year),
+         scenario = "baseline_action5_2026-03-24",
+         run = "winter")
+
+old_hab |> 
+  bind_rows(new_hab) |> 
+  mutate(habitat_acres = DSMhabitat::square_meters_to_acres(habitat_sqm),
+         fake_date = as.Date(paste0(year, "-", month, "-01"))) |> 
+  ggplot(aes(x = fake_date, y = habitat_acres, color = scenario)) + 
+  geom_line() +
+  facet_wrap(~lifestage, nrow = 4, scales = "free_y") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(x = "Simulation Date",
+       y = "Habitat (acres)",
+       title = "Baseline habitat update for Battle Creek",
+       subtitle = "Constrained to Lower Battle Creek")
+  
+
+```
+
 ### BC-2: Lower Battle Creek rearing habitat
 
 This action modeled the inclusion of several habitat projects designed to increase rearing habitat in Lower Battle Creek. Acreage from proposed projects provided to FlowWest was scaled down by a factor of 0.25 to represent suitability across all flows and added to the flow-to-habitat curve in `DSMhabitat` (habitat inputs for the model) at a representative flow. The percent increase in habitat at a representative flow was then applied across all flows. 
