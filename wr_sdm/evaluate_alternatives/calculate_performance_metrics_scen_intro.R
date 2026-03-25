@@ -4,6 +4,7 @@
 library(zoo)
 library(dplyr)
 library(tidyr)
+library(winterRunDSM)
 
 # Run models ----------------------------------------------------
 
