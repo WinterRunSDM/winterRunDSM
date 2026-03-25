@@ -178,7 +178,7 @@ create_param_list <- function(action_ids) {
     # add both habitat actions
     param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2_bc_5["Battle Creek",,]
     param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_2_bc_5["Battle Creek",,]
-    param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2_bc_5["Battle Creek",,]
+    param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,] # BC-5 does not have a fp action, so use bc-2
     param_list$spawning_habitat["Battle Creek",,] <- DSMhabitat::wr_spawn$action_5_bc_2_bc_5["Battle Creek",,]
   }
   
