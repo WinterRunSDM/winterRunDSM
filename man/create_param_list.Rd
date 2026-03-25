@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_parameter_list_function.R
 \name{create_param_list}
 \alias{create_param_list}
-\title{Create new parameter list}
+\title{Create parameter list for portfolios}
 \usage{
 create_param_list(action_ids)
 }
@@ -12,7 +12,4 @@ create_param_list(action_ids)
 \description{
 Creates a new parameter list for input to the winter run model that uses
 `winterRunDSM::wr_sdm_baseline_params` as a basis.
-}
-\details{
-Actions are passed in as a vector and a new param list is produced for use in `winter_run_model()`
 }

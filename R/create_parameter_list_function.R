@@ -1,7 +1,6 @@
-#' @title Create new parameter list
+#' @title Create parameter list for portfolios
 #' @description Creates a new parameter list for input to the winter run model that uses
-#' `winterRunDSM::wr_sdm_baseline_params` as a basis.
-#' @details Actions are passed in as a vector and a new param list is produced for use in `winter_run_model()`
+  #' `winterRunDSM::wr_sdm_baseline_params` as a basis.
 #' @param action_ids A vector of action IDs to represent in the parameters. 
 #' @export
 create_param_list <- function(action_ids) {
