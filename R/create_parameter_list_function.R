@@ -1,6 +1,3 @@
-# work through approaches
-
-
 # action_params <- readr::read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.csv") |> 
 #   janitor::clean_names() |> 
 #   dplyr::select(-short_description) |> 
@@ -11,7 +8,12 @@
 #          !is.na(action_id)) |> 
 #   dplyr::arrange(parameter_title)
 
-impossible_combinations <- c()
+#' @title Create parameter list for portfolios
+#' @description Creates updated parameter list for portfolios based on actions included
+#' @param action_ids The action ids included in portfolio
+#' @export
+
+# impossible_combinations <- c()
 
 create_param_list <- function(action_ids) {
   param_list <- winterRunDSM::wr_sdm_baseline_params
