@@ -3,10 +3,7 @@
 export(adult_stray)
 export(apply_enroute_survival)
 export(apply_straying)
-<<<<<<< HEAD
-=======
 export(calculate_habitat_additions_ASD_BC)
->>>>>>> 8a62e90acdcc76144ad9b737b69f857460e01a4a
 export(compute_adult_stray_rates)
 export(create_param_list)
 export(fill_natal)

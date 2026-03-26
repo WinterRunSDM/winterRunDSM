@@ -73,7 +73,7 @@ winter_hatchery_release<- array(rep(winter_hatchery_release, 20),
 
 winter_hatchery_release["Upper Sacramento River", "l", ] <- summarized_release$release_number[1]
 # populate hatchery release as larger fish based on avg hatchery release data
-dry_years <- c(2, 6, 8:13, 15) # WR DSM update - for dry years to reflect data from Emily USBR, release numbers are higher
+dry_years <- c(2, 6, 8:13, 15)+1 # WR DSM update - for dry years to reflect data from Emily USBR, release numbers are higher
 winter_hatchery_release["Upper Sacramento River", "l", dry_years] <- 500000
 
 usethis::use_data(winter_hatchery_release, overwrite = TRUE)
