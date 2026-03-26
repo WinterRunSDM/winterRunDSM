@@ -137,10 +137,12 @@ wr_sdm_baseline_params <- list(
   # update naming to move away from r_to_r, but keep values
   # biop_itp to change to Action 5
   # DSMhabitat variables -----
-  spawning_habitat = DSMhabitat::wr_spawn$action_5,
-  inchannel_habitat_fry = DSMhabitat::wr_fry$action_5, # vary by run
-  inchannel_habitat_juvenile = DSMhabitat::wr_juv$action_5, # vary by run
-  floodplain_habitat = DSMhabitat::wr_fp$action_5, # vary by run
+  # WR DSM - scale baseline battle creek habitat by temperature suitability
+  
+  spawning_habitat = wr_sdm_habitat_action_5_bc_scaled$spawn,
+  inchannel_habitat_fry = wr_sdm_habitat_action_5_bc_scaled$fry, # vary by run
+  inchannel_habitat_juvenile = wr_sdm_habitat_action_5_bc_scaled$juv, # vary by run
+  floodplain_habitat = wr_sdm_habitat_action_5_bc_scaled$fp, # vary by run
   weeks_flooded = DSMhabitat::weeks_flooded$action_5,
   delta_habitat = DSMhabitat::delta_habitat$action_5,
   sutter_habitat = DSMhabitat::sutter_habitat$action_5,
