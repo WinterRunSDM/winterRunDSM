@@ -248,3 +248,26 @@ wr_sdm_temp_habitat_scaling_factors <- setNames(
 
 usethis::use_data(wr_sdm_temp_habitat_scaling_factors, overwrite = TRUE)
 
+# WR SDM scale battle creek habitat by temp suitability
+action5_spawn <- DSMhabitat::wr_spawn$action_5
+action5_spawn["Battle Creek",,] <- action5_spawn["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$spawn
+action5_fry <- DSMhabitat::wr_fry$action_5
+action5_fry["Battle Creek",,] <- action5_fry["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+action5_juv <- DSMhabitat::wr_juv$action_5
+action5_juv["Battle Creek",,] <- action5_juv["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+action5_fp <- DSMhabitat::wr_fp$action_5
+action5_fp["Battle Creek",,] <- action5_fp["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+
+wr_sdm_habitat_action_5_bc_scaled <- list(spawn = action5_spawn,
+                                          fry = action5_fry,
+                                          juv = action5_juv,
+                                          fp = action5_fp)
+
+usethis::use_data(wr_sdm_habitat_action_5_bc_scaled, overwrite = TRUE)
+
+
+

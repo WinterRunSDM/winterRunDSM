@@ -8,6 +8,7 @@ create_param_list <- function(action_ids) {
   
   # TODO check that "action_ids" argument does not have any of the impossible combinations
   
+<<<<<<< HEAD
   # temperature scaling factors
   
   # Data prep
@@ -28,6 +29,10 @@ create_param_list <- function(action_ids) {
   mccloud_addition_spawn <- mccloud_addition_spawn * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$spawn
   # ds3_inchannel_hab <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,] + upper_mccloud_addition
   # ds4_inchannel_hab <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,] + lower_mccloud_addition
+=======
+  # calculate habitat additions - too much code here so i moved it to a subfunction
+  habitat_additions <- calculate_habitat_additions_ASD_BC()
+>>>>>>> 8a62e90acdcc76144ad9b737b69f857460e01a4a
   
   #Hatchery -----
   
@@ -161,9 +166,9 @@ create_param_list <- function(action_ids) {
   
   # BC-2
   if("BC-2" %in% action_ids){
-    param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,] * DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,] * wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
-    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2["Battle Creek",,] * wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
-    param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_2["Battle Creek",,]* wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$spawn
+    param_list$floodplain_habitat["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$fp["Battle Creek",,] + habitat_additions$bc_2$fp
+    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$juv["Battle Creek",,] + habitat_additions$bc_2$juv
+    param_list$inchannel_habitat_fry["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$fry["Battle Creek",,] + habitat_additions$bc_2$fry
   }
   
   # BC-3 
@@ -173,21 +178,18 @@ create_param_list <- function(action_ids) {
   
   # BC-5
   if("BC-5" %in% action_ids) {
-    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,] * wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear
-    param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_5["Battle Creek",,] * wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear
-    param_list$spawning_habitat["Battle Creek",,] <- DSMhabitat::wr_spawn$action_5_bc_5["Battle Creek",,] * wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$spawn
+    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$juv["Battle Creek",,] + habitat_additions$bc_5$juv
+    param_list$inchannel_habitat_fry["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$fry["Battle Creek",,] + habitat_additions$bc_5$fry
+    param_list$spawning_habitat["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$spawn["Battle Creek",,] + habitat_additions$bc_5$spawn
   }
   
   if("BC-5" %in% action_ids && "BC-2" %in% action_ids) {
     # add both habitat actions
-    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- DSMhabitat::wr_juv$action_5_bc_2_bc_5["Battle Creek",,] * mean(wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear, 
-                                                                                                                              wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear)
-    param_list$inchannel_habitat_fry["Battle Creek",,] <- DSMhabitat::wr_fry$action_5_bc_2_bc_5["Battle Creek",,] * mean(wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear, 
-                                                                                                                         wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear)
+    param_list$inchannel_habitat_juvenile["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$juv["Battle Creek",,] + habitat_additions$bc_2_5$juv
+    param_list$inchannel_habitat_fry["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$fry["Battle Creek",,] + habitat_additions$bc_2_5$fry
     # BC-5 does not have a fp action, so use bc-2
-    param_list$floodplain_habitat["Battle Creek",,] <- DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,] * wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
-    param_list$spawning_habitat["Battle Creek",,] <- DSMhabitat::wr_spawn$action_5_bc_2_bc_5["Battle Creek",,] * mean(wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$spawn, 
-                                                                                                                      wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$spawn)
+    param_list$floodplain_habitat["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$fp["Battle Creek",,] + habitat_additions$bc_2$fp
+    param_list$spawning_habitat["Battle Creek",,] <- wr_sdm_habitat_action_5_bc_scaled$spawn["Battle Creek",,] + habitat_additions$bc_2_5$spawn
   }
   
   # BC-6 - are we doing this?
@@ -321,3 +323,129 @@ create_param_list <- function(action_ids) {
   
   return(param_list)
 }
+<<<<<<< HEAD
+=======
+
+#' @title Calculate habitat additions for ASD actions
+#' @description Calculates the values of added habitat across ASD actions
+#' @export
+calculate_habitat_additions_ASD_BC <- function() {
+  # baseline objects
+  baseline_fry <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,]
+  baseline_juv <- DSMhabitat::wr_juv$action_5["Upper Sacramento River",,]
+  baseline_fp <- DSMhabitat::wr_fp$action_5["Upper Sacramento River",,]
+  baseline_spawn <- DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]
+  
+  # mccloud river
+  # fry
+  upper_sac_w_mccloud_fry <- DSMhabitat::wr_fry$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
+  mccloud_addition_fry <- upper_sac_w_mccloud_fry - baseline_fry
+  upper_mccloud_addition_fry <- mccloud_addition_fry * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$rear
+  lower_mccloud_addition_fry <- mccloud_addition_fry * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$rear
+  # juv
+  upper_sac_w_mccloud_juv <- DSMhabitat::wr_juv$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
+  mccloud_addition_juv <- upper_sac_w_mccloud_juv - baseline_juv
+  upper_mccloud_addition_juv <- mccloud_addition_juv * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$rear
+  lower_mccloud_addition_juv <- mccloud_addition_juv * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$rear
+  # floodplain
+  upper_sac_w_mccloud_fp <- DSMhabitat::wr_fp$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
+  mccloud_addition_fp <- upper_sac_w_mccloud_fp - baseline_fp
+  upper_mccloud_addition_fp <- mccloud_addition_fp * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$rear
+  lower_mccloud_addition_fp <- mccloud_addition_fp * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$rear
+  # spawn
+  upper_sac_w_mccloud_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
+  mccloud_addition_spawn <- upper_sac_w_mccloud_spawn - baseline_spawn
+  upper_mccloud_addition_spawn <- mccloud_addition_spawn * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$spawn
+  lower_mccloud_addition_spawn <- mccloud_addition_spawn * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$spawn
+  
+  # temp scale full mccloud addition after it's been used to calculate upper and lower
+  mccloud_addition_fry <- mccloud_addition_fry * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$rear
+  mccloud_addition_juv <- mccloud_addition_juv * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$rear
+  mccloud_addition_fp <- mccloud_addition_fp * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$rear
+  mccloud_addition_spawn <- mccloud_addition_spawn * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$spawn
+  
+  # Upper Sacramento - needs to be calculated from full TMH minus (-) Pit/McCloud
+  # fry
+  upper_sac_w_little_sac_fry <- DSMhabitat::wr_fry$action_5_upper_sac_tmh["Upper Sacramento River",,] - 
+    DSMhabitat::wr_fry$action_5_upper_sac_pit_mccloud_tmh["Upper Sacramento River",,]
+  little_sac_addition_fry <- (upper_sac_w_little_sac_fry - baseline_fry) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
+  # juv
+  upper_sac_w_little_sac_juv <- DSMhabitat::wr_juv$action_5_upper_sac_tmh["Upper Sacramento River",,] - 
+    DSMhabitat::wr_juv$action_5_upper_sac_pit_mccloud_tmh["Upper Sacramento River",,]
+  little_sac_addition_juv <- (upper_sac_w_little_sac_juv - baseline_fry) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
+  # floodplain
+  upper_sac_w_little_sac_fp <- DSMhabitat::wr_fp$action_5_upper_sac_tmh["Upper Sacramento River",,] - 
+    DSMhabitat::wr_fp$action_5_upper_sac_pit_mccloud_tmh["Upper Sacramento River",,]
+  little_sac_addition_fp <- (upper_sac_w_little_sac_fp - baseline_fp) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
+  # spawn
+  upper_sac_w_little_sac_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,] - 
+    DSMhabitat::wr_spawn$action_5_upper_sac_pit_mccloud_tmh["Upper Sacramento River",,]
+  little_sac_addition_spawn <- (upper_sac_w_little_sac_spawn - baseline_spawn) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$spawn
+  
+  # battle creek
+  bc_baseline_spawn <- wr_sdm_habitat_action_5_bc_scaled$spawn["Battle Creek",,]
+  bc_baseline_fry <- wr_sdm_habitat_action_5_bc_scaled$fry["Battle Creek",,] 
+  bc_baseline_juv <- wr_sdm_habitat_action_5_bc_scaled$juv["Battle Creek",,] 
+  bc_baseline_fp <- wr_sdm_habitat_action_5_bc_scaled$fp["Battle Creek",,] 
+  
+  # bc-2
+  bc_bc2_spawn_addition <- (DSMhabitat::wr_spawn$action_5_bc_2["Battle Creek",,] - bc_baseline_spawn) * 
+    wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$spawn
+  bc_bc2_fry_addition <- (DSMhabitat::wr_fry$action_5_bc_2["Battle Creek",,] - bc_baseline_fry) * 
+    wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+  bc_bc2_juv_addition <- (DSMhabitat::wr_juv$action_5_bc_2["Battle Creek",,] - bc_baseline_juv) * 
+    wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+  bc_bc2_fp_addition <- (DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,] - bc_baseline_fp) * 
+    wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+  
+  # bc-5
+  bc_bc5_spawn_addition <- (DSMhabitat::wr_spawn$action_5_bc_5["Battle Creek",,] - bc_baseline_spawn) * 
+    wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$spawn
+  bc_bc5_fry_addition <- (DSMhabitat::wr_fry$action_5_bc_5["Battle Creek",,] - bc_baseline_fry) * 
+    wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear
+  bc_bc5_juv_addition <- (DSMhabitat::wr_juv$action_5_bc_5["Battle Creek",,] - bc_baseline_juv) * 
+    wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear
+  # no floodplain
+  
+  # bc-2 and bc-5
+  bc_bc2_bc5_spawn_addition <- (DSMhabitat::wr_spawn$action_5_bc_2_bc_5["Battle Creek",,] - bc_baseline_spawn) * 
+    mean(wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$spawn, 
+         wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$spawn)
+  bc_bc2_bc5_fry_addition <- (DSMhabitat::wr_fry$action_5_bc_2_bc_5["Battle Creek",,] - bc_baseline_fry) * 
+    mean(wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear, 
+         wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear)
+  bc_bc2_bc5_juv_addition <- (DSMhabitat::wr_juv$action_5_bc_2_bc_5["Battle Creek",,] - bc_baseline_juv) * 
+    mean(wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear, 
+         wr_sdm_temp_habitat_scaling_factors$`North Fork Battle Creek`$rear)
+  bc_bc2_bc5_fp_addition <- (DSMhabitat::wr_fp$action_5_bc_2["Battle Creek",,] - bc_baseline_fp) * 
+    wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+  
+  return(list("upper_mccloud" = list("fry" = upper_mccloud_addition_fry,
+                                     "juv" = upper_mccloud_addition_juv,
+                                     "fp" = upper_mccloud_addition_fp,
+                                     "spawn" = upper_mccloud_addition_spawn),
+              "lower_mccloud" = list("fry" = lower_mccloud_addition_fry,
+                                     "juv" = lower_mccloud_addition_juv,
+                                     "fp" = lower_mccloud_addition_fp,
+                                     "spawn" = lower_mccloud_addition_spawn),
+              "full_mccloud" = list("fry" = mccloud_addition_fry,
+                                     "juv" = mccloud_addition_juv,
+                                     "fp" = mccloud_addition_fp,
+                                     "spawn" = mccloud_addition_spawn),
+              "little_sac" = list("fry" = little_sac_addition_fry,
+                                  "juv" = little_sac_addition_juv,
+                                  "fp" = little_sac_addition_fp,
+                                  "spawn" = little_sac_addition_spawn),
+              "bc_2" = list("fry" = bc_bc2_fry_addition,
+                            "juv" = bc_bc2_juv_addition,
+                            "fp" = bc_bc2_fp_addition,
+                            "spawn" = bc_bc2_spawn_addition),
+              "bc_5" = list("fry" = bc_bc5_fry_addition,
+                            "juv" = bc_bc5_juv_addition,
+                            "spawn" = bc_bc5_spawn_addition),
+              "bc_2_5" = list("fry" = bc_bc2_bc5_fry_addition,
+                              "juv" = bc_bc2_bc5_juv_addition,
+                              "fp" = bc_bc2_bc5_fp_addition,
+                              "spawn" = bc_bc2_bc5_spawn_addition)))
+}
+>>>>>>> 8a62e90acdcc76144ad9b737b69f857460e01a4a
