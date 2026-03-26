@@ -283,17 +283,135 @@ The modeling team requested and received a report from Mike Deas and Maya Wood, 
 * Upper Sacramento River above Shasta Dam
 * Battle Creek
 
-Data provided are below - there are important caveats for some of these cells
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 md_metadata <- read_xlsx(here("data-raw", "habitat-data-docs", "mike_deas_data.xlsx"),
-                         sheet = "metadata") |> 
-  janitor::clean_names()
+                         sheet = "metadata")
 md_data <- read_xlsx(here("data-raw", "habitat-data-docs", "mike_deas_data.xlsx"),
-                     sheet = "data") |> 
-  janitor::clean_names()
+                     sheet = "data")
+```
 
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+knitr::kable(md_metadata)
+knitr::kable(md_data)
 ```
 
 ## Scaling approach
 
+Population dynamics in the lifecyle model, a derivative of the SIT DSM developed by Peterson & Duarte 2020, is structured by month:
+
+![](peterson_duarte_fig2.png)
+*Fig. 2 from Peterson & Duarte, 2020*
+
+We used the months relevant for each lifestage to scale the appropriate temperature estimates:
+
+* Spawning: May - August
+* Rearing (inchannel and floodplain): September - April
+
+**Spawning:** Per the analyses in the [2003 EIR for the Battle Creek Restoration Project](https://www.waterboards.ca.gov/waterrights/water_issues/programs/water_quality_cert/docs/battlecreek_salmon_ferc1121/draft_eir/appendix_m.pdf), egg survival is `100%` below `55 F` and drops below `80%` at temperatures of `58 F`. Therefore we used additional plots from the analysis to apply a sliding scale of temperature effect, as the binary above/below `53.5 F` would not account for the accruing effects on suitability.
+
+**Rearing:** Through conversations with modelers we selected a threshold of `68 F` as appropriate for juvenile rearing. 
+
+### BC-2: Lower Battle Creek
+
+![](md_graphs/md_CNFH.png)
+*Deas & Wood, 2026*
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+md_data |> 
+  filter(Station == "Upper Battle Creek") |> 
+  knitr::kable()
+```
+
+**Spawning:** Nearly all days in May-August are not only above `53.5 F` but are also at or around `60 F` (figure). We propose scaling total habitat to `25%` of the proposed value to account for mortality in June-August and partial survival in May.
+
+**Rearing:** Only one month from Sep-May showed temperatures near `68 F` (September) so we propose scaling to `90%` of total habitat.
+
+### BC-5: North Fork Battle Creek
+
+![](md_graphs/md_NF.png)
+*Deas & Wood, 2026*
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+md_data |> 
+  filter(Station == "Wildcat Dam") |> 
+  knitr::kable()
+```
+
+**Spawning:** Nearly all days in May-August are not only above `53.5 F` but are also at or around `60 F` (figure). We initially proposed scaling total habitat to `25%` of the proposed value to account for mortality in June-August and partial survival in May; however, Wildcat dam may not represent all the cold-water habitat in the North Fork of Battle Creek which is fed by coldwater springs and shade from a steep canyon section. We propose instead using a scaling factor of `50%` to account for upper reach temperature suitability not represented by Wildcat dam.
+
+**Rearing:** All months from Sep-May showed temperatures below `68 F` (September) so we propose scaling total habitat to `100%` of the proposed value.
+
+### ASD: Upper McCloud
+
+![](md_graphs/md_MRA.png)
+*Deas & Wood, 2026*
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+md_data |> 
+  filter(Station == "MRA") |> 
+  knitr::kable()
+```
+
+**Spawning:** All days in May-August are below `53.5 F`. We propose scaling total habitat to `100%` of the proposed value.
+
+**Rearing:** All months from Sep-May showed temperatures below `68 F` (September) so we propose scaling total habitat to `100%` of the proposed value.
+
+### ASD: Lower McCloud
+
+There were several gages on the McCloud River as part of the report from Deas & Wood. We selected the gage `MR4A` as representative of the middle of the Lower McCloud.
+
+![](md_graphs/md_MR4A.png)
+*Deas & Wood, 2026*
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+md_data |> 
+  filter(Station == "MR4A") |> 
+  knitr::kable()
+```
+
+**Spawning:** 7 days in May were above the `53.5 F` threshold, 20 in June, and all days in July and August. Across all spawning months, however, the temperatures did not exceed `60 F`, so we propose scaling by `70%` to represent partial mortality (survival is ~80% at 58 F) for this temperature range.
+
+**Rearing:** All months from Sep-May showed temperatures below `68 F` (September) so we propose scaling total habitat to `100%` of the proposed value.
+
+### ASD: Full McCloud River 
+
+For the Full McCloud River (for ASD-7; removal of McCloud Dam), we propose taking the average of our scaling factors for the Lower and Upper McCloud:
+
+**Spawning:** Average of `100%` (Upper) and `70%` (Lower) - propose `85%`.
+
+**Rearing:** Average of `100%` (Upper) and `100%` (Lower)  - propose `100%`
+
+### ASD: Little Sacramento River
+
+![](md_graphs/md_Sac_above_shasta.png)
+*Deas & Wood, 2026*
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+md_data |> 
+  filter(Station == "Sacramento River") |> 
+  knitr::kable()
+```
+
+**Spawning:** 11 days in May were above the `53.5 F` threshold and all days in June, July, and August. Temperatures exceeded `60 F` for July, August, and September. We propose scaling by `15%` to represent partial mortality in May and signficant mortality / stress in July, August, and September.
+
+**Rearing:** September shows some temperatures near `68 F` and all temperatures from October-May below `68 F` (September) so we propose scaling total habitat to `90%` of the proposed value.
+
+### ASD: Pit River
+
+The Pit River was eliminated from consideration due to feedback about barriers and temperature suitability.
+
+
 ## Results
+
+### Scaling factors
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+# this code is also in cache-data.R so we can read it into our param function
+wr_sdm_temp_habitat_scaling_factors <- tibble("Station ID" = c("11342000", "MRA", "MR4A", NA_character_, "1000", "2000"),
+                          "Watershed" = c("Little Sacramento River", "Upper McCloud River", "Lower McCloud River", "Full McCloud River", "North Fork Battle Creek", "Lower Battle Creek"),
+                          "Spawning Scale Factor" = c(0.15, 1, 0.7, 0.85, 0.5, 0.25),
+                          "Rearing Scale Factor" = c(0.9, 1, 1, 1, 1, 0.90))
+
+wr_sdm_temp_habitat_scaling_factors |> 
+  knitr::kable()
+```
