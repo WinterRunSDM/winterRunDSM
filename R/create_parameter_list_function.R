@@ -231,7 +231,6 @@ create_param_list <- function(action_ids) {
   if("ASD-1" %in% action_ids) {
     param_list$hatchery_release["Upper Sacramento River","m",] <- rep(300000, 20)
     param_list$hatchery_release["Upper Sacramento River","l",] <- rep(200000, 20)
-    param_list$egg_to_fry_survival_abv_dam <- 0.6
   }
   
   # ASD-2
@@ -241,12 +240,11 @@ create_param_list <- function(action_ids) {
   
   # ASD-3
   if("ASD-3" %in% action_ids) {
-    param_list$hatchery_release["Upper Sacramento River","m",] <- c(rep(800000, 8), rep(115000,6), rep(150000, 6))
+    param_list$hatchery_release["Upper Sacramento River","m",] <- c(rep(80000, 8), rep(115000,6), rep(150000, 6))
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + upper_mccloud_addition_rear
-    # applied to the hatchery releasesz
+    # applied to the hatchery releases
     param_list$juvenile_capture_efficiency_dam_transport <- 0.25
     param_list$dam_passage_survival <- list("adult" = 1, "juv" = 0.8)
-    param_list$abv_dam_spawn_proportion <- 0
   }
   
   # ASD-4
@@ -270,6 +268,7 @@ create_param_list <- function(action_ids) {
     param_list$abv_dam_spawn_proportion <- 0.5
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.6
+    param_list$prespawn_survival_abv_dam <- 0.95
   }
   
   
@@ -288,6 +287,7 @@ create_param_list <- function(action_ids) {
     param_list$abv_dam_spawn_proportion <-  mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.6
+    param_list$prespawn_survival_abv_dam <- 0.95
   }
   
   # ASD-6b Volitional both directions
@@ -302,6 +302,7 @@ create_param_list <- function(action_ids) {
     param_list$abv_dam_spawn_proportion <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(lower_mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+lower_mccloud_addition_spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.6
+    param_list$prespawn_survival_abv_dam <- 0.95
   }
   
   # ASD-7 Remove McCloud
@@ -310,6 +311,7 @@ create_param_list <- function(action_ids) {
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + mccloud_addition_rear
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(mccloud_addition_spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+mccloud_addition_spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.7
+    param_list$prespawn_survival_abv_dam <- 0.95
   }
   
   # Facilities -------

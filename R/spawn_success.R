@@ -141,7 +141,8 @@ spawn_success <- function(escapement,
       # if no above dam action, return the below dam fry as total amount
       return(list("total_fry" = fry_blw_dam_final,
                   "prop_abv_dam" = rep(0, 31),
-                  "pct_abv_dam_habitat_used" = 0))
+                  "pct_abv_dam_habitat_used" = 0,
+                  "spawners_abv_dam" = spawner_capacity_abv_dam))
     } else {
       # natural fry
       nat_spawn_abv_dam <- tibble(watershed = winterRunDSM::watershed_labels,
@@ -201,7 +202,8 @@ spawn_success <- function(escapement,
       pct_abv_dam_habitat_used[is.nan(pct_abv_dam_habitat_used)] <- 0
       return(list("total_fry" = total_fry_final,
                   "prop_abv_dam" = prop_abv_dam,
-                  "pct_abv_dam_habitat_used" = pct_abv_dam_habitat_used))
+                  "pct_abv_dam_habitat_used" = pct_abv_dam_habitat_used,
+                  "spawners_abv_dam" = spawner_capacity_abv_dam))
     }
 
 }

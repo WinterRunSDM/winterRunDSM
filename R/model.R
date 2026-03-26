@@ -64,6 +64,7 @@ winter_run_model <- function(scenario = NULL,
     # WR SDM metrics
     prop_fry_abv_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     total_fry_from_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
+    spawners_abv_dam = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     pct_abv_dam_habitat_used = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     upper_mid_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
     lower_mid_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
@@ -320,6 +321,7 @@ winter_run_model <- function(scenario = NULL,
                                fecundity = ..params$spawn_success_fecundity,
                                stochastic = stochastic)
     
+    output$spawners_abv_dam[, year] <- juveniles$spawners_abv_dam
     output$pct_abv_dam_habitat_used[, year] <- juveniles$pct_abv_dam_habitat_used
     output$prop_fry_abv_dam[, year] <- juveniles$prop_abv_dam
     output$total_fry_from_dam[, year] <- juveniles$total_fry[,1] + juveniles$total_fry[,2]
