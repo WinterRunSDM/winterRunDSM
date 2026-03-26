@@ -208,8 +208,8 @@ create_param_list <- function(action_ids) {
   
   # ASD-1
   if("ASD-1" %in% action_ids) {
-    param_list$hatchery_release["Upper Sacramento River","m",] <- rep(300000, 20)
-    param_list$hatchery_release["Upper Sacramento River","l",] <- rep(200000, 20)
+    param_list$hatchery_release["Upper Sacramento River","m",] <- rep(20000, 20) + wr_sdm_baseline_params$hatchery_release["Upper Sacramento River","m",]
+    param_list$hatchery_release["Upper Sacramento River","l",] <- rep(30000, 20)+ wr_sdm_baseline_params$hatchery_release["Upper Sacramento River","l",]
   }
   
   # ASD-2
