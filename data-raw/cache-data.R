@@ -225,3 +225,26 @@ natural_straying_destinations <- matrix(1/31, nrow = 31, ncol = 4)
 
 rmultinom(n = 1, size = matrix(1:4, ncol = 2), prob = matrix(1:4, ncol = 2))
 
+# WR SDM Mike Deas temperature data scaling factors to apply
+# to scale down new habitat additions above shasta and on Battle Creek
+# according to temperature suitability. 
+# see wr_sdm/documentation/habitat_actions_documentation.Rmd for full
+# process
+wr_sdm_temp_habitat_scaling_factors_table <- tibble("Station ID" = c("11342000", "MRA", "MR4A", NA_character_, "1000", "2000"),
+                                              "Watershed" = c("Little Sacramento River", "Upper McCloud River", "Lower McCloud River", "Full McCloud River", "North Fork Battle Creek", "Lower Battle Creek"),
+                                              "Spawning Scale Factor" = c(0.15, 1, 0.7, 0.85, 0.5, 0.25),
+                                              "Rearing Scale Factor" = c(0.9, 1, 1, 1, 1, 0.90)) |> 
+  janitor::clean_names()
+
+wr_sdm_temp_habitat_scaling_factors <- setNames(
+  lapply(1:nrow(wr_sdm_temp_habitat_scaling_factors_table), function(i) {
+    list(
+      spawn = wr_sdm_temp_habitat_scaling_factors_table$spawning_scale_factor[i],
+      rear  = wr_sdm_temp_habitat_scaling_factors_table$rearing_scale_factor[i]
+    )
+  }),
+  wr_sdm_temp_habitat_scaling_factors_table$watershed
+)
+
+usethis::use_data(wr_sdm_temp_habitat_scaling_factors, overwrite = TRUE)
+
