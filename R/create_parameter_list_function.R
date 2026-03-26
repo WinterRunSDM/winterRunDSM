@@ -24,7 +24,7 @@ create_param_list <- function(action_ids) {
   lower_mccloud_addition_spawn <- mccloud_addition_spawn * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$spawn
   
   # temp scale full mccloud addition after it's been used to calculate upper and lower
-  mccloud_addition <- mccloud_addition * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$rear
+  mccloud_addition_rear <- mccloud_addition_rear * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$rear
   mccloud_addition_spawn <- mccloud_addition_spawn * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$spawn
   # ds3_inchannel_hab <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,] + upper_mccloud_addition
   # ds4_inchannel_hab <- DSMhabitat::wr_fry$action_5["Upper Sacramento River",,] + lower_mccloud_addition
