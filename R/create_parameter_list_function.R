@@ -224,7 +224,7 @@ create_param_list <- function(action_ids) {
     param_list$hatchery_release["Upper Sacramento River","m",] <- param_list$hatchery_release["Upper Sacramento River","m",] + (c(rep(80000, 8), rep(115000,6), rep(150000, 6))*param_list$juvenile_capture_efficiency_dam_transport)
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$upper_mccloud$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$upper_mccloud$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$upper_mccloud$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$upper_mccloud$fp
     param_list$dam_passage_survival <- list("adult" = 1, "juv" = 0.8)
   }
   
@@ -234,7 +234,7 @@ create_param_list <- function(action_ids) {
     param_list$hatchery_release["Upper Sacramento River","m",] <- param_list$hatchery_release["Upper Sacramento River","m",] + (c(rep(80000, 8), rep(115000,6), rep(150000, 6))*param_list$juvenile_capture_efficiency_dam_transport)
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$lower_mccloud$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
     param_list$dam_passage_survival <- list("adult" = 1, "juv" = 0.8)
     param_list$abv_dam_spawn_proportion <- 0
   }
@@ -245,7 +245,7 @@ create_param_list <- function(action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$lower_mccloud$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
     # applied to spawn success
     param_list$juvenile_capture_efficiency_dam_transport <- 0.9
     # juvenile survival includes transport survival
@@ -261,7 +261,7 @@ create_param_list <- function(action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + habitat_additions$little_sac$spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$little_sac$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$little_sac$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$little_sac$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$little_sac$fp
     # applied to spawn success
     param_list$juvenile_capture_efficiency_dam_transport <- 0.9
     # juvenile survival includes transport survival
@@ -277,7 +277,7 @@ create_param_list <- function(action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$spawn + habitat_additions$little_sac$spawn 
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fry + habitat_additions$little_sac$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$lower_mccloud$juv+ habitat_additions$little_sac$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp + habitat_additions$little_sac$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp + habitat_additions$little_sac$fp
     # applied to spawn success
     param_list$juvenile_capture_efficiency_dam_transport <- 0.9
     # juvenile survival includes transport survival
@@ -293,7 +293,7 @@ create_param_list <- function(action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$lower_mccloud$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
     # applied to spawn success
     # juvenile survival includes swimming through Lake Shasta
     # adult survival represents survival with volitional challenges
@@ -310,7 +310,7 @@ create_param_list <- function(action_ids) {
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + habitat_additions$full_mccloud$spawn
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$full_mccloud$fry
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$full_mccloud$juv
-    param_list$inchannel_habitat_fp["Upper Sacramento River",,] <- param_list$inchannel_habitat_fp["Upper Sacramento River",,] + habitat_additions$full_mccloud$fp
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$full_mccloud$fp
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- mean(habitat_additions$full_mccloud$spawn/ (DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]+habitat_additions$full_mccloud$spawn))
     param_list$egg_to_fry_survival_abv_dam <- 0.7
     param_list$prespawn_survival_abv_dam <- 0.95
