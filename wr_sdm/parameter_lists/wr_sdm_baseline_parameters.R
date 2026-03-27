@@ -193,9 +193,7 @@ wr_sdm_baseline_params <- list(
   
   # winter Run SDM inputs
   adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),
-  # TODO baseline harvest rates is under discussion. Fishery has been closed last 3 years, but 
-  # according to brad harvest rates were about 20% for age-3 fish and 50% for age-5 fish ?
-  harvest_rate_ocean = c("2" = 0, "3" = 0.11, "4" = 0.11, "5" = 0), # age-structured; 0.11 is baseline (Brad recommended 0.2 age 3 and 0.5 age 4)
+  harvest_rate_ocean = c("2" = 0, "3" = 0.2, "4" = 0.5, "5" = 0), # age-structured; Brad recommended 0.2 age 3 and 0.5 age 4 (previous was 0.11)
   prop_mature_by_age = c("2" = 0, "3" = 0.95, "4" = 0.05, "5" = 1), # this is only used to apply harvest rate; percent mature provided by Brad Carvallo 2026
   egg_to_fry_survival_mult = setNames(rep(1, 31), winterRunDSM::watershed_labels),
   gs_bubble_curtain_effect_mult = 1,
