@@ -336,7 +336,7 @@ winter_run_model <- function(scenario = NULL,
     # added if else for above dam actions to account for when adults are not sent above dam but hatchery releases
     # are subject to capture efficiency
     if(..params$abv_dam_spawn_proportion == 0) {
-    juveniles <- juveniles + sweep(..params$hatchery_release[, , year] * ..params$juvenile_capture_efficiency_dam_transport, 
+    juveniles <- juveniles + sweep(..params$hatchery_release[, , year], 
                                    MARGIN=2, 
                                    (1 - ..params$hatchery_release_proportion_bay), "*")
     }
