@@ -14,15 +14,15 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                     seeds = baseline_seeds)
 
 # test out adult enroute survival multiplier
-alt_params <- create_param_list(action_ids = c("BC-5", "BC-8"))
+alt_params <- create_param_list(action_ids = c("ASD-7", "ASD-3"))
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
                                                  seeds = NULL, 
-                                                 ..params = winterRunDSM::wr_sdm_baseline_params)
+                                                 ..params = alt_params)
 
 alt_results <- winterRunDSM::winter_run_model(mode = "simulate", 
-                                                   ..params = winterRunDSM::wr_sdm_baseline_params,
+                                                   ..params = alt_params,
                                                    seeds = alt_seeds)
 
 baseline_results$spawners |> 
