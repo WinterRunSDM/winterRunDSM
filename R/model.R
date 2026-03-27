@@ -177,30 +177,30 @@ winter_run_model <- function(scenario = NULL,
     }
     
     if(mode == "simulate") {
-      # harvest logic is only hooking mortality for winterRunDSM
+      
       # HARVEST ----------------------------------------------------------------
-      # Harvest percentage (incidental in tributaries)
-      hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 
-      adults_after_ocean_harvest <- hatch_adults * (1 - ..params$harvest_rate_ocean) # assume 11% harvest in the ocean 
-      adults_after_harvest <- adults_after_ocean_harvest * (1-..params$harvest_rate_trib)
-      hatch_after_harvest_by_age <- round(unname(adults_after_harvest) * as.matrix(default_hatch_age_dist[2:5]))
-      row.names(hatch_after_harvest_by_age) = winterRunDSM::watershed_labels
-      colnames(hatch_after_harvest_by_age) = c(2, 3, 4, 5)
-      harvested_hatchery_adults <- hatch_adults - adults_after_harvest
+      # WR SDM : we modified the harvest in a few ways:
+      #  1) apply an ocean harvest rate and a trib harvest rate
+      #  2) apply the ocean harvest rate differentially based on age class and the proportion of fish mature per age class
+      #     (what this does is has age-3 fish carry the burden of the harvest rate)
+      #  3) moved this into a harvest function in adults.R
+      hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery
+      nat_adults   <- annual_adults_hatch_removed * (1 - seeds$proportion_hatchery)
       
-      # Harvest percentage (incidental in tributaries)
-      nat_adults <- annual_adults_hatch_removed * (1 - seeds$proportion_hatchery)
-      natural_adults_after_ocean_harvest <- nat_adults * (1 - ..params$harvest_rate_ocean) # assume 11% harvest in the ocean 
-      natural_adults_after_harvest <- natural_adults_after_ocean_harvest  * (1-..params$harvest_rate_trib)
-      natural_adults_by_age <- round(unname(natural_adults_after_harvest) * as.matrix(default_nat_age_dist[2:5]))
-      harvested_natural_adults <- nat_adults - natural_adults_after_harvest
-      row.names(natural_adults_by_age) = winterRunDSM::watershed_labels
-      colnames(natural_adults_by_age) = c(2, 3, 4, 5)
+      hatch_harvest <- apply_harvest(hatch_adults, default_hatch_age_dist, 
+                                     ..params$harvest_rate_ocean, 
+                                     ..params$prop_mature_by_age, 
+                                     ..params$harvest_rate_trib)
       
-      adults_after_harvest <- list(hatchery_adults = hatch_after_harvest_by_age,
-                                   natural_adults = natural_adults_by_age,
-                                   harvested_hatchery_adults = harvested_hatchery_adults,
-                                   harvested_natural_adults = harvested_natural_adults)
+      nat_harvest   <- apply_harvest(nat_adults, default_nat_age_dist,
+                                     ..params$harvest_rate_ocean, 
+                                     ..params$prop_mature_by_age,
+                                     ..params$harvest_rate_trib)
+      
+      adults_after_harvest <- list(hatchery_adults = hatch_harvest$after_harvest,
+                                   natural_adults = nat_harvest$after_harvest,
+                                   harvested_hatchery_adults = hatch_harvest$harvested,
+                                   harvested_natural_adults = nat_harvest$harvested)
       
       natural_adult_harvest <- sum(adults_after_harvest$harvested_natural_adults, na.rm = TRUE)
       hatchery_adult_harvest <- sum(adults_after_harvest$harvested_hatchery_adults, na.rm = TRUE)

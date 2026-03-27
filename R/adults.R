@@ -228,3 +228,46 @@ prepare_stray_model_data <- function(hatchery, type = c("natural", "hatchery"), 
     )
   )
 }
+
+
+#' @title Apply Harvest to Adult Salmon
+#' @description Applies age-structured ocean harvest (weighted by proportion mature)
+#' and a flat tributary harvest rate to hatchery or natural adult salmon.
+#' @param adults A named numeric vector of length 31 representing the number of
+#' adults per watershed
+#' @param age_dist A tibble with columns \code{prop_2}, \code{prop_3},
+#' \code{prop_4}, and \code{prop_5} representing the proportion of adults in
+#' each age class per watershed
+#' @param harvest_rate_ocean A named numeric vector of length 4 with names
+#' \code{"2"}, \code{"3"}, \code{"4"}, \code{"5"} representing the ocean
+#' harvest rate for each age class
+#' @param prop_mature_by_age A named numeric vector of length 4 with names
+#' \code{"2"}, \code{"3"}, \code{"4"}, \code{"5"} representing the proportion
+#' of fish that are mature and therefore subject to harvest for each age class
+#' @param harvest_rate_trib A scalar representing the flat incidental harvest
+#' rate applied to all age classes in tributaries
+#' @return A list with two elements:
+#' \itemize{
+#'   \item \code{after_harvest}: A 31 x 4 matrix of adults remaining after
+#'   ocean and tributary harvest, by watershed and age class
+#'   \item \code{harvested}: A named numeric vector of length 31 representing
+#'   the total number of adults harvested per watershed
+#' }
+#' @source IP-117068
+#' @export
+apply_harvest <- function(adults, age_dist, harvest_rate_ocean, prop_mature_by_age, harvest_rate_trib) {
+  effective_ocean_harvest <- harvest_rate_ocean * prop_mature_by_age
+  
+  by_age <- round(unname(adults) * as.matrix(age_dist[2:5]))
+  row.names(by_age) <- winterRunDSM::watershed_labels
+  colnames(by_age) <- 2:5
+  
+  after_ocean <- t(apply(by_age, 1, function(ws) round(ws * (1 - effective_ocean_harvest))))
+  
+  by_age_final <- round(after_ocean * (1 - harvest_rate_trib))
+  row.names(by_age_final) <- winterRunDSM::watershed_labels
+  colnames(by_age_final) <- 2:5
+  
+  list(after_harvest = by_age_final,
+       harvested = adults - rowSums(by_age_final))
+}

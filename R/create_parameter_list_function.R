@@ -195,14 +195,14 @@ create_param_list <- function(action_ids) {
   if("O-2" %in% action_ids) {
   # change the incidental/illegal harvest rate
     param_list$harvest_rate_ocean <- param_list$harvest_rate_ocean * 0.99
-    }
+  }
   
-  # O-3 
-  # TODO 
+  # O-3
   # percent of age class harvested 
-  # if("O-3"){
-  #   
-  # }
+  if("O-3" %in% action_ids){
+    param_list$harvest_rate_ocean["2"] = param_list$harvest_rate_ocean["2"] * 0.75 # Brad's rec was going from 20% to 15% (25% decrease)
+    param_list$harvest_rate_ocean["3"] = param_list$harvest_rate_ocean["3"] * 0.3 # Brad's rec was going from 50% to 15% (70% decrease)
+  }
   
   # ASD ------------------
   
