@@ -18,7 +18,13 @@ This is to document each update we make to the model in the course of the SDM.
 
 ## New parameters
 
-* Converted the hard coded 0.1 incidental harvest rate to watershed object `harvest_rate_trib` and `harvest_rate_ocean` and changed individual values for specific actions. Added reduction from harvest in `model.R`. 
+* Converted the hard coded 0.1 incidental harvest rate to watershed object `harvest_rate_trib` and `harvest_rate_ocean` and changed individual values for specific actions. Added reduction from harvest in `model.R`.
+* modified the `harvest_rate_ocean` to be age-structured per feedback:
+**Ocean harvest impact rates on age-3 winter-run are not supposed to exceed 20% under current 
+  regulations.  Currently no rules protect winter-run that mature at age-4 and those fish 
+  (though uncommon) are exposed to much more harvest impacts.  There is a lot of uncertainty in 
+  harvest impact rates for age-3 fish, and the impact rate was 26% in 2022 (last year with 
+  normal ocean fishing season). **
 * Created `addl_juv_chipps` to add very large juveniles to the juvenile object in `model.R` during drought years (years 9:13), defined as 2+ dry years in a row
 * Created `juvenile_capture_efficiency_dam_transport` to represent the efficiency of capturing/routing juveniles for trap and haul or volitional passage. 
 * Created `dam_passage_survival` to represent the effects of passage (either trap and haul or volitional) on adults and juveniles.
@@ -63,7 +69,7 @@ Throughout the process there were certain aspects of the baseline model that did
 
 * Changed the Battle Creek baseline habitat for winter run to be constrained to below Coleman National Fish Hatchery.
 
-* Updated baseline hatchery releases for the Upper Sacramento River to be 500,000 in dry years.
+* Updated baseline hatchery releases for the Upper Sacramento River to be 500,000 the year following dry years.
 
 ## Recalibration
 
