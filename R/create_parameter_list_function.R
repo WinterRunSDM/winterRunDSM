@@ -334,31 +334,31 @@ calculate_habitat_additions_ASD_BC <- function() {
   baseline_fp <- DSMhabitat::wr_fp$action_5["Upper Sacramento River",,]
   baseline_spawn <- DSMhabitat::wr_spawn$action_5["Upper Sacramento River",,]
   
-  # upper sac objects (in every TMH object, so we need to subtract)
-  upper_little_sac_fry <- DSMhabitat::wr_fry$action_5_upper_sac_tmh["Upper Sacramento River",,]
-  upper_little_sac_juv <- DSMhabitat::wr_juv$action_5_upper_sac_tmh["Upper Sacramento River",,]
-  upper_little_sac_fp <- DSMhabitat::wr_fp$action_5_upper_sac_tmh["Upper Sacramento River",,]
-  upper_little_sac_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
+  # upper sac objects (in every TMH object, so we need to subtract), includes baseline
+  upper_and_little_sac_fry <- DSMhabitat::wr_fry$action_5_upper_sac_tmh["Upper Sacramento River",,]
+  upper_and_little_sac_juv <- DSMhabitat::wr_juv$action_5_upper_sac_tmh["Upper Sacramento River",,]
+  upper_and_little_sac_fp <- DSMhabitat::wr_fp$action_5_upper_sac_tmh["Upper Sacramento River",,]
+  upper_and_little_sac_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,]
   
   # mccloud river
   # fry
   upper_sac_w_mccloud_fry <- DSMhabitat::wr_fry$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
-  mccloud_addition_fry <- upper_sac_w_mccloud_fry - baseline_fry - upper_little_sac_fry
+  mccloud_addition_fry <- upper_sac_w_mccloud_fry - upper_and_little_sac_fry
   upper_mccloud_addition_fry <- mccloud_addition_fry * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$rear
   lower_mccloud_addition_fry <- mccloud_addition_fry * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$rear
   # juv
   upper_sac_w_mccloud_juv <- DSMhabitat::wr_juv$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
-  mccloud_addition_juv <- upper_sac_w_mccloud_juv - baseline_juv - upper_little_sac_juv
+  mccloud_addition_juv <- upper_sac_w_mccloud_juv - upper_and_little_sac_juv
   upper_mccloud_addition_juv <- mccloud_addition_juv * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$rear
   lower_mccloud_addition_juv <- mccloud_addition_juv * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$rear
   # floodplain
   upper_sac_w_mccloud_fp <- DSMhabitat::wr_fp$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
-  mccloud_addition_fp <- upper_sac_w_mccloud_fp - baseline_fp - upper_little_sac_fp
+  mccloud_addition_fp <- upper_sac_w_mccloud_fp - upper_and_little_sac_fp
   upper_mccloud_addition_fp <- mccloud_addition_fp * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$rear
   lower_mccloud_addition_fp <- mccloud_addition_fp * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$rear
   # spawn
   upper_sac_w_mccloud_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_mccloud_tmh["Upper Sacramento River",,]
-  mccloud_addition_spawn <- upper_sac_w_mccloud_spawn - baseline_spawn - upper_little_sac_spawn
+  mccloud_addition_spawn <- upper_sac_w_mccloud_spawn - upper_and_little_sac_spawn
   upper_mccloud_addition_spawn <- mccloud_addition_spawn * 0.3 * wr_sdm_temp_habitat_scaling_factors$`Upper McCloud River`$spawn
   lower_mccloud_addition_spawn <- mccloud_addition_spawn * 0.7 * wr_sdm_temp_habitat_scaling_factors$`Lower McCloud River`$spawn
   
@@ -370,13 +370,13 @@ calculate_habitat_additions_ASD_BC <- function() {
   
   # Upper Sacramento - has its own object upper_sac_tmh
   # fry
-  little_sac_addition_fry <- (upper_little_sac_fry - baseline_fry) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
+  little_sac_addition_fry <- (upper_and_little_sac_fry - baseline_fry) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
   # juv
-  little_sac_addition_juv <- (upper_little_sac_juv - baseline_juv) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
+  little_sac_addition_juv <- (upper_and_little_sac_juv - baseline_juv) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
   # floodplain
-  little_sac_addition_fp <- (upper_little_sac_fp - baseline_fp) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
+  little_sac_addition_fp <- (upper_and_little_sac_fp - baseline_fp) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$rear
   # spawn
-  little_sac_addition_spawn <- (upper_little_sac_spawn - baseline_spawn) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$spawn
+  little_sac_addition_spawn <- (upper_and_little_sac_spawn - baseline_spawn) * wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$spawn
   
   # battle creek
   bc_baseline_spawn <- wr_sdm_habitat_action_5_bc_scaled$spawn["Battle Creek",,]
