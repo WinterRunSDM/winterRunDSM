@@ -82,7 +82,7 @@ old_hab |>
 
 ### BC-2: Lower Battle Creek rearing habitat
 
-This action modeled the inclusion of several habitat projects designed to increase rearing habitat in Lower Battle Creek. Acreage from proposed projects provided to FlowWest was scaled down by a factor of 0.25 to represent suitability across all flows and added to the flow-to-habitat curve in `DSMhabitat` (habitat inputs for the model) at a representative flow. The percent increase in habitat at a representative flow was then applied across all flows. 
+This action modeled the inclusion of several habitat projects designed to increase rearing habitat in Lower Battle Creek. Acreage from proposed projects provided to FlowWest was added to existing habitat across all flows for instream spawning and rearing, and scaled down to 25% of total project areas based on project proponents knowledge of project designs ability to provide suitable habitat at different flows. Suitable habitat areas were added to the flow-to-habitat curves in DSMhabitat (habitat inputs for the model) at a representative flow. The percent increase in habitat at a representative flow was then applied across all flows.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 bc_proj <- read_xlsx(here("data-raw", "habitat-data-docs", "DRAFT Battle Creek Projects List 0721(1).xlsx"), skip = 1) |> 
