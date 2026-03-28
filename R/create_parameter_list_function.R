@@ -107,7 +107,10 @@ create_param_list <- function(action_ids) {
   
   if("SR-8a" %in% action_ids) {
     # TODO TBD on the reduction percentage
-    param_list$contact_points <- round(param_list$contact_points * 0.5)
+    param_list$contact_points["Upper Sacramento River"] <- round(param_list$contact_points["Upper Sacramento River"] * 1.50) # calibration issue 0.75)
+    param_list$contact_points["Upper-mid Sacramento River"] <- round(param_list$contact_points["Upper-mid Sacramento River"] * 1.50) # calibration issue 0.75)
+    param_list$contact_points["Lower Sacramento River"] <- round(param_list$contact_points["Lower Sacramento River"] * 1.50) # calibration issue 0.75)
+    param_list$contact_points["Lower-mid Sacramento River"] <- round(param_list$contact_points["Lower-mid Sacramento River"] * 1.50) # calibration issue 0.75)
   }
   
   if("SR-8b" %in% action_ids) {
