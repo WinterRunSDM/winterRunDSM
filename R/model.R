@@ -517,12 +517,11 @@ winter_run_model <- function(scenario = NULL,
         # For use in WR SDM: Add juveniles in drought years
         # drought years = at least 2 dry years in a row according to CDEC WSI (1988-1992)
         if (year %in% c(9:13)) {
-          if(month == 3) {
-            # action specifies adding fish in March or when fish are 90mm
+          if(month == 5) {
+            # action suggests adding fish in March or when fish are 90mm but the way output is created easier to do this in May (last month of year)
             fish_list$route_1_fish$juveniles_at_chipps["Upper Sacramento River","vl"] <- fish_list$route_1_fish$juveniles_at_chipps["Upper Sacramento River","vl"] + ..params$addl_juv_chipps 
           }
         }
-
       
       if (FALSE) {
         fish_1_df <- create_fish_df(fish_df = fish_list$route_1_fish, month = month, year = year)
