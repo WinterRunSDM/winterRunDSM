@@ -509,6 +509,11 @@ winter_run_model <- function(scenario = NULL,
           non_natal_proportion_shift = ..params$non_natal_proportion_shift
         )
         
+        if(month %in% 3:5) {
+          cat("Year:", year, "Month:", month, 
+              "Upper Sac golden gate by size:", fish_list$route_1_fish$migrants_at_golden_gate[1,], "\n")
+        }
+        
         # TODO make sure this isn't double counting
         output$upper_mid_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$upper_mid_sac_fish, na.rm = T)
         output$lower_mid_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$lower_mid_sac_fish, na.rm = T)
@@ -555,10 +560,10 @@ winter_run_model <- function(scenario = NULL,
       # end R2R metric -----------------------------------------------------------
       adults_in_ocean <- 
         ..params$movement_hypo_weights[1] * fish_list$route_1_fish$adults_in_ocean 
+
     } # end month loop
     
     output$juvenile_biomass[ , year] <- juveniles_at_chipps %*% winterRunDSM::wr_sdm_baseline_params$mass_by_size_class
-
     
     # Updated logic here for R2R so that natural adults and hatchery adults return separately
     natural_adults_returning <- t(sapply(1:31, function(i) {
