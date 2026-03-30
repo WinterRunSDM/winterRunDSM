@@ -27,7 +27,10 @@ ocean_entry_success <- function(migrants, month, avg_ocean_transition_month,
   }
   
   survival_probs <- pmin(survival_probs, 1)
-  
+  if (month_since > 0) {
+    cat("month_since:", month_since, 
+        "Upper Sac survival_probs by size:", survival_probs[1,], "\n")
+  }
   if (stochastic) {
     survived <- t(sapply(1:31, function(watershed) {
       rbinom(4, size = migrants[watershed, ], prob = survival_probs[watershed, ])
