@@ -68,7 +68,6 @@ create_param_list <- function(action_ids) {
   }
   
   if("SR-2c" %in% action_ids) {
-    # TODO add rearing habitat
     param_list$non_natal_proportion_shift <- 0.6 # could be 45% - 60%
   }
   
@@ -99,7 +98,6 @@ create_param_list <- function(action_ids) {
   }
   
   if("SR-6" %in% action_ids){
-    # Change routing for Georgiana Slough
     param_list$gs_bubble_curtain_effect_mult <- 0.8
   }
   
@@ -115,7 +113,10 @@ create_param_list <- function(action_ids) {
   
   if("SR-8b" %in% action_ids) {
     # reduce prop high predation
-    param_list$prop_high_predation["Upper Sacramento River"] <- 0.2 
+    param_list$prop_high_predation["Upper Sacramento River"] <- param_list$prop_high_predation["Upper Sacramento River"] * 1.8 # calibration issue 0.7
+    param_list$prop_high_predation["Upper-mid Sacramento River"] <- param_list$prop_high_predation["Upper-mid Sacramento River"] * 1.8 # calibration issue 0.7 
+    param_list$prop_high_predation["Lower Sacramento River"] <- param_list$prop_high_predation["Lower Sacramento River"] * 1.8 # calibration issue 0.7
+    param_list$prop_high_predation["Lower-mid Sacramento River"] <- param_list$prop_high_predation["Lower-mid Sacramento River"] * 1.8 # calibration issue 0.7
   }
  
   if("SR-9" %in% action_ids) {
@@ -174,13 +175,15 @@ create_param_list <- function(action_ids) {
   
   # BC-6 - are we doing this?
   
+  # BC-7 - what is happening here?
+  
   # BC-8
   if("BC-8" %in% action_ids) {
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
   }
  
   # TODO modify model code based on a threshold of adults returning to Battle Creek
-  # BC-9
+    # BC-9
   if("BC-9" %in% action_ids) {
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
     
