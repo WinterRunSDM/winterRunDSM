@@ -527,7 +527,6 @@ winter_run_model <- function(scenario = NULL,
             fish_list$route_1_fish$juveniles_at_chipps["Upper Sacramento River","vl"] <- fish_list$route_1_fish$juveniles_at_chipps["Upper Sacramento River","vl"] + ..params$addl_juv_chipps 
           }
         }
-
       
       if (FALSE) {
         fish_1_df <- create_fish_df(fish_df = fish_list$route_1_fish, month = month, year = year)
