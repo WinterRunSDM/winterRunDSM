@@ -28,7 +28,9 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                    filling_regional_args = NULL,
                                    movement_fn = NULL,
                                    movement_args = NULL,
-                                   movement_months = NULL) {
+                                   movement_months = NULL,
+                                   gs_bubble_curtain_effect_mult,
+                                   non_natal_proportion_shift) {
   
   juveniles <- fish$juveniles
   lower_mid_sac_fish <- fish$lower_mid_sac_fish
@@ -75,6 +77,7 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                         juveniles_at_chipps = juveniles_at_chipps,
                                         growth_rates = ..params$growth_rates,
                                         territory_size = ..params$territory_size,
+                                        gs_bubble_curtain_effect_mult = gs_bubble_curtain_effect_mult,
                                         stochastic = stochastic)
     
     juveniles_at_chipps <- delta_fish$juveniles_at_chipps
@@ -114,6 +117,19 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
     # route migrant fish into Upper-mid Sac Region (fish from watersheds 1:15)
     # regional fish stay and rear
     # or migrate further downstream or in sutter bypass
+    
+    # WR SDM - model effect of non-natal rearing between upper sac and 
+    # upper-mid sac fish by shifting 45% to a larger size class
+    # TODO what month?
+    migrants_to_shift <- upper_sac_trib_fish$migrants
+    sm_total <- migrants_to_shift[1, 1] + migrants_to_shift[1, 2]
+    shift <- round(sm_total * non_natal_proportion_shift)
+    if (sm_total > 0 && shift > 0) {
+      migrants_to_shift[1, 1] <- migrants_to_shift[1, 1] - round(migrants_to_shift[1, 1] / sm_total * shift)
+      migrants_to_shift[1, 2] <- migrants_to_shift[1, 2] - round(migrants_to_shift[1, 2] / sm_total * shift)
+      migrants_to_shift[1, 3] <- migrants_to_shift[1, 3] + shift
+      upper_sac_trib_fish$migrants <- migrants_to_shift
+    }
     
     upper_mid_sac_fish <- route_regional(month = month,
                                          year = year,
@@ -383,6 +399,7 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                         juveniles_at_chipps = juveniles_at_chipps,
                                         growth_rates = delta_growth,
                                         territory_size = ..params$territory_size, 
+                                        gs_bubble_curtain_effect_mult = gs_bubble_curtain_effect_mult,
                                         stochastic = stochastic)
     
     migrants_at_golden_gate <- delta_fish$migrants_at_golden_gate

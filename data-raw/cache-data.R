@@ -29,9 +29,7 @@ adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 |>
 rownames(adult_seeds) <- watershed_labels
 
 adult_seeds[ , 1] <- adult_seed_values
-adult_seeds["Battle Creek", 1] <- 1200
-
-usethis::use_data(adult_seeds, overwrite = TRUE)
+adult_seeds["Battle Creek", 1] <- 500 # 1200
 
 rownames(adult_seeds) <- watershed_labels
 usethis::use_data(adult_seeds, overwrite = TRUE)
@@ -41,9 +39,44 @@ usethis::use_data(adult_seeds, overwrite = TRUE)
 proportion_hatchery <- rep(0, 31) #proportion hatchery based on CWT reports
 names(proportion_hatchery) <- watershed_labels
 proportion_hatchery["Upper Sacramento River"] <- 0.1759966
-proportion_hatchery["Battle Creek"] <- .2
+proportion_hatchery["Battle Creek"] <- 1 #.2
 
 usethis::use_data(proportion_hatchery, overwrite = TRUE)
+
+# hatchery releases
+# in R2R, this object is created in hatchery_update_documentation.Rmd
+hatchery_releases <- tibble(
+  Hatchery = c("Livingston Stone"),
+  Tributary = c("Upper Sacramento River"),
+  Run = c("Winter"),
+  `Number Released` = c(250000) # 2 max released
+)
+# prep for model 
+summarized_release <- hatchery_releases |>
+  filter(Run == "Winter") |> 
+  select(watershed = Tributary, release_number = `Number Released`) |> 
+  right_join(winterRunDSM::watershed_attributes |> 
+               select(watershed, order)) |>
+  arrange(order) |>
+  mutate(release_number = ifelse(is.na(release_number), 0, release_number)) 
+
+winter_hatchery_release = matrix(0, nrow = 31, ncol = 4, 
+                                 dimnames = list(winterRunDSM::watershed_labels,
+                                                 c("s", "m", "l", "xl")))
+
+# convert to 3d matrix (one 2D matrix for 20 years) to allow hatchery releases to vary annually
+winter_hatchery_release<- array(rep(winter_hatchery_release, 20), 
+                                c(31, 4, 20),
+                                dimnames = list(springRunDSM::watershed_labels,
+                                                c("s", "m", "l", "xl"),
+                                                1:20))
+
+winter_hatchery_release["Upper Sacramento River", "l", ] <- summarized_release$release_number[1]
+# populate hatchery release as larger fish based on avg hatchery release data
+dry_years <- c(2, 6, 8:13, 15)+1 # WR DSM update - for dry years to reflect data from Emily USBR, release numbers are higher
+winter_hatchery_release["Upper Sacramento River", "l", dry_years] <- 500000
+
+usethis::use_data(winter_hatchery_release, overwrite = TRUE)
 
 # @title Proportion of Adults Spawning January to April
 # @export
@@ -191,4 +224,50 @@ usethis::use_data(straying_destinations, overwrite = TRUE)
 natural_straying_destinations <- matrix(1/31, nrow = 31, ncol = 4)
 
 rmultinom(n = 1, size = matrix(1:4, ncol = 2), prob = matrix(1:4, ncol = 2))
+
+# WR SDM Mike Deas temperature data scaling factors to apply
+# to scale down new habitat additions above shasta and on Battle Creek
+# according to temperature suitability. 
+# see wr_sdm/documentation/habitat_actions_documentation.Rmd for full
+# process
+wr_sdm_temp_habitat_scaling_factors_table <- tibble("Station ID" = c("11342000", "MRA", "MR4A", NA_character_, "1000", "2000"),
+                                              "Watershed" = c("Little Sacramento River", "Upper McCloud River", "Lower McCloud River", "Full McCloud River", "North Fork Battle Creek", "Lower Battle Creek"),
+                                              "Spawning Scale Factor" = c(0.15, 1, 0.7, 0.85, 0.5, 0.25),
+                                              "Rearing Scale Factor" = c(0.9, 1, 1, 1, 1, 0.90)) |> 
+  janitor::clean_names()
+
+wr_sdm_temp_habitat_scaling_factors <- setNames(
+  lapply(1:nrow(wr_sdm_temp_habitat_scaling_factors_table), function(i) {
+    list(
+      spawn = wr_sdm_temp_habitat_scaling_factors_table$spawning_scale_factor[i],
+      rear  = wr_sdm_temp_habitat_scaling_factors_table$rearing_scale_factor[i]
+    )
+  }),
+  wr_sdm_temp_habitat_scaling_factors_table$watershed
+)
+
+usethis::use_data(wr_sdm_temp_habitat_scaling_factors, overwrite = TRUE)
+
+# WR SDM scale battle creek habitat by temp suitability
+action5_spawn <- DSMhabitat::wr_spawn$action_5
+action5_spawn["Battle Creek",,] <- action5_spawn["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$spawn
+action5_fry <- DSMhabitat::wr_fry$action_5
+action5_fry["Battle Creek",,] <- action5_fry["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+action5_juv <- DSMhabitat::wr_juv$action_5
+action5_juv["Battle Creek",,] <- action5_juv["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+action5_fp <- DSMhabitat::wr_fp$action_5
+action5_fp["Battle Creek",,] <- action5_fp["Battle Creek",,] * 
+  wr_sdm_temp_habitat_scaling_factors$`Lower Battle Creek`$rear
+
+wr_sdm_habitat_action_5_bc_scaled <- list(spawn = action5_spawn,
+                                          fry = action5_fry,
+                                          juv = action5_juv,
+                                          fp = action5_fp)
+
+usethis::use_data(wr_sdm_habitat_action_5_bc_scaled, overwrite = TRUE)
+
+
 

@@ -244,7 +244,7 @@ route_regional <- function(month, year, migrants,
       if (stochastic) {
         rbinom(n = 4, size = regional_fish$migrants[i, ], prob = migration_survival_rate)
       } else {
-        round(regional_fish$migrants[i, ] * as.vector(migration_survival_rate))
+        suppressWarnings(round(regional_fish$migrants[i, ] * migration_survival_rate))
       }
     }))
 
@@ -284,7 +284,8 @@ route_to_south_delta <- function(freeport_flow, dcc_closed, month,
                               .gs_intercept = -2.9481450,
                               .gs_freeport_discharge = -2.9118350,
                               .gs_dcc_effect_on_routing = -0.5548430,
-                              .gs_lower_asymptote = 0.2729845){
+                              .gs_lower_asymptote = 0.2729845,
+                              gs_bubble_curtain_effect_mult){
 
   number_of_days <- days_in_month(month)
   daily_gate_status <- c(dcc_closed, number_of_days - dcc_closed)
@@ -317,6 +318,9 @@ route_to_south_delta <- function(freeport_flow, dcc_closed, month,
   # Unconditional probability of remaining in Sacramento River
   DCC <- sum(psi_SAC1 * psi_DCC * daily_gate_status) / number_of_days
   Geo <- sum(psi_SAC1 * psi_GEO * daily_gate_status) / number_of_days
+  
+  # WR SDM param
+  Geo <- Geo * gs_bubble_curtain_effect_mult
 
   return(DCC + Geo)
 }
@@ -354,11 +358,12 @@ route_and_rear_deltas <- function(year, month, migrants, north_delta_fish, south
                                   juveniles_at_chipps, growth_rates,
                                   location_index = c(rep(1, 24), 3, rep(2, 2), rep(4, 4)),
                                   territory_size,
-                                  stochastic) {
+                                  stochastic, 
+                                  gs_bubble_curtain_effect_mult) {
   
   prop_delta_fish_entrained <- route_to_south_delta(freeport_flow = freeport_flows[[month, year]] * 35.3147,
                                                     dcc_closed = cc_gates_days_closed[month],
-                                                    month = month)
+                                                    month = month, gs_bubble_curtain_effect_mult = gs_bubble_curtain_effect_mult)
   
   sac_not_entrained <- t(sapply(1:nrow(migrants[1:23, ]), function(i) {
     if (stochastic) {

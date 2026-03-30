@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Cat Pien, Liz Stebbins, Flowwest">
+
+<title>Winter Run SDM Example Portfolio Results</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="summarize_outputs_scen_intro_files/libs/clipboard/clipboard.min.js"></script>
+<script src="summarize_outputs_scen_intro_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="summarize_outputs_scen_intro_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="summarize_outputs_scen_intro_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="summarize_outputs_scen_intro_files/libs/quarto-html/popper.min.js"></script>
+<script src="summarize_outputs_scen_intro_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="summarize_outputs_scen_intro_files/libs/quarto-html/anchor.min.js"></script>
+<link href="summarize_outputs_scen_intro_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="summarize_outputs_scen_intro_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="summarize_outputs_scen_intro_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="summarize_outputs_scen_intro_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="summarize_outputs_scen_intro_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="summarize_outputs_scen_intro_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="summarize_outputs_scen_intro_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+<link href="summarize_outputs_scen_intro_files/libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+<script src="summarize_outputs_scen_intro_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="summarize_outputs_scen_intro_files/libs/plotly-binding-4.11.0/plotly.js"></script>
+
+<script src="summarize_outputs_scen_intro_files/libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="summarize_outputs_scen_intro_files/libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="summarize_outputs_scen_intro_files/libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="summarize_outputs_scen_intro_files/libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
+<link href="summarize_outputs_scen_intro_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="summarize_outputs_scen_intro_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#description-of-included-actions" id="toc-description-of-included-actions" class="nav-link active" data-scroll-target="#description-of-included-actions">Description of included actions</a></li>
+  <li><a href="#a-note-about-seeds" id="toc-a-note-about-seeds" class="nav-link" data-scroll-target="#a-note-about-seeds">A note about seeds</a></li>
+  <li><a href="#abundance" id="toc-abundance" class="nav-link" data-scroll-target="#abundance">Abundance</a>
+  <ul class="collapse">
+  <li><a href="#spawners" id="toc-spawners" class="nav-link" data-scroll-target="#spawners">Spawners</a></li>
+  <li><a href="#natural-origin-wr-returning-to-spawn" id="toc-natural-origin-wr-returning-to-spawn" class="nav-link" data-scroll-target="#natural-origin-wr-returning-to-spawn">Natural origin WR returning to spawn</a></li>
+  <li><a href="#hatchery-origin-wr-returning-to-spawn" id="toc-hatchery-origin-wr-returning-to-spawn" class="nav-link" data-scroll-target="#hatchery-origin-wr-returning-to-spawn">Hatchery origin WR returning to spawn</a></li>
+  <li><a href="#frequency-of-population-decline" id="toc-frequency-of-population-decline" class="nav-link" data-scroll-target="#frequency-of-population-decline">Frequency of population decline</a></li>
+  <li><a href="#frequency-of-catastrophic-decline" id="toc-frequency-of-catastrophic-decline" class="nav-link" data-scroll-target="#frequency-of-catastrophic-decline">Frequency of catastrophic decline</a></li>
+  </ul></li>
+  <li><a href="#productivity" id="toc-productivity" class="nav-link" data-scroll-target="#productivity">Productivity</a>
+  <ul class="collapse">
+  <li><a href="#number-of-juveniles-emigrating-from-upper-sacramento-river" id="toc-number-of-juveniles-emigrating-from-upper-sacramento-river" class="nav-link" data-scroll-target="#number-of-juveniles-emigrating-from-upper-sacramento-river">Number of juveniles emigrating from upper Sacramento River</a></li>
+  <li><a href="#number-of-natural-origin-smolts-surviving-to-reach-the-ocean" id="toc-number-of-natural-origin-smolts-surviving-to-reach-the-ocean" class="nav-link" data-scroll-target="#number-of-natural-origin-smolts-surviving-to-reach-the-ocean">Number of natural origin smolts surviving to reach the ocean</a></li>
+  <li><a href="#cohort-replacement-rate" id="toc-cohort-replacement-rate" class="nav-link" data-scroll-target="#cohort-replacement-rate">Cohort Replacement Rate</a></li>
+  </ul></li>
+  <li><a href="#life-history-diversity-and-fitness" id="toc-life-history-diversity-and-fitness" class="nav-link" data-scroll-target="#life-history-diversity-and-fitness">Life history diversity and fitness</a>
+  <ul class="collapse">
+  <li><a href="#phos" id="toc-phos" class="nav-link" data-scroll-target="#phos">pHOS</a></li>
+  <li><a href="#size-class-diversity" id="toc-size-class-diversity" class="nav-link" data-scroll-target="#size-class-diversity">Size class diversity</a></li>
+  <li><a href="#timing-diversity" id="toc-timing-diversity" class="nav-link" data-scroll-target="#timing-diversity">Timing diversity</a></li>
+  </ul></li>
+  <li><a href="#increase-number-of-tributaries-supporting-wr" id="toc-increase-number-of-tributaries-supporting-wr" class="nav-link" data-scroll-target="#increase-number-of-tributaries-supporting-wr">Increase number of tributaries supporting WR</a>
+  <ul class="collapse">
+  <li><a href="#proportion-of-above-shasta-habitat-occupied" id="toc-proportion-of-above-shasta-habitat-occupied" class="nav-link" data-scroll-target="#proportion-of-above-shasta-habitat-occupied">Proportion of Above Shasta habitat occupied</a></li>
+  <li><a href="#number-of-adults-spawning-in-tributaries" id="toc-number-of-adults-spawning-in-tributaries" class="nav-link" data-scroll-target="#number-of-adults-spawning-in-tributaries">Number of adults spawning in tributaries</a></li>
+  <li><a href="#number-of-juveniles-rearing-in-tributaries" id="toc-number-of-juveniles-rearing-in-tributaries" class="nav-link" data-scroll-target="#number-of-juveniles-rearing-in-tributaries">Number of juveniles rearing in tributaries</a></li>
+  <li><a href="#number-of-independent-populations" id="toc-number-of-independent-populations" class="nav-link" data-scroll-target="#number-of-independent-populations">Number of independent populations</a></li>
+  <li><a href="#number-of-independent-populations-in-historic-habitats" id="toc-number-of-independent-populations-in-historic-habitats" class="nav-link" data-scroll-target="#number-of-independent-populations-in-historic-habitats">Number of independent populations in historic habitats</a></li>
+  <li><a href="#number-of-dependent-populations" id="toc-number-of-dependent-populations" class="nav-link" data-scroll-target="#number-of-dependent-populations">Number of dependent populations</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Winter Run SDM Example Portfolio Results</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Cat Pien, Liz Stebbins, Flowwest </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="description-of-included-actions" class="level2">
+<h2 class="anchored" data-anchor-id="description-of-included-actions">Description of included actions</h2>
+<ul>
+<li><strong>H-1: LSNFH modified release practices:</strong> Release hatchery-reared salmon in locations or at times that differ from traditional practices to improve survival and support population recovery. This may include releasing fish at different life stages, in alternative river reaches, or under specific environmental conditions to reduce predation, improve imprinting, and enhance ocean survival.</li>
+<li><strong>H-2: LSNFH facility upgrades and production improvements:</strong> Combines all proposed hatchery upgrades and production improvements, and will be reflected by bookend estimates (high and low) of changes. Major upgrades and improvements reflected include a pathogenic filtration system to allow reintroduction of WRCS above Shasta to spawn, brood fish collection facility (e.g., in-river pound net) on the Sacramento River to collect natural origin fish and maintain fitness wtihin the integrated (hatchery-natural) WRCS population, addition of a secondary trapping location, upgrades to the Keswick Fish Trap, installation of permanent water chiller to provide the hatchery with cold water during drought years, and electrical and plumbing upgrades.
+<ul>
+<li><strong>H-2a: LSNFH facility and adult collection upgrades</strong></li>
+<li><strong>H-2b: Upgrades to Keswick Dam adult collection system</strong></li>
+</ul></li>
+<li><strong>H-3: CNFH trapping and sorting improvements:</strong> Non-water supply improvements, including construction of an automated fish sorting and trapping facilitie to allow for daily real-time sorting that can reduce excess holding/handling and migration delays for WRCS and passage blockage, and improvements to water treatment infrastructure.</li>
+<li><strong>SR-4a: Reduce predation on Sacramento River:</strong> Implement projects to minimize predation at weirs, diversions, and related structures in the Sacramento River.</li>
+<li><strong>SR-11: Captive rearing and assisted migration of juveniles in drought years:</strong> Provide a temporary refuge for a portion of natural-origin juveniles in years when conditions are predicted to be poor and release them back into the wild. From Sep-Nov, capture 10k juvenile WRCS (expandable to 100k fish over time) at USFWS’s Red Bluff Diversion Dam rotary screw traps, transport fish to a contained, protected (from predators) and productive off-channel rearing environment (e.g.&nbsp;artificial floodplain, or net pen). When mean fish size is 90mm or by March (whichever comes first), collect fish from the rearing environment. Apply fin clips and coded wire tags to all fish (PBT won’t work because parents are unknown). Transfer fish into a boat equipped with continuously recirculating river water. Over 5-7 days transport fish from Red Bluff to Horseshoe Bay (near GG Bridge). Fish will be fed natural prey while in transport (cultured dipterans, cladocerans or similar). Fish will be continuously bathed in ambient waters with a clear view of the sky (for imprinting and orientation). Upon arrival at Horseshoe Bay, fish will be transferred into a net pen for ~24 hours prior to release. Release will occur on a strong outgoing tide at night. NOTE: When migratory conditions are favorable, some or all of refuge rearing WRCS could be released into the Sacramento River rather than being transported (with imprinting) for downstream release.</li>
+<li><strong>O-2: Increase distance from shoreline to “International” designation:</strong> If the distance from shoreline of the International designation is increases, there could be less fish extracted from the ocean.</li>
+<li><strong>BC-1: Control illegal harvest and/or poaching in Battle Creek:</strong> Fund an increased level of effort for agencies to reduce the potential for illegal harvest and poaching</li>
+<li><strong>BC-8: Battle Creek egg incubation:</strong> Place fertilized eggs directly into natural streambed habitats within Battle Creek. This method allows eggs to develop in a more natural environment, improving imprinting and potentially increasing survival rates compared to traditional hatchery rearing.</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21627.2415715804"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23138.3585734758"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5907.52641898813"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21627.2415715804"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23138.3585734758"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5907.52641898813"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 20038.1429151025"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23419.2409131592"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21425.208863336"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 24672.6588034593"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 19863.5709482901"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 22908.7240665843"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 20439.6466475506"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5319.14954950998"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 19573.9618088191"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21627.2415715804"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23138.3585734758"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5907.52641898813"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21627.2415715804"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23138.3585734758"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5907.52641898813"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 20038.1429151025"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23419.2409131592"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21425.208863336"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 24672.6588034593"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 19863.5709482901"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 22908.7240665843"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 20439.6466475506"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5319.14954950998"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 19573.9618088191"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21627.2415715804"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23138.3585734758"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5907.52641898813"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 20038.1429151025"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 23419.2409131592"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 21425.208863336"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 24672.6588034593"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 19863.5709482901"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 22908.7240665843"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 20439.6466475506"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5319.14954950998"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 19573.9618088191"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 4711.77959739953"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"
+[1] "Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)"
+[1] "Spawning capacity abv: 0"
+[1] "Spawning capacity blw: 5883.21522373356"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Mean spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">829</td>
+<td style="text-align: left;">1,719</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Mean natural spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">609</td>
+<td style="text-align: left;">703</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Mean hatchery spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">220</td>
+<td style="text-align: left;">1,016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Years of declining spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; border-bottom: 3px solid black;">Increase abundance</td>
+<td style="text-align: left; border-bottom: 3px solid black;">Catastrophic decline</td>
+<td style="text-align: left; border-bottom: 3px solid black;">combined</td>
+<td style="text-align: left; border-bottom: 3px solid black;">-0.316</td>
+<td style="text-align: left; border-bottom: 3px solid black;">-0.337</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean juveniles outmigrating from Upper Sac</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">890,779</td>
+<td style="text-align: left;">1,004,695</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean natural smolts at ocean entry</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">10,397</td>
+<td style="text-align: left;">48,849</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean CRR</td>
+<td style="text-align: left;">Battle Creek</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; border-bottom: 3px solid black;">Increase productivity</td>
+<td style="text-align: left; border-bottom: 3px solid black;">Mean CRR</td>
+<td style="text-align: left; border-bottom: 3px solid black;">Upper Sacramento River</td>
+<td style="text-align: left; border-bottom: 3px solid black;">0.895</td>
+<td style="text-align: left; border-bottom: 3px solid black;">0.887</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean juvenile size diversity at ocean entry</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0.540</td>
+<td style="text-align: left;">0.400</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean juvenile timing diversity at ocean entry</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">1.39</td>
+<td style="text-align: left;">1.34</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean pHOS</td>
+<td style="text-align: left;">Battle Creek</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">1.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; border-bottom: 3px solid black;">Increase life history diversity</td>
+<td style="text-align: left; border-bottom: 3px solid black;">Mean pHOS</td>
+<td style="text-align: left; border-bottom: 3px solid black;">Upper Sacramento River</td>
+<td style="text-align: left; border-bottom: 3px solid black;">0.251</td>
+<td style="text-align: left; border-bottom: 3px solid black;">0.266</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Mean spawners in tributaries</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">762</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Mean juveniles in tributaries</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">699,459</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Number of independent pops in historic habitat</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Number of independent pops</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; border-bottom: 3px solid black;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left; border-bottom: 3px solid black;">Number of dependent pops</td>
+<td style="text-align: left; border-bottom: 3px solid black;">combined</td>
+<td style="text-align: left; border-bottom: 3px solid black;">2</td>
+<td style="text-align: left; border-bottom: 3px solid black;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="a-note-about-seeds" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-about-seeds">A note about seeds</h2>
+<p>The model spins up using several years of data (years 1-6) to seed the model before producing results for year 1. This allows the model to produce more results for the limited time series. For the portfolio, this seeding period takes into account the actions in the portfolio. Thus you can see differences between the baseline and portfolio starting in simulation year 1.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="spawners_baseline_seeds.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Spawner results using baseline scenario seeds (does not include portfolio actions)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="spawners_portfolio_seeds.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Spawner results using portfolio scenario seeds (includes portfolio actions)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="abundance" class="level2">
+<h2 class="anchored" data-anchor-id="abundance">Abundance</h2>
+<section id="spawners" class="level3">
+<h3 class="anchored" data-anchor-id="spawners">Spawners</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a78d4cb97f0618948db4" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-a78d4cb97f0618948db4">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"text":["sim_year:  1<br />spawners:    0<br />scenario: baseline","sim_year:  2<br />spawners:    0<br />scenario: baseline","sim_year:  3<br />spawners:    0<br />scenario: baseline","sim_year:  4<br />spawners:    0<br />scenario: baseline","sim_year:  5<br />spawners:    0<br />scenario: baseline","sim_year:  6<br />spawners:    0<br />scenario: baseline","sim_year:  7<br />spawners:    0<br />scenario: baseline","sim_year:  8<br />spawners:    0<br />scenario: baseline","sim_year:  9<br />spawners:    0<br />scenario: baseline","sim_year: 10<br />spawners:    0<br />scenario: baseline","sim_year: 11<br />spawners:    0<br />scenario: baseline","sim_year: 12<br />spawners:    0<br />scenario: baseline","sim_year: 13<br />spawners:    0<br />scenario: baseline","sim_year: 14<br />spawners:    0<br />scenario: baseline","sim_year: 15<br />spawners:    0<br />scenario: baseline","sim_year: 16<br />spawners:    0<br />scenario: baseline","sim_year: 17<br />spawners:    0<br />scenario: baseline","sim_year: 18<br />spawners:    0<br />scenario: baseline","sim_year: 19<br />spawners:    0<br />scenario: baseline","sim_year: 20<br />spawners:    0<br />scenario: baseline"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)","dash":"solid"},"hoveron":"points","name":"(baseline,1)","legendgroup":"(baseline,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1776,1666,1036,812,962,1776,1546,764,524,472,342,304,326,258,242,388,448,780,1334,816],"text":["sim_year:  1<br />spawners: 1776<br />scenario: baseline","sim_year:  2<br />spawners: 1666<br />scenario: baseline","sim_year:  3<br />spawners: 1036<br />scenario: baseline","sim_year:  4<br />spawners:  812<br />scenario: baseline","sim_year:  5<br />spawners:  962<br />scenario: baseline","sim_year:  6<br />spawners: 1776<br />scenario: baseline","sim_year:  7<br />spawners: 1546<br />scenario: baseline","sim_year:  8<br />spawners:  764<br />scenario: baseline","sim_year:  9<br />spawners:  524<br />scenario: baseline","sim_year: 10<br />spawners:  472<br />scenario: baseline","sim_year: 11<br />spawners:  342<br />scenario: baseline","sim_year: 12<br />spawners:  304<br />scenario: baseline","sim_year: 13<br />spawners:  326<br />scenario: baseline","sim_year: 14<br />spawners:  258<br />scenario: baseline","sim_year: 15<br />spawners:  242<br />scenario: baseline","sim_year: 16<br />spawners:  388<br />scenario: baseline","sim_year: 17<br />spawners:  448<br />scenario: baseline","sim_year: 18<br />spawners:  780<br />scenario: baseline","sim_year: 19<br />spawners: 1334<br />scenario: baseline","sim_year: 20<br />spawners:  816<br />scenario: baseline"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)","dash":"solid"},"hoveron":"points","name":"(baseline,2)","legendgroup":"(baseline,2)","showlegend":true,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1812,1340,724,736,880,1812,1342,532,450,444,290,288,332,256,256,430,454,776,1362,718],"text":["sim_year:  1<br />spawners: 1812<br />scenario: portfolio_eg","sim_year:  2<br />spawners: 1340<br />scenario: portfolio_eg","sim_year:  3<br />spawners:  724<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  736<br />scenario: portfolio_eg","sim_year:  5<br />spawners:  880<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 1812<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1342<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  532<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  450<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  444<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  290<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  288<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  332<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  256<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  256<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  430<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  454<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  776<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1362<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  718<br />scenario: portfolio_eg"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)","dash":"solid"},"hoveron":"points","name":"(portfolio_eg,1)","legendgroup":"(portfolio_eg,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[2018,1906,1164,904,1082,2056,1828,864,568,526,392,358,392,320,312,486,540,914,1560,958],"text":["sim_year:  1<br />spawners: 2018<br />scenario: portfolio_eg","sim_year:  2<br />spawners: 1906<br />scenario: portfolio_eg","sim_year:  3<br />spawners: 1164<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  904<br />scenario: portfolio_eg","sim_year:  5<br />spawners: 1082<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 2056<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1828<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  864<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  568<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  526<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  392<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  358<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  392<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  320<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  312<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  486<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  540<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  914<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1560<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  958<br />scenario: portfolio_eg"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)","dash":"solid"},"hoveron":"points","name":"(portfolio_eg,2)","legendgroup":"(portfolio_eg,2)","showlegend":true,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"text":["sim_year:  1<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  2<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  3<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  4<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  5<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  6<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  7<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  8<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  9<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 10<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 11<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 12<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 13<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 14<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 15<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 16<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 17<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 18<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 19<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 20<br />spawners:    0<br />scenario: baseline<br />scenario: baseline"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(147,196,125,1)","opacity":1,"size":11.338582677165356,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)"}},"hoveron":"points","name":"baseline","legendgroup":"baseline","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1776,1666,1036,812,962,1776,1546,764,524,472,342,304,326,258,242,388,448,780,1334,816],"text":["sim_year:  1<br />spawners: 1776<br />scenario: baseline<br />scenario: baseline","sim_year:  2<br />spawners: 1666<br />scenario: baseline<br />scenario: baseline","sim_year:  3<br />spawners: 1036<br />scenario: baseline<br />scenario: baseline","sim_year:  4<br />spawners:  812<br />scenario: baseline<br />scenario: baseline","sim_year:  5<br />spawners:  962<br />scenario: baseline<br />scenario: baseline","sim_year:  6<br />spawners: 1776<br />scenario: baseline<br />scenario: baseline","sim_year:  7<br />spawners: 1546<br />scenario: baseline<br />scenario: baseline","sim_year:  8<br />spawners:  764<br />scenario: baseline<br />scenario: baseline","sim_year:  9<br />spawners:  524<br />scenario: baseline<br />scenario: baseline","sim_year: 10<br />spawners:  472<br />scenario: baseline<br />scenario: baseline","sim_year: 11<br />spawners:  342<br />scenario: baseline<br />scenario: baseline","sim_year: 12<br />spawners:  304<br />scenario: baseline<br />scenario: baseline","sim_year: 13<br />spawners:  326<br />scenario: baseline<br />scenario: baseline","sim_year: 14<br />spawners:  258<br />scenario: baseline<br />scenario: baseline","sim_year: 15<br />spawners:  242<br />scenario: baseline<br />scenario: baseline","sim_year: 16<br />spawners:  388<br />scenario: baseline<br />scenario: baseline","sim_year: 17<br />spawners:  448<br />scenario: baseline<br />scenario: baseline","sim_year: 18<br />spawners:  780<br />scenario: baseline<br />scenario: baseline","sim_year: 19<br />spawners: 1334<br />scenario: baseline<br />scenario: baseline","sim_year: 20<br />spawners:  816<br />scenario: baseline<br />scenario: baseline"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(147,196,125,1)","opacity":1,"size":11.338582677165356,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)"}},"hoveron":"points","name":"baseline","legendgroup":"baseline","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1812,1340,724,736,880,1812,1342,532,450,444,290,288,332,256,256,430,454,776,1362,718],"text":["sim_year:  1<br />spawners: 1812<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  2<br />spawners: 1340<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  3<br />spawners:  724<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  736<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  5<br />spawners:  880<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 1812<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1342<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  532<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  450<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  444<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  290<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  288<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  332<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  256<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  256<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  430<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  454<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  776<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1362<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  718<br />scenario: portfolio_eg<br />scenario: portfolio_eg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,158,115,1)","opacity":1,"size":11.338582677165356,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)"}},"hoveron":"points","name":"portfolio_eg","legendgroup":"portfolio_eg","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[2018,1906,1164,904,1082,2056,1828,864,568,526,392,358,392,320,312,486,540,914,1560,958],"text":["sim_year:  1<br />spawners: 2018<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  2<br />spawners: 1906<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  3<br />spawners: 1164<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  904<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  5<br />spawners: 1082<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 2056<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1828<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  864<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  568<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  526<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  392<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  358<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  392<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  320<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  312<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  486<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  540<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  914<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1560<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  958<br />scenario: portfolio_eg<br />scenario: portfolio_eg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,158,115,1)","opacity":1,"size":11.338582677165356,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)"}},"hoveron":"points","name":"portfolio_eg","legendgroup":"portfolio_eg","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":52.529680365296812,"r":7.3059360730593621,"b":44.167704441677046,"l":60.107928601079294},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Spawners by watershed","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.049999999999999933,20.949999999999999],"tickmode":"array","ticktext":["5","10","15","20"],"tickvals":[5,10,15,20],"categoryorder":"array","categoryarray":["5","10","15","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"y2","title":"","hoverformat":".2f"},"annotations":[{"text":"sim_year","x":0.5,"y":0,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685762},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"top","annotationType":"axis","yshift":-26.168534661685349},{"text":"spawners","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685762},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-42.108758821087591},{"text":"Battle Creek","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Upper Sacramento River","x":0.5,"y":0.48515981735159819,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"yaxis":{"domain":[0.51484018264840181,1],"automargin":true,"type":"linear","autorange":false,"range":[-102.80000000000001,2158.8000000000002],"tickmode":"array","ticktext":["0","500","1000","1500","2000"],"tickvals":[-1.4210854715202004e-14,499.99999999999994,1000,1500,2000.0000000000002],"categoryorder":"array","categoryarray":["0","500","1000","1500","2000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"rgba(255,255,255,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0.51484018264840181,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"rgba(255,255,255,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":0.48515981735159819},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":0.48515981735159819,"ysizemode":"pixel"}],"yaxis2":{"type":"linear","autorange":false,"range":[-102.80000000000001,2158.8000000000002],"tickmode":"array","ticktext":["0","500","1000","1500","2000"],"tickvals":[-1.4210854715202004e-14,499.99999999999994,1000,1500,2000.0000000000002],"categoryorder":"array","categoryarray":["0","500","1000","1500","2000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0,0.48515981735159819],"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"scenario","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685762}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"ea7848ac7f27":{"x":{},"y":{},"colour":{},"type":"scatter"},"ea7845a12063":{"x":{},"y":{},"colour":{},"shape":{}}},"cur_data":"ea7848ac7f27","visdat":{"ea7848ac7f27":["function (y) ","x"],"ea7845a12063":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-0461e8a121a1eecac577" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-0461e8a121a1eecac577">{"x":{"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"text":["sim_year:  1<br />spawners:    0<br />scenario: baseline","sim_year:  2<br />spawners:    0<br />scenario: baseline","sim_year:  3<br />spawners:    0<br />scenario: baseline","sim_year:  4<br />spawners:    0<br />scenario: baseline","sim_year:  5<br />spawners:    0<br />scenario: baseline","sim_year:  6<br />spawners:    0<br />scenario: baseline","sim_year:  7<br />spawners:    0<br />scenario: baseline","sim_year:  8<br />spawners:    0<br />scenario: baseline","sim_year:  9<br />spawners:    0<br />scenario: baseline","sim_year: 10<br />spawners:    0<br />scenario: baseline","sim_year: 11<br />spawners:    0<br />scenario: baseline","sim_year: 12<br />spawners:    0<br />scenario: baseline","sim_year: 13<br />spawners:    0<br />scenario: baseline","sim_year: 14<br />spawners:    0<br />scenario: baseline","sim_year: 15<br />spawners:    0<br />scenario: baseline","sim_year: 16<br />spawners:    0<br />scenario: baseline","sim_year: 17<br />spawners:    0<br />scenario: baseline","sim_year: 18<br />spawners:    0<br />scenario: baseline","sim_year: 19<br />spawners:    0<br />scenario: baseline","sim_year: 20<br />spawners:    0<br />scenario: baseline"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)","dash":"solid"},"hoveron":"points","name":"(baseline,1)","legendgroup":"(baseline,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1776,1666,1036,812,962,1776,1546,764,524,472,342,304,326,258,242,388,448,780,1334,816],"text":["sim_year:  1<br />spawners: 1776<br />scenario: baseline","sim_year:  2<br />spawners: 1666<br />scenario: baseline","sim_year:  3<br />spawners: 1036<br />scenario: baseline","sim_year:  4<br />spawners:  812<br />scenario: baseline","sim_year:  5<br />spawners:  962<br />scenario: baseline","sim_year:  6<br />spawners: 1776<br />scenario: baseline","sim_year:  7<br />spawners: 1546<br />scenario: baseline","sim_year:  8<br />spawners:  764<br />scenario: baseline","sim_year:  9<br />spawners:  524<br />scenario: baseline","sim_year: 10<br />spawners:  472<br />scenario: baseline","sim_year: 11<br />spawners:  342<br />scenario: baseline","sim_year: 12<br />spawners:  304<br />scenario: baseline","sim_year: 13<br />spawners:  326<br />scenario: baseline","sim_year: 14<br />spawners:  258<br />scenario: baseline","sim_year: 15<br />spawners:  242<br />scenario: baseline","sim_year: 16<br />spawners:  388<br />scenario: baseline","sim_year: 17<br />spawners:  448<br />scenario: baseline","sim_year: 18<br />spawners:  780<br />scenario: baseline","sim_year: 19<br />spawners: 1334<br />scenario: baseline","sim_year: 20<br />spawners:  816<br />scenario: baseline"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)","dash":"solid"},"hoveron":"points","name":"(baseline,2)","legendgroup":"(baseline,2)","showlegend":true,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[2,2,192,446,832,1806,1340,532,450,444,290,288,332,256,256,430,454,776,1362,718],"text":["sim_year:  1<br />spawners:    2<br />scenario: portfolio_eg","sim_year:  2<br />spawners:    2<br />scenario: portfolio_eg","sim_year:  3<br />spawners:  192<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  446<br />scenario: portfolio_eg","sim_year:  5<br />spawners:  832<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 1806<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1340<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  532<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  450<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  444<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  290<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  288<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  332<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  256<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  256<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  430<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  454<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  776<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1362<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  718<br />scenario: portfolio_eg"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)","dash":"solid"},"hoveron":"points","name":"(portfolio_eg,1)","legendgroup":"(portfolio_eg,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1842,1726,1092,896,1080,2056,1832,870,570,524,392,358,392,322,312,488,538,916,1562,960],"text":["sim_year:  1<br />spawners: 1842<br />scenario: portfolio_eg","sim_year:  2<br />spawners: 1726<br />scenario: portfolio_eg","sim_year:  3<br />spawners: 1092<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  896<br />scenario: portfolio_eg","sim_year:  5<br />spawners: 1080<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 2056<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1832<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  870<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  570<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  524<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  392<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  358<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  392<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  322<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  312<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  488<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  538<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  916<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1562<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  960<br />scenario: portfolio_eg"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)","dash":"solid"},"hoveron":"points","name":"(portfolio_eg,2)","legendgroup":"(portfolio_eg,2)","showlegend":true,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"text":["sim_year:  1<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  2<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  3<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  4<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  5<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  6<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  7<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  8<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year:  9<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 10<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 11<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 12<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 13<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 14<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 15<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 16<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 17<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 18<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 19<br />spawners:    0<br />scenario: baseline<br />scenario: baseline","sim_year: 20<br />spawners:    0<br />scenario: baseline<br />scenario: baseline"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(147,196,125,1)","opacity":1,"size":11.338582677165356,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)"}},"hoveron":"points","name":"baseline","legendgroup":"baseline","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1776,1666,1036,812,962,1776,1546,764,524,472,342,304,326,258,242,388,448,780,1334,816],"text":["sim_year:  1<br />spawners: 1776<br />scenario: baseline<br />scenario: baseline","sim_year:  2<br />spawners: 1666<br />scenario: baseline<br />scenario: baseline","sim_year:  3<br />spawners: 1036<br />scenario: baseline<br />scenario: baseline","sim_year:  4<br />spawners:  812<br />scenario: baseline<br />scenario: baseline","sim_year:  5<br />spawners:  962<br />scenario: baseline<br />scenario: baseline","sim_year:  6<br />spawners: 1776<br />scenario: baseline<br />scenario: baseline","sim_year:  7<br />spawners: 1546<br />scenario: baseline<br />scenario: baseline","sim_year:  8<br />spawners:  764<br />scenario: baseline<br />scenario: baseline","sim_year:  9<br />spawners:  524<br />scenario: baseline<br />scenario: baseline","sim_year: 10<br />spawners:  472<br />scenario: baseline<br />scenario: baseline","sim_year: 11<br />spawners:  342<br />scenario: baseline<br />scenario: baseline","sim_year: 12<br />spawners:  304<br />scenario: baseline<br />scenario: baseline","sim_year: 13<br />spawners:  326<br />scenario: baseline<br />scenario: baseline","sim_year: 14<br />spawners:  258<br />scenario: baseline<br />scenario: baseline","sim_year: 15<br />spawners:  242<br />scenario: baseline<br />scenario: baseline","sim_year: 16<br />spawners:  388<br />scenario: baseline<br />scenario: baseline","sim_year: 17<br />spawners:  448<br />scenario: baseline<br />scenario: baseline","sim_year: 18<br />spawners:  780<br />scenario: baseline<br />scenario: baseline","sim_year: 19<br />spawners: 1334<br />scenario: baseline<br />scenario: baseline","sim_year: 20<br />spawners:  816<br />scenario: baseline<br />scenario: baseline"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(147,196,125,1)","opacity":1,"size":11.338582677165356,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(147,196,125,1)"}},"hoveron":"points","name":"baseline","legendgroup":"baseline","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[2,2,192,446,832,1806,1340,532,450,444,290,288,332,256,256,430,454,776,1362,718],"text":["sim_year:  1<br />spawners:    2<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  2<br />spawners:    2<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  3<br />spawners:  192<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  446<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  5<br />spawners:  832<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 1806<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1340<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  532<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  450<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  444<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  290<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  288<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  332<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  256<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  256<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  430<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  454<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  776<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1362<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  718<br />scenario: portfolio_eg<br />scenario: portfolio_eg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,158,115,1)","opacity":1,"size":11.338582677165356,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)"}},"hoveron":"points","name":"portfolio_eg","legendgroup":"portfolio_eg","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1842,1726,1092,896,1080,2056,1832,870,570,524,392,358,392,322,312,488,538,916,1562,960],"text":["sim_year:  1<br />spawners: 1842<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  2<br />spawners: 1726<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  3<br />spawners: 1092<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  4<br />spawners:  896<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  5<br />spawners: 1080<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  6<br />spawners: 2056<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  7<br />spawners: 1832<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  8<br />spawners:  870<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year:  9<br />spawners:  570<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 10<br />spawners:  524<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 11<br />spawners:  392<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 12<br />spawners:  358<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 13<br />spawners:  392<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 14<br />spawners:  322<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 15<br />spawners:  312<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 16<br />spawners:  488<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 17<br />spawners:  538<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 18<br />spawners:  916<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 19<br />spawners: 1562<br />scenario: portfolio_eg<br />scenario: portfolio_eg","sim_year: 20<br />spawners:  960<br />scenario: portfolio_eg<br />scenario: portfolio_eg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,158,115,1)","opacity":1,"size":11.338582677165356,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,158,115,1)"}},"hoveron":"points","name":"portfolio_eg","legendgroup":"portfolio_eg","showlegend":false,"xaxis":"x","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":52.529680365296812,"r":7.3059360730593621,"b":44.167704441677046,"l":60.107928601079294},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Spawners by watershed","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.049999999999999933,20.949999999999999],"tickmode":"array","ticktext":["5","10","15","20"],"tickvals":[5,10,15,20],"categoryorder":"array","categoryarray":["5","10","15","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"y2","title":"","hoverformat":".2f"},"annotations":[{"text":"sim_year","x":0.5,"y":0,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685762},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"top","annotationType":"axis","yshift":-26.168534661685349},{"text":"spawners","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685762},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-42.108758821087591},{"text":"Battle Creek","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"Upper Sacramento River","x":0.5,"y":0.48515981735159819,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"yaxis":{"domain":[0.51484018264840181,1],"automargin":true,"type":"linear","autorange":false,"range":[-102.80000000000001,2158.8000000000002],"tickmode":"array","ticktext":["0","500","1000","1500","2000"],"tickvals":[-1.4210854715202004e-14,499.99999999999994,1000,1500,2000.0000000000002],"categoryorder":"array","categoryarray":["0","500","1000","1500","2000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"rgba(255,255,255,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0.51484018264840181,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":"rgba(255,255,255,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":0.48515981735159819},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"rgba(51,51,51,1)","width":0,"linetype":"solid"},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":0.48515981735159819,"ysizemode":"pixel"}],"yaxis2":{"type":"linear","autorange":false,"range":[-102.80000000000001,2158.8000000000002],"tickmode":"array","ticktext":["0","500","1000","1500","2000"],"tickvals":[-1.4210854715202004e-14,499.99999999999994,1000,1500,2000.0000000000002],"categoryorder":"array","categoryarray":["0","500","1000","1500","2000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0,0.48515981735159819],"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"scenario","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685762}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"ea783fef1707":{"x":{},"y":{},"colour":{},"type":"scatter"},"ea78ae91834":{"x":{},"y":{},"colour":{},"shape":{}}},"cur_data":"ea783fef1707","visdat":{"ea783fef1707":["function (y) ","x"],"ea78ae91834":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Mean spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">829</td>
+<td style="text-align: left;">1,719</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="natural-origin-wr-returning-to-spawn" class="level3">
+<h3 class="anchored" data-anchor-id="natural-origin-wr-returning-to-spawn">Natural origin WR returning to spawn</h3>
+<p>Natural origin spawners - each year and tributary has a different proportion natural based on hatchery allocations in previous years. Total combines applicable watersheds.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Mean natural spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">609</td>
+<td style="text-align: left;">703</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hatchery-origin-wr-returning-to-spawn" class="level3">
+<h3 class="anchored" data-anchor-id="hatchery-origin-wr-returning-to-spawn">Hatchery origin WR returning to spawn</h3>
+<p>Hatchery origin spawners - each year has a different proportion natural based on hatchery allocations in previous years. Total combines applicable watersheds.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Mean hatchery spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">220</td>
+<td style="text-align: left;">1,016</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="frequency-of-population-decline" class="level3">
+<h3 class="anchored" data-anchor-id="frequency-of-population-decline">Frequency of population decline</h3>
+<p>Number of years of decline in spawners.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Years of declining spawners</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="frequency-of-catastrophic-decline" class="level3">
+<h3 class="anchored" data-anchor-id="frequency-of-catastrophic-decline">Frequency of catastrophic decline</h3>
+<p>Maximum 3-year average change in spawners across model time series.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase abundance</td>
+<td style="text-align: left;">Catastrophic decline</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">-0.316</td>
+<td style="text-align: left;">-0.337</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="productivity" class="level2">
+<h2 class="anchored" data-anchor-id="productivity">Productivity</h2>
+<section id="number-of-juveniles-emigrating-from-upper-sacramento-river" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-juveniles-emigrating-from-upper-sacramento-river">Number of juveniles emigrating from upper Sacramento River</h3>
+<p>Number of juveniles originating from the Upper Sacramento River watershed. Numbers shown are juveniles before they undergo rearing, growth, migration, etc.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean juveniles outmigrating from Upper Sac</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">890,779</td>
+<td style="text-align: left;">1,004,695</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="number-of-natural-origin-smolts-surviving-to-reach-the-ocean" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-natural-origin-smolts-surviving-to-reach-the-ocean">Number of natural origin smolts surviving to reach the ocean</h3>
+<p>This metric calculates natural-origin juveniles at Chipps, showing only “large” and “very large” size classes to represent smolts. We apply proportion of natural-origin juveniles to integers to obtain the result.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean natural smolts at ocean entry</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">10,397</td>
+<td style="text-align: left;">48,849</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="cohort-replacement-rate" class="level3">
+<h3 class="anchored" data-anchor-id="cohort-replacement-rate">Cohort Replacement Rate</h3>
+<p>Battle Creek does not have a baseline value for this performance metric.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean CRR</td>
+<td style="text-align: left;">Battle Creek</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase productivity</td>
+<td style="text-align: left;">Mean CRR</td>
+<td style="text-align: left;">Upper Sacramento River</td>
+<td style="text-align: left;">0.895</td>
+<td style="text-align: left;">0.887</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="life-history-diversity-and-fitness" class="level2">
+<h2 class="anchored" data-anchor-id="life-history-diversity-and-fitness">Life history diversity and fitness</h2>
+<section id="phos" class="level3">
+<h3 class="anchored" data-anchor-id="phos">pHOS</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean pHOS</td>
+<td style="text-align: left;">Battle Creek</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">1.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean pHOS</td>
+<td style="text-align: left;">Upper Sacramento River</td>
+<td style="text-align: left;">0.251</td>
+<td style="text-align: left;">0.266</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="size-class-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="size-class-diversity">Size class diversity</h3>
+<p>We show two plots: one shows the Shannon Diversity Index calculated for size class, and one shows the proportions per year. The Shannon Diversity Index measures evenness and diversity: a higher value indicates greater evenness and diversity, while a low number may indicate domination by one group (in this case, very large individuals in the portfolio scenario).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean juvenile size diversity at ocean entry</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0.540</td>
+<td style="text-align: left;">0.400</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="timing-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="timing-diversity">Timing diversity</h3>
+<p>We show two plots: one shows the Shannon Diversity Index calculated for month of entry, and one shows the proportions per year. The Shannon Diversity Index measures evenness and diversity: a higher value indicates greater evenness and diversity, while a low number may indicate domination by one group (month of ocean entry).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase life history diversity</td>
+<td style="text-align: left;">Mean juvenile timing diversity at ocean entry</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">1.39</td>
+<td style="text-align: left;">1.34</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="increase-number-of-tributaries-supporting-wr" class="level2">
+<h2 class="anchored" data-anchor-id="increase-number-of-tributaries-supporting-wr">Increase number of tributaries supporting WR</h2>
+<section id="proportion-of-above-shasta-habitat-occupied" class="level3">
+<h3 class="anchored" data-anchor-id="proportion-of-above-shasta-habitat-occupied">Proportion of Above Shasta habitat occupied</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="number-of-adults-spawning-in-tributaries" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-adults-spawning-in-tributaries">Number of adults spawning in tributaries</h3>
+<p>Results shown for Battle Creek.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Mean spawners in tributaries</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">762</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="number-of-juveniles-rearing-in-tributaries" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-juveniles-rearing-in-tributaries">Number of juveniles rearing in tributaries</h3>
+<p>This shows the number of juveniles present in a tributary before they grow, rear, and migrate.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Mean juveniles in tributaries</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">699,459</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="number-of-independent-populations" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-independent-populations">Number of independent populations</h3>
+<p>Independent populations, also named viable populations, include those with:</p>
+<ul>
+<li>greater than 500 spawners</li>
+<li>pHOS less than 5%</li>
+<li>CRR &gt; 1</li>
+<li>Growth rate (spawner change) &gt; 1</li>
+</ul>
+<p>We sum up the number of populations (tributaries) that meet the criteria for the 3 last years of the time series.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="summarize_outputs_scen_intro_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Number of independent pops</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="number-of-independent-populations-in-historic-habitats" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-independent-populations-in-historic-habitats">Number of independent populations in historic habitats</h3>
+<p>This PM is not relevant for this portfolio since Battle Creek is the only tributary included. Historic habitats include Pit River, Little Sacramento River, and McCloud River.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Number of independent pops in historic habitat</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="number-of-dependent-populations" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-dependent-populations">Number of dependent populations</h3>
+<p>Defined as populations not meeting independent population criteria.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Objective</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Metric</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Watershed</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Baseline Results</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Portfolio Results</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Increase number of tribs supporting WRCS</td>
+<td style="text-align: left;">Number of dependent pops</td>
+<td style="text-align: left;">combined</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

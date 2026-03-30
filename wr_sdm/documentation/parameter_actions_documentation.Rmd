@@ -1,0 +1,76 @@
+---
+title: "parameter_actions_documentation"
+output: html_document
+---
+
+This is to document each update we make to the model in the course of the SDM.
+
+
+## Simple Update to Existing Parameter Value
+
+* see `create_parameter_list_function.R` for individual parameter changes
+
+## Removal of parameters
+
+* Commented out STRAY part of `model.R`
+  * Commented out `stray_rate` and `cross_channel_stray_rate` in baseline params as they do not appear to be used in this version of the model
+  * Commented out `flows_oct_nov` and `flows_apr_may` in baseline params associated with straying
+
+## New parameters
+
+* Converted the hard coded 0.1 incidental harvest rate to watershed object `harvest_rate_trib` and `harvest_rate_ocean` and changed individual values for specific actions. Added reduction from harvest in `model.R`.
+* modified the `harvest_rate_ocean` to be age-structured per feedback:
+**Ocean harvest impact rates on age-3 winter-run are not supposed to exceed 20% under current 
+  regulations.  Currently no rules protect winter-run that mature at age-4 and those fish 
+  (though uncommon) are exposed to much more harvest impacts.  There is a lot of uncertainty in 
+  harvest impact rates for age-3 fish, and the impact rate was 26% in 2022 (last year with 
+  normal ocean fishing season). **
+* Created `addl_juv_chipps` to add very large juveniles to the juvenile object in `model.R` during drought years (years 9:13), defined as 2+ dry years in a row
+* Created `juvenile_capture_efficiency_dam_transport` to represent the efficiency of capturing/routing juveniles for trap and haul or volitional passage. 
+* Created `dam_passage_survival` to represent the effects of passage (either trap and haul or volitional) on adults and juveniles.
+
+## Multiplier requiring code changes
+
+* Added multiplier `adult_enroute_surv_mult` to change adult enroute survival. Multiplier applied to function `surv_adult_enroute`. Additionally called as function input for `apply_enroute_survival` and in `model.R` under the spawners section.
+
+## Structural change to model logic
+
+### Spawn success
+
+The spawn success function takes the adult escapement value and steps through the following:
+- calculates spawner potential (how many spawners are produced, a function of escapement, sex ratio, and prespawn survival)
+- calculates spawner capacity (how many spawners the habitat can fit, a function of spawning habitat and redd size)
+- takes the minimum of spawner potential vs. spawner capacity to get spawning adults
+- calculates hatchery and natural fry as a function of spawning adults, scour, egg to fry survival, and proportion natural
+
+We modified this function to track fish released above the dam (only relevant for ASD, or Above Shasta Dam actions; i.e. it is hard coded to only apply to Upper Sacramento River watershed fish at this time). The workflow was modified to:
+
+- send a proportion of escapement to experience above dam conditions, determined by the input parameter `abv_dam_spawn_proportion`
+- calculate spawner potential above and below dam as a function of escapement, sex ratio, and prespawn survival. We use a different value for prespawn survival below and above dam
+- calculates spawner capacity for above and below dam habitat separately. `abv_dam_spawn_habitat_proportion` is a new input parameter and is calculated directly from the habitat data. Habitat above- and below-dam is then divided by redd size to calculate spawner capacity separately.
+- takes the minimum of these values for above- and below-dam separately.
+- calculates fry produced above- and below-dam separately, using the same function as above but a different value, `egg_to_fry_survival_abv_dam`, for above-dam fish
+- assigns the fish produced from above the dam to size class *medium* instead of *small* to model the positive rearing conditions.
+- combines the fry into one table, but calculates proportion of fry coming from above the dam.
+
+This change to the spawn success function requires the addition of two new parameters:
+* `abv_dam_spawn_habitat_proportion`
+* `egg_to_fry_survival_abv_dam`
+
+The addition of above-dam fry to a larger size class has a measurable effect on population dynamics. Assumptions about egg-to-fry survival above dam, for this process, are coarse but have been shown in explorations to similarly influence population dynamics and should be refined or modified with caution.
+
+## Changes to baseline conditions
+
+Throughout the process there were certain aspects of the baseline model that did not accurately reflect the true baseline. We made these changes:
+
+* Changed `adult_seeds` in `cache-data.R` to have Battle Creek seeds set to 500, effectively setting the spawner population to 0 in the model. Also changed `proportion_hatchery` in `cache-data.R` to be 100% from 20% for Battle Creek to reflect that there is currently no self-sustaining natural population in Battle Creek.
+
+* Removed the `adult_stray()` function call in the model. This reflects the belief that there is no straying of WRCS currently. In tests this showed minimal effect (i.e. removing the straying function showed about 30 more spawners in year 20 in the Upper Sacramento River when compared to the model run with straying included).
+
+* Changed the Battle Creek baseline habitat for winter run to be constrained to below Coleman National Fish Hatchery.
+
+* Updated baseline hatchery releases for the Upper Sacramento River to be 500,000 the year following dry years.
+
+## Recalibration
+
+TODO emanuel fill this out

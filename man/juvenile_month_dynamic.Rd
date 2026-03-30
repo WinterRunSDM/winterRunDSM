@@ -24,7 +24,9 @@ juvenile_month_dynamic(
   filling_regional_args = NULL,
   movement_fn = NULL,
   movement_args = NULL,
-  movement_months = NULL
+  movement_months = NULL,
+  gs_bubble_curtain_effect_mult,
+  non_natal_proportion_shift
 )
 }
 \arguments{

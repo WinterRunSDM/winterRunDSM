@@ -48,11 +48,13 @@ adult_stray <- function(wild, natal_flow, south_delta_watershed, cross_channel_g
 surv_adult_enroute <- function(migratory_temp, bypass_overtopped, 
                                ..surv_adult_enroute_int = winterRunDSM::wr_sdm_baseline_params$..surv_adult_enroute_int,
                                .migratory_temp = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_migratory_temp,
-                               .bypass_overtopped = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped) {
+                               .bypass_overtopped = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped,
+                               # winter run SDM parameter
+                               adult_enroute_surv_mult = adult_enroute_surv_mult) {
 
   pmax(boot::inv.logit(..surv_adult_enroute_int +
                        .migratory_temp * migratory_temp +
-                       .bypass_overtopped * bypass_overtopped), 0)
+                       .bypass_overtopped * bypass_overtopped), 0) * adult_enroute_surv_mult
 }
 
 #' Apply enroute survival to adult salmon
@@ -88,23 +90,25 @@ apply_enroute_survival <- function(year,
                                    .adult_en_route_migratory_temp,
                                    .adult_en_route_bypass_overtopped,
                                    hatchery_release,
-                                   stochastic) {
+                                   stochastic,
+                                   # winter Run SDM parameter
+                                   adult_enroute_surv_mult) {
   # Do adults by month
   # Natural Adults
   natural_adults_by_month <- t(sapply(1:31, function(watershed) {
     if (stochastic) {
-      rmultinom(1, rowSums(adults$natural)[watershed], month_return_proportions)
+      rmultinom(1, rowSums(adults$natural_adults)[watershed], month_return_proportions)
     } else {
-      round(rowSums(adults$natural)[watershed] * month_return_proportions)
+      round(rowSums(adults$natural_adults)[watershed] * month_return_proportions)
     }
   }))
   
   # Hatchery Adults
   hatchery_adults_by_month <- t(sapply(1:31, function(watershed) {
     if (stochastic) {
-      rmultinom(1, rowSums(adults$hatchery)[watershed], month_return_proportions)
+      rmultinom(1, rowSums(adults$hatchery_adults)[watershed], month_return_proportions)
     } else {
-      round(rowSums(adults$hatchery)[watershed] * month_return_proportions)
+      round(rowSums(adults$hatchery_adults)[watershed] * month_return_proportions)
     }
   }))
   
@@ -124,8 +128,10 @@ apply_enroute_survival <- function(year,
                                               bypass_overtopped = bypass_is_overtopped[,month],
                                               ..surv_adult_enroute_int = ..surv_adult_enroute_int,
                                               .migratory_temp = .adult_en_route_migratory_temp,
-                                              .bypass_overtopped = .adult_en_route_bypass_overtopped)
+                                              .bypass_overtopped = .adult_en_route_bypass_overtopped,
+                                              adult_enroute_surv_mult = adult_enroute_surv_mult)
   }), 1)
+  
   
   # Natural adults
   natural_adults_survived_to_spawning <- sapply(1:4, function(month) {
@@ -221,4 +227,47 @@ prepare_stray_model_data <- function(hatchery, type = c("natural", "hatchery"), 
       mean_PDO_retn = normalize_with_params(mean_PDO_return, betareg_normalizing_context$mean_PDO_retn$mean, betareg_normalizing_context$mean_PDO_retn$sd)
     )
   )
+}
+
+
+#' @title Apply Harvest to Adult Salmon
+#' @description Applies age-structured ocean harvest (weighted by proportion mature)
+#' and a flat tributary harvest rate to hatchery or natural adult salmon.
+#' @param adults A named numeric vector of length 31 representing the number of
+#' adults per watershed
+#' @param age_dist A tibble with columns \code{prop_2}, \code{prop_3},
+#' \code{prop_4}, and \code{prop_5} representing the proportion of adults in
+#' each age class per watershed
+#' @param harvest_rate_ocean A named numeric vector of length 4 with names
+#' \code{"2"}, \code{"3"}, \code{"4"}, \code{"5"} representing the ocean
+#' harvest rate for each age class
+#' @param prop_mature_by_age A named numeric vector of length 4 with names
+#' \code{"2"}, \code{"3"}, \code{"4"}, \code{"5"} representing the proportion
+#' of fish that are mature and therefore subject to harvest for each age class
+#' @param harvest_rate_trib A scalar representing the flat incidental harvest
+#' rate applied to all age classes in tributaries
+#' @return A list with two elements:
+#' \itemize{
+#'   \item \code{after_harvest}: A 31 x 4 matrix of adults remaining after
+#'   ocean and tributary harvest, by watershed and age class
+#'   \item \code{harvested}: A named numeric vector of length 31 representing
+#'   the total number of adults harvested per watershed
+#' }
+#' @source IP-117068
+#' @export
+apply_harvest <- function(adults, age_dist, harvest_rate_ocean, prop_mature_by_age, harvest_rate_trib) {
+  effective_ocean_harvest <- harvest_rate_ocean * prop_mature_by_age
+  
+  by_age <- round(unname(adults) * as.matrix(age_dist[2:5]))
+  row.names(by_age) <- winterRunDSM::watershed_labels
+  colnames(by_age) <- 2:5
+  
+  after_ocean <- t(apply(by_age, 1, function(ws) round(ws * (1 - effective_ocean_harvest))))
+  
+  by_age_final <- round(after_ocean * (1 - harvest_rate_trib))
+  row.names(by_age_final) <- winterRunDSM::watershed_labels
+  colnames(by_age_final) <- 2:5
+  
+  list(after_harvest = by_age_final,
+       harvested = adults - rowSums(by_age_final))
 }

@@ -664,6 +664,7 @@ get_migratory_survival <- function(year, month,
                                    ..surv_juv_outmigration_sj_int,
                                    .surv_juv_outmigration_san_joaquin_medium,
                                    .surv_juv_outmigration_san_joaquin_large,
+                                   delta_survival_multiplier,
                                    min_survival_rate,
                                    stochastic) {
 
@@ -703,6 +704,8 @@ get_migratory_survival <- function(year, month,
                                                 CVP_exp = CVP_exports[month, year],
                                                 SWP_exp = SWP_exports[month, year],
                                                 trap_trans = 0) # newDsurv
+  
+  delta_survival = delta_survival * delta_survival_multiplier
 
   bay_delta_migration_surv <- mean(c(0.43, 0.46, 0.26, 0.25, 0.39)) # Bay.S Chipps island to bay
 

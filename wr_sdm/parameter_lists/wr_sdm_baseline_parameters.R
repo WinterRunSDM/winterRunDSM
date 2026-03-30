@@ -1,6 +1,6 @@
-remotes::install_github("winterRunSDM/DSMhabitat")
-remotes::install_github("winterRunSDM/DSMflow")
-remotes::install_github("winterRunSDM/DSMtemperature")
+# remotes::install_github("winterRunSDM/DSMhabitat")
+# remotes::install_github("winterRunSDM/DSMflow")
+# remotes::install_github("winterRunSDM/DSMtemperature")
 library(DSMhabitat)
 library(DSMflow)
 library(DSMtemperature)
@@ -32,8 +32,9 @@ wr_sdm_baseline_params <- list(
   growth_rates = winterRunDSM::growth_rates_inchannel,
   growth_rates_floodplain = winterRunDSM::growth_rates_floodplain,
   mass_by_size_class = winterRunDSM::mass_by_size_class,
-  cross_channel_stray_rate = winterRunDSM::cross_channel_stray_rate,
-  stray_rate = winterRunDSM::stray_rate,
+  # these do not appear to be used 
+  # cross_channel_stray_rate = winterRunDSM::cross_channel_stray_rate,
+  # stray_rate = winterRunDSM::stray_rate,
   diversity_group = winterRunDSM::diversity_group,
   
   # Coefficients for adult submodules
@@ -136,10 +137,12 @@ wr_sdm_baseline_params <- list(
   # update naming to move away from r_to_r, but keep values
   # biop_itp to change to Action 5
   # DSMhabitat variables -----
-  spawning_habitat = DSMhabitat::wr_spawn$action_5,
-  inchannel_habitat_fry = DSMhabitat::wr_fry$action_5, # vary by run
-  inchannel_habitat_juvenile = DSMhabitat::wr_juv$action_5, # vary by run
-  floodplain_habitat = DSMhabitat::wr_fp$action_5, # vary by run
+  # WR DSM - scale baseline battle creek habitat by temperature suitability
+  
+  spawning_habitat = wr_sdm_habitat_action_5_bc_scaled$spawn,
+  inchannel_habitat_fry = wr_sdm_habitat_action_5_bc_scaled$fry, # vary by run
+  inchannel_habitat_juvenile = wr_sdm_habitat_action_5_bc_scaled$juv, # vary by run
+  floodplain_habitat = wr_sdm_habitat_action_5_bc_scaled$fp, # vary by run
   weeks_flooded = DSMhabitat::weeks_flooded$action_5,
   delta_habitat = DSMhabitat::delta_habitat$action_5,
   sutter_habitat = DSMhabitat::sutter_habitat$action_5,
@@ -154,8 +157,8 @@ wr_sdm_baseline_params <- list(
   prob_strand_early = DSMhabitat::prob_strand_early,
   prob_strand_late = DSMhabitat::prob_strand_late,
   prob_nest_scoured = DSMhabitat::prob_nest_scoured,
-  above_dam_spawn_proportion = DSMhabitat::above_dam_spawn_proportion$wr, # R2R - above dam proportion 
-  above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$wr, # R2R - above dam proportion
+  # above_dam_spawn_proportion = DSMhabitat::above_dam_spawn_proportion$wr, # R2R - above dam proportion 
+  # above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$wr, # R2R - above dam proportion
   
   # Calibration Variables (vary by run)
   # TODO Liz replace the ..surv_egg_to_fry_mean_egg_temp_effect with the correct calibration parameter
@@ -178,17 +181,43 @@ wr_sdm_baseline_params <- list(
   hatchery_release_proportion_bay = winterRunDSM::hatchery_release_proportion_bay, 
   fecundity_lookup = winterRunDSM::fecundity_by_age,
   
-  # TODO
-  # Change biop to Action5
+
   # Flows for stray 
-  flows_oct_nov = DSMflow::hatchery_oct_nov_flows$action_5,
-  flows_apr_may = DSMflow::hatchery_apr_may_flows$action_5,
+  # flows_oct_nov = DSMflow::hatchery_oct_nov_flows$action_5,
+  # flows_apr_may = DSMflow::hatchery_apr_may_flows$action_5,
   
   # multi route
   movement_hypo_weights = c(1, rep(0, 7)), # rep(1/8, 8),
   ..habitat_capacity = 5,
-  ..floodplain_capacity = 5
+  ..floodplain_capacity = 5,
   
+  # winter Run SDM inputs
+  adult_enroute_surv_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),
+  harvest_rate_ocean = c("2" = 0, "3" = 0.2, "4" = 0.5, "5" = 0), # age-structured; Brad recommended 0.2 age 3 and 0.5 age 4 (previous was 0.11)
+  prop_mature_by_age = c("2" = 0, "3" = 0.95, "4" = 0.05, "5" = 1), # this is only used to apply harvest rate; percent mature provided by Brad Carvallo 2026
+  egg_to_fry_survival_mult = setNames(rep(1, 31), winterRunDSM::watershed_labels),
+  gs_bubble_curtain_effect_mult = 1,
+  non_natal_proportion_shift = 0,
+  # Battle Creek set to 0.05; rest of tribs 0.1
+  harvest_rate_trib = setNames(c(0.1, 0.1, 0.05, rep(0.1, 28)), winterRunDSM::watershed_labels),
+  # survival estimate for adults - volitional passage past Keswick Dam
+  effect_upstream_vol_adult_kwk = 0,
+  # survival estimate for juveniles - volitional passage past Keswick Dam
+  effect_upstream_vol_juv_kwk = 0,
+  # applied in drought years
+  addl_juv_chipps = 0,
+  delta_survival_multiplier = 1,
+  effect_habitat_size_class_abv_dam = NA,
+  # above dam actions - 
+  juvenile_capture_efficiency_dam_transport = 1,
+  dam_passage_survival = list("adult" = 1, "juv" = 1), 
+  harvest_rate_abv_dam = 0.025,
+  # if you change any one of the params below, you should change them all
+  abv_dam_spawn_proportion = 0, # should be 0 for baseline due to restructuring of spawn_success
+  prespawn_survival_abv_dam  = 0, # R2R was using max fall run survival here
+  egg_to_fry_survival_abv_dam = 0, # baseline is 0
+  # abv_dam_spawn_habitat_proportion NEEDS to be calculated based on habitat input data
+  abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels) # this should specifically be about the amount of additional habitat above dam
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)
