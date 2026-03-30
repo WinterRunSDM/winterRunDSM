@@ -1,9 +1,6 @@
-remotes::install_github("WinterRunSDM/DSMflow")
-remotes::install_github("WinterRunSDM/DSMtemperature")
-remotes::install_github("WinterRunSDM/DSMhabitat")
-remotes::install_github("cvpia-osc/DSMscenario")
-remotes::install_github("cvpia-osc/DSMCalibrationData")
-
+# run-calibration-enhanced.R
+# Same as run-calibration.R but uses enhanced proxy year indices
+# that incorporate Shasta storage and Keswick temperature matching.
 
 library(winterRunDSM)
 library(GA)
@@ -16,15 +13,19 @@ library(DSMCalibrationData)
 source("calibration/fitness.R")
 source("calibration/update-params.R")
 
-run_calibration <- function(description, pop_size = 100, iter = 5000, seed = 1234) {
-  
-  params <- DSMCalibrationData::set_synth_years(winterRunDSM::wr_sdm_baseline_params)
+# Load enhanced indices from synthetic-redo.R output
+enhanced_spawn_index <- readr::read_rds(here::here("data-raw", "enhanced_spawn_index.rds"))
+enhanced_year_index  <- readr::read_rds(here::here("data-raw", "enhanced_year_index.rds"))
+
+run_calibration_enhanced <- function(description, pop_size = 100, iter = 5000, seed = 1234) {
+
+  params <- DSMCalibrationData::set_synth_years(
+    winterRunDSM::wr_sdm_baseline_params,
+    spawn_years = enhanced_spawn_index,
+    years = enhanced_year_index
+  )
   grandtab_observed <- DSMCalibrationData::grandtab_observed
-  
-  # Map LTO parameter indices to R2R indices and derive bounds
-  # R2R_index order: 1=enroute, 2=rear_int, 3=rear_contact, 4=rear_prop_div,
-  #   5=rear_total_div, 6=bypass_int, 7=delta_int, 8=delta_contact,
-  #   9=delta_total_div, 10=outmig_sj, 11=ocean_entry, 12=egg_to_fry_temp
+
   map_params <- tibble::tibble(
     "LTO_index" = c(1:16, 13),
     "R2R_index" = c(2, 6, 7, 10,
@@ -41,34 +42,34 @@ run_calibration <- function(description, pop_size = 100, iter = 5000, seed = 123
                            0.0194795)) |>
     dplyr::arrange(R2R_index) |>
     dplyr::filter(!is.na(R2R_index))
-  
+
   lower_bounds <- map_params$LTO_mins
   upper_bounds <- map_params$LTO_maxes
-  # egg_to_fry_temp_effect (x[12]) is a survival multiplier, not a logistic intercept
   lower_bounds[12] <- 0.01
   upper_bounds[12] <- 1
-  
+
   LTO_suggestions_matrix <- matrix(map_params$LTO_suggested, nrow = 1, ncol = 12)
-  
+
   set.seed(seed)
-  
-  # Monitor function: plot obs vs sim every 50 generations
+
   monitor_fn <- function(obj) {
     cat("Gen:", obj@iter, " Best fitness:", obj@fitnessValue, "\n")
     best <- obj@population[which.max(obj@fitness), ]
     p <- update_params(x = best, params)
-    p <- DSMCalibrationData::set_synth_years(p)
+    p <- DSMCalibrationData::set_synth_years(p,
+      spawn_years = enhanced_spawn_index,
+      years = enhanced_year_index
+    )
     sim <- winter_run_model(seeds = DSMCalibrationData::grandtab_imputed$winter,
                             mode = "calibrate", ..params = p, stochastic = FALSE)
     obs <- grandtab_observed$winter[1, 6:20]
     plot(1:15, sim[1, ], type = "o", col = "blue", pch = 16, ylim = range(c(sim[1, ], obs), na.rm = TRUE),
          xlab = "Year", ylab = "Spawners",
-         main = paste0("Gen ", obj@iter, " | SSE: ", round(-obj@fitnessValue)))
+         main = paste0("Enhanced | Gen ", obj@iter, " | SSE: ", round(-obj@fitnessValue)))
     lines(1:15, obs, type = "o", col = "red", pch = 16)
     legend("topright", legend = c("Simulated", "Observed"), col = c("blue", "red"), lty = 1, pch = 16)
   }
-  
-  # Perform calibration
+
   res <- ga(type = "real-valued",
             fitness =
               function(x) -winter_run_fitness(
@@ -87,37 +88,35 @@ run_calibration <- function(description, pop_size = 100, iter = 5000, seed = 123
             parallel = 4,
             pmutation = .5,
             monitor = monitor_fn)
-  
+
   timestamp <- format(Sys.time(), "%Y-%m-%d_%H%M%S")
-  filename <- paste0("calibration/", description, "_", timestamp, ".rds")
+  filename <- paste0("calibration/res-enhanced-", description, "_", timestamp, ".rds")
   readr::write_rds(res, filename)
   cat("Results saved to:", filename, "\n")
-  
+
   return(res)
 }
 
-
-res <- run_calibration("upper-sac-with-suggestions", pop_size = 200)
+res_enhanced <- run_calibration_enhanced("enhanced-synth-years", pop_size = 200)
 
 # Evaluate Results ------------------------------------
-# res <- readr::read_rds("calibration/<results-file>.rds")\
-read <- read_rds("calibration/upper-sac-only-no-suggestions_2026-03-10_140235.rds")
 keep <- c(1)
-r1_solution <- res@solution[1, ]
+r1_solution <- res_enhanced@solution[1, ]
 
 r1_params <- update_params(x = r1_solution, winterRunDSM::wr_sdm_baseline_params)
-r1_params <- DSMCalibrationData::set_synth_years(r1_params)
+r1_params <- DSMCalibrationData::set_synth_years(r1_params,
+  spawn_years = enhanced_spawn_index,
+  years = enhanced_year_index
+)
 r1_sim <- winter_run_model(seeds = DSMCalibrationData::grandtab_imputed$winter, mode = "calibrate",
                            ..params = r1_params,
                            stochastic = FALSE)
 
-
-r1_nat_spawners <- as_tibble(r1_sim[keep, ,drop = F]) |>
+r1_nat_spawners <- as_tibble(r1_sim[keep, , drop = F]) |>
   mutate(watershed = DSMscenario::watershed_labels[keep]) |>
   gather(year, spawners, -watershed) |>
   mutate(type = "simulated",
          year = readr::parse_number(year) + 5)
-
 
 r1_observed <- as_tibble((1 - winterRunDSM::wr_sdm_baseline_params$proportion_hatchery[keep]) * DSMCalibrationData::grandtab_observed$winter[keep, ]) |>
   mutate(watershed = DSMscenario::watershed_labels[keep]) |>
@@ -126,19 +125,17 @@ r1_observed <- as_tibble((1 - winterRunDSM::wr_sdm_baseline_params$proportion_ha
   filter(!is.na(spawners),
          year > 5)
 
-
-
 r1_eval_df <- bind_rows(r1_nat_spawners, r1_observed)
 
-
-r1_eval_df |> 
-  ggplot(aes(year, spawners, color = type)) + geom_line() + facet_wrap(~watershed, scales = "free_y")
+r1_eval_df |>
+  ggplot(aes(year, spawners, color = type)) + geom_line() + facet_wrap(~watershed, scales = "free_y") +
+  labs(title = "Enhanced Synthetic Years: Observed vs Simulated")
 
 r1_eval_df |>
   spread(type, spawners) |>
   ggplot(aes(observed, simulated)) + geom_point() +
   geom_abline(intercept = 0, slope = 1) +
-  labs(title = "Observed vs Predicted updated",
+  labs(title = "Enhanced Synthetic Years: Observed vs Predicted",
        x = "Observed Natural Spawners",
        y = "Predicted Natural Spawners") +
   xlim(0, 20000) +
@@ -147,15 +144,6 @@ r1_eval_df |>
 r1_eval_df |>
   spread(type, spawners) |>
   filter(!is.na(observed)) |>
-  group_by(watershed) |>
-  summarise(
-    r = cor(observed, simulated, use = "pairwise.complete.obs")
-  ) |> arrange(desc(abs(r)))
-
-r1_eval_df |>
-  spread(type, spawners) |>
-  filter(!is.na(observed)) |>
   summarise(
     r = cor(observed, simulated, use = "pairwise.complete.obs")
   )
-
