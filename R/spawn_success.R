@@ -98,7 +98,7 @@ spawn_success <- function(escapement,
       select(-c(prop_2, prop_3, prop_4, prop_5, spawners, watershed)) |>
       as.matrix()
     dimnames(nat_spawn_blw_dam) <- list(c(winterRunDSM::watershed_labels), c("2", "3", "4", "5"))
-
+    egg_to_fry_survival <- pmin(egg_to_fry_survival * egg_to_fry_survival_mult, 1)
     natural_fry_blw_dam <- suppressWarnings(rowSums(sweep(nat_spawn_blw_dam *
                                                             (1 - prob_scour), 2, fecundity_natural, "*") *
                                                       egg_to_fry_survival))
@@ -115,7 +115,6 @@ spawn_success <- function(escapement,
     dimnames(hatch_spawn_blw_dam) <- list(c(winterRunDSM::watershed_labels), c("2", "3", "4", "5"))
 
     # calculate hatchery fry
-    egg_to_fry_survival <- pmin(egg_to_fry_survival * egg_to_fry_survival_mult, 1)
     hatchery_fry_blw_dam <- suppressWarnings(rowSums(sweep(hatch_spawn_blw_dam *
                                                              (1 - prob_scour), 2, fecundity_hatch, "*") *
                                                        (egg_to_fry_survival)))

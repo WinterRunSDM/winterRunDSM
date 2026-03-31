@@ -76,10 +76,10 @@ create_param_list <- function(action_ids) {
   
   if("SR-4a" %in% action_ids) {
     # reduce predator contact points by 25%
-    param_list$contact_points["Upper Sacramento River"] <- round(param_list$contact_points["Upper Sacramento River"] * 1.3) # calibration issue 0.75)
-    param_list$contact_points["Upper-mid Sacramento River"] <- round(param_list$contact_points["Upper-mid Sacramento River"] * 1.3) # calibration issue 0.75)
-    param_list$contact_points["Lower Sacramento River"] <- round(param_list$contact_points["Lower Sacramento River"] * 1.3) # calibration issue 0.75)
-    param_list$contact_points["Lower-mid Sacramento River"] <- round(param_list$contact_points["Lower-mid Sacramento River"] * 1.3) # calibration issue 0.75)
+    param_list$contact_points["Upper Sacramento River"] <- round(param_list$contact_points["Upper Sacramento River"] * 1.25) # calibration issue 0.75)
+    param_list$contact_points["Upper-mid Sacramento River"] <- round(param_list$contact_points["Upper-mid Sacramento River"] * 1.25) # calibration issue 0.75)
+    param_list$contact_points["Lower Sacramento River"] <- round(param_list$contact_points["Lower Sacramento River"] * 1.25) # calibration issue 0.75)
+    param_list$contact_points["Lower-mid Sacramento River"] <- round(param_list$contact_points["Lower-mid Sacramento River"] * 1.25) # calibration issue 0.75)
   }
   
   if("SR-4b" %in% action_ids) {
@@ -118,24 +118,24 @@ create_param_list <- function(action_ids) {
   }
  
   if("SR-9" %in% action_ids) {
-    # TODO have Liz check this logic 
+    # TODO Liz to convert to habitat_additions
     # spawning habitat: this is an add'l 1.8 acres for 0.75 quantile of spawning habitat
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] * 1.03)
     param_list$abv_dam_spawn_proportion <- mean((winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] * 1.03)/ 
                                                   (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,]+
                                                      (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] * 1.03)))
+    param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- param_list$abv_dam_spawn_proportion
     # juvenile survival includes swimming through Lake Shasta
     # adult survival represents survival with volitional challenges
     param_list$dam_passage_survival <- list("adult" = 0.99, "juv" = 0.97)
   }
   
   if("SR-10" %in% action_ids) {
-    # calculated at 75% quantile of habitat to get ~ 1 acre floodplain, ~2 acres inchannel habitat and fry, ~7 acres spawning habitat
+    # calculated at 0.75 quantile of habitat to get ~ 1 acre floodplain, ~2 acres inchannel habitat and fry, ~7 acres spawning habitat
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] * 1.12
     param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] *1.16
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <-param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] *1.03
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] * 1.03
-    # TODO add prespawn survival change
     param_list$surv_adult_prespawn_mult["Upper Sacramento River"] <- 1.04
     
   }
@@ -185,7 +185,7 @@ create_param_list <- function(action_ids) {
   }
   
   # BC-6
-  # Increase by 3% comes from number of spawning season that is within 3deg of 53.5
+  # Increase by 3% comes from number of spawning season that is within 5 deg of 53.5
   if("BC-6" %in% action_ids) {
   param_list$spawning_habitat["Battle Creek",,] <- param_list$spawning_habitat["Battle Creek",,] *1.03
   param_list$egg_to_fry_survival_mult["Battle Creek"] <- param_list$egg_to_fry_survival_mult["Battle Creek"] * 1.03
@@ -193,7 +193,7 @@ create_param_list <- function(action_ids) {
   }
   
   # BC-7 
-  # Increase by 3% comes from number of spawning season that is within 3deg of 53.5
+  # Increase by 3% comes from number of spawning season that is within 5 deg of 53.5
   if("BC-7" %in% action_ids) {
     param_list$spawning_habitat["Battle Creek",,] <- param_list$spawning_habitat["Battle Creek",,] *1.03
     param_list$egg_to_fry_survival_mult["Battle Creek"] <- param_list$egg_to_fry_survival_mult["Battle Creek"] * 1.03
