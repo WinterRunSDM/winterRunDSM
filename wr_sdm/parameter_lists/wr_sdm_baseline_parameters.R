@@ -214,6 +214,7 @@ wr_sdm_baseline_params <- list(
   egg_to_fry_survival_abv_dam = 0, # baseline is 0
   # abv_dam_spawn_habitat_proportion NEEDS to be calculated based on habitat input data
   abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels), # this should specifically be about the amount of additional habitat above dam
+  surv_adult_prespawn_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels)
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)

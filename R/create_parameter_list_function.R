@@ -135,6 +135,9 @@ create_param_list <- function(action_ids) {
     param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] *1.16
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <-param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] *1.03
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] * 1.03
+    # TODO add prespawn survival change
+    param_list$surv_adult_prespawn_mult["Upper Sacramento River"] <- 1.04
+    
   }
   
   if("SR-11" %in% action_ids) {
