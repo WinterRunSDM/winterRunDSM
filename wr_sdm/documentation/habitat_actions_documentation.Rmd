@@ -535,7 +535,7 @@ For the Full McCloud River (for ASD-7; removal of McCloud Dam), we propose takin
 littlesac <- temps |> 
   filter(location == "sacasl")
 # Plot
-plot_temp(littlesac, "Little Sacramento River (11342000")
+plot_temp(littlesac, "Little Sacramento River (11342000)")
 ```
 
 
