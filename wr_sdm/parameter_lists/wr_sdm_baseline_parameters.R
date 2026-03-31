@@ -200,10 +200,6 @@ wr_sdm_baseline_params <- list(
   non_natal_proportion_shift = 0,
   # Battle Creek set to 0.05; rest of tribs 0.1
   harvest_rate_trib = setNames(c(0.1, 0.1, 0.05, rep(0.1, 28)), winterRunDSM::watershed_labels),
-  # survival estimate for adults - volitional passage past Keswick Dam
-  effect_upstream_vol_adult_kwk = 0,
-  # survival estimate for juveniles - volitional passage past Keswick Dam
-  effect_upstream_vol_juv_kwk = 0,
   # applied in drought years
   addl_juv_chipps = 0,
   delta_survival_multiplier = 1,
@@ -217,7 +213,7 @@ wr_sdm_baseline_params <- list(
   prespawn_survival_abv_dam  = 0, # R2R was using max fall run survival here
   egg_to_fry_survival_abv_dam = 0, # baseline is 0
   # abv_dam_spawn_habitat_proportion NEEDS to be calculated based on habitat input data
-  abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels) # this should specifically be about the amount of additional habitat above dam
+  abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels), # this should specifically be about the amount of additional habitat above dam
 )
 
 usethis::use_data(wr_sdm_baseline_params, overwrite = TRUE)
