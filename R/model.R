@@ -296,7 +296,8 @@ winter_run_model <- function(scenario = NULL,
     
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              .adult_prespawn_int = ..params$.adult_prespawn_int,
-                                             .deg_day = ..params$.adult_prespawn_deg_day)
+                                             .deg_day = ..params$.adult_prespawn_deg_day,
+                                             surv_adult_prespawn_mult = ..params$surv_adult_prespawn_mult)
     
     # calculate juveniles 
     juveniles <- spawn_success(escapement = init_adults,
