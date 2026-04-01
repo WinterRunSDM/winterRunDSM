@@ -381,8 +381,17 @@ create_param_list <- function(action_ids) {
   # Facilities -------
 
   # F-1
-  # TODO waiting for HEC-5Q
-  
+  # we will use the information provided from temperature modeling to identify the
+  # proportion of days that meet the 53.5 F threshold under cold water pool
+  # management that did not reach the threshold under baseline management
+  if("F-1" %in% action_ids) {
+    # 17 months reached 53.5 target in temp control scenario
+    # 26 months reached 53.5 target in baseline
+    # so moving from 26/252 to 17/252 is an improvement of 0.0357
+    # this is compounding on SR-3 which improves by 10%
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * (1 + ((26-17)/252)) 
+  }
+
   return(param_list)
 }
 
