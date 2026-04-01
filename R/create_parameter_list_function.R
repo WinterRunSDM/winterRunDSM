@@ -6,7 +6,6 @@
 create_param_list <- function(action_ids) {
   param_list <- winterRunDSM::wr_sdm_baseline_params
   
-  # TODO check that "action_ids" argument does not have any of the impossible combinations
 
   # temperature scaling factors
   # calculate habitat additions - too much code here so i moved it to a subfunction
@@ -53,7 +52,6 @@ create_param_list <- function(action_ids) {
   
   if("SR-2a" %in% action_ids) {
     # double instream habitat in Upper-mid Sacramento River
-    # TODO do we need to do anything with temperature suitability here? 
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper Sacramento River",,]
     param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]
     param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,]*2
@@ -140,7 +138,6 @@ create_param_list <- function(action_ids) {
   }
   
   if("SR-10" %in% action_ids) {
-    # TODO code to add multiplier to baseline
     # calculated at 0.75 quantile of habitat to get ~ 1 acre floodplain, ~2 acres inchannel habitat and fry, ~7 acres spawning habitat
     param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] * 1.12
     param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] *1.16
@@ -154,9 +151,7 @@ create_param_list <- function(action_ids) {
     param_list$addl_juv_chipps <- 50000
   }
   
-  # TODO wait on Rene
-  if("SR-12" %in% action_ids) {
-  }
+  # removed SR-12 because flow action
   
   # Battle Creek--------
   
@@ -472,7 +467,7 @@ calculate_habitat_additions_ASD_BC <- function() {
   # no floodplain
   
   # bc-2 and bc-5
-  # TODO was using bc_2_bc_5 DSMhabitat object here but it was too much of an issue with the temperature adjustment factors;
+  # was using bc_2_bc_5 DSMhabitat object here but it was too much of an issue with the temperature adjustment factors;
   # was reducing the overall value to below the basic BC-5. 
   bc_bc2_bc5_spawn_addition <- bc_bc2_spawn_addition + bc_bc5_spawn_addition
   bc_bc2_bc5_fry_addition <- bc_bc2_fry_addition + bc_bc5_fry_addition
