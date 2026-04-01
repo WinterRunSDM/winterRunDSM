@@ -19,7 +19,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                    ..params = winterRunDSM::wr_sdm_baseline_params,
                                                    seeds = baseline_seeds)
 
-portfolio_results <- p1_results
+
 calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj) {
 
   output <- list(
