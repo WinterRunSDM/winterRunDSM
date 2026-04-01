@@ -79,9 +79,9 @@ fill_regional <- function(juveniles, habitat, floodplain_habitat = NULL,
   prop_migrant <- mapply(migrants / orig_tot, FUN = max, 0, na.rm = TRUE)
 
   # apportioning tributary fish to the region
-  flood_rear <- round(t(t(juveniles) * prop_flood))
-  river_rear <- round(t(t(juveniles) * prop_river))
-  migrants <- round(t(t(juveniles) * prop_migrant))
+  flood_rear <- t(t(juveniles) * prop_flood)
+  river_rear <- t(t(juveniles) * prop_river)
+  migrants <- t(t(juveniles) * prop_migrant)
 
   if (is.null(floodplain_habitat)) {
     list(inchannel = river_rear, migrants = migrants)
