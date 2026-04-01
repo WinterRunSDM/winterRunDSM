@@ -131,6 +131,12 @@ create_param_list <- function(action_ids) {
     # juvenile survival includes swimming through Lake Shasta
     # adult survival represents survival with volitional challenges
     param_list$dam_passage_survival <- list("adult" = 0.99, "juv" = 0.97)
+    if("ASD-6" %in% action_ids) {
+      # this parameter now represents volitional passage survival for fish
+      # both through Shasta reservoir and thorough keswick, so we scale up 
+      # Shasta values (0.8 adult, 0.4 juv) to something in between
+      param_list$dam_passage_survival <- list("adult" = 0.8, "juv" = 0.6)
+    }
   }
   
   if("SR-10" %in% action_ids) {
