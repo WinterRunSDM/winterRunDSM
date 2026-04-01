@@ -71,7 +71,7 @@ Several participants highlighted the importance of applying the same temperature
 
 **Data:** Temperature time series provided by Mike Deas and Maya Wood, Watercourse Engineering Inc. Contains time series from sources along Battle Creek, Shasta Lake, the McCloud River, Sacramento River, and Pit River. These data were also used to scale total proposed habitat to account for temperature suitability.
 
-**Approach:** Take temperature timeseries from representative locations and calculate the proportion of days from May-August (spawning) where the temperature is below `53.5 F`. Calculate how this proportion relates to data from below Keswick and use that ratio to modify the component of the egg-to-fry submodel that models the effect of temperature, effectively scaling the egg-to-fry survival by the suitable temperatures for the proposed action.
+**Approach:** Take temperature timeseries from representative locations and calculate the proportion of days from May-August (spawning) where the temperature is below `53.5 F`. Calculate how this proportion relates to modeled temperature data on the Upper Sacramento River and use that ratio to modify the component of the egg-to-fry submodel that models the effect of temperature, effectively scaling the egg-to-fry survival by the suitable temperatures for the proposed action.
 
 ### Metadata
 
@@ -91,42 +91,52 @@ temps <- read_csv(here("data-raw", "habitat-data-docs", "mikedeas_Temp_data_clea
 knitr::kable(md_metadata)
 ```
 
-Additionally, for below Keswick temperatures representing baseline, we use the USGS gage below Keswick, `KWK` on CDEC. 
+Additionally, for below Keswick temperatures representing baseline, we use the HEC 5Q modeled average temperature time series from the BELOW CLEAR CREEK node using the Action 5 CalSim 3 run.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-library(CDECRetrieve)
-kwk <- CDECRetrieve::cdec_query(station = "KWK", dur_code = "H", sensor_num = "25", start_date = "2000-10-01")
+us_modeled_temps <- read_csv(here("data-raw", "habitat-data-docs", "hec5q_blw_clear_creek_temps.csv")) |> 
+  filter(watershed == "Upper Sacramento River",
+         month(date) %in% 5:8) |>
+  mutate(year = year(date), 
+         month = month(date), 
+         day = day(date), 
+         fake_date = as.Date(paste0("1979-", month, "-", day)))
 ```
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-kwk_clean <- kwk |> 
-  mutate(date = as.Date(datetime)) |> 
-  group_by(date) |> 
-  summarise(mean_daily_temp = mean(parameter_value, na.rm = T)) |> 
-  ungroup() |> 
-  filter(month(date) %in% 5:8) |> 
-  mutate(month = month(date),
-         below_threshold = ifelse(mean_daily_temp <= 53.5, TRUE, FALSE)) |> 
-  filter(!is.na(month), !is.na(mean_daily_temp)) 
-
-kwk_clean |> 
-  ggplot(aes(x = date, y = mean_daily_temp)) +
+us_modeled_temps |> 
+  group_by(fake_date) |> 
+  summarise(mean_temps_across_years = mean(mean_daily_temp_F, na.rm = T)) |> 
+  ggplot(aes(x = fake_date, y = mean_temps_across_years)) + 
   geom_line() + 
   geom_hline(aes(yintercept = 53.5), linetype = "dashed") +
-  scale_x_date(date_labels = "%Y", date_breaks = "1 year") +
-  annotate("text", x = min(kwk_clean$date), y = 54.5, label = "53.5°F",
+  annotate("text", x = min(us_modeled_temps$date), y = 53.8, label = "53.5°F",
            hjust = 0, size = 3, color = "gray30") +
-  labs(x = "Date", y = "Temperature (F)",
-       title = "KWK Spawning Time Series")
+  theme_minimal() +
+  labs(x = "Simulation Month",
+       y = "Mean temperature (F)",
+       title = "Mean temperatures at HEC 5Q blw clear creek",
+       subtitle = "Temperatures summarized by date across 1979-2000")
 
-kwk_clean |> 
-  group_by(month) |> 
-  summarise(prop_below_threshold = round(sum(below_threshold)/n(), 2)) |> 
-  ungroup() |> 
-  knitr::kable()
+us_modeled_props <- us_modeled_temps |> 
+  mutate(below_threshold = ifelse(mean_daily_temp_F <= 53.5, TRUE, FALSE)) |> 
+  group_by(year) |> 
+  summarise(prop_below_threshold = sum(below_threshold, na.rm = T) / n()) |> 
+  ungroup()
+
+# comp <- us_modeled_temps |> 
+#   group_by(fake_date) |> 
+#   summarise(mean_temps_across_years = mean(mean_daily_temp_F, na.rm = T)) |> 
+#   ungroup() |> 
+#   mutate(below_threshold = ifelse(mean_temps_across_years <= 53.5, TRUE, FALSE)) |> 
+#   group_by(year(fake_date)) |> 
+#   summarise(prop_below_threshold = sum(below_threshold, na.rm = T) / n()) |> 
+#   ungroup()
+
+knitr::kable(us_modeled_props)
 ```
 
-The average proportion of days within the months of May-August that are below `53.5 F` below Keswick across years 2000-present is `0.85`. 
+The average proportion of days within the months of May-August that are below `53.5 F` in the HEC 5Q modeled temperature time series from 1980-2000 is `r mean(us_modeled_props$prop_below_threshold)`. 
 
 ### McCloud River
 
@@ -134,7 +144,7 @@ The average proportion of days within the months of May-August that are below `5
 
 #### Lower McCloud River (ASD-5 & ASD-6)
 
-We used `MR4A` as the relevant gage for representing spawning habitat in the Lower McCloud River. The value by which to scale the total egg-to-fry survival is `(0.28 - 0.85) / 0.85 = -0.67`. 
+We used `MR4A` as the relevant gage for representing spawning habitat in the Lower McCloud River. The value by which to scale the total egg-to-fry survival is `(0.28 - 0.57) / 0.57 = -0.51` which results in a scale factor of `1 + -0.51 = 0.49`. 
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 mr4a <- temps |> 
@@ -195,13 +205,13 @@ mra |>
   knitr::kable()
 ```
 
-The value by which to scale the total egg-to-fry survival is `(0.625 - 0.85) / 0.85 = -0.26`. 
+The value by which to scale the total egg-to-fry survival is `(0.625 - 0.57) / 0.57 = 0.10` which results in a scale factor of `1 + 0.10 = 1.10`. 
 
 ### Little Upper Sacramento River (ASD-5 & ASD-6)
 
 ![](md_graphs/md_asl_map.png)
 
-We used `11342000` as the relevant gage for representing spawning habitat in the Little Upper Sacramento River. The value by which to scale the total egg-to-fry survival is `(0.17 - 0.85) / 0.85 = -0.80`. 
+We used `11342000` as the relevant gage for representing spawning habitat in the Little Upper Sacramento River. The value by which to scale the total egg-to-fry survival is `(0.17 - 0.57) / 0.57 = -0.70` which results in a scale factor of `1 + -0.70 = 0.3`.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 lilsac <- temps |> 
@@ -236,7 +246,7 @@ lilsac |>
 # this code is also in cache-data.R so we can read it into our param function
 wr_sdm_egg_to_fry_values <- tibble("Station ID" = c("11342000", "MRA", "MR4A", NA_character_),
                           "Watershed" = c("Little Sacramento River", "Upper McCloud River", "Lower McCloud River", "Full McCloud River"),
-                          "Egg-to-Fry Scale Factor" = c(-0.80, 1.17, -0.67, -0.26))
+                          "Egg-to-Fry Scale Factor" = c(0.30, 1.74, 0.49, 1.10))
 
 wr_sdm_egg_to_fry_values |> 
   knitr::kable()
