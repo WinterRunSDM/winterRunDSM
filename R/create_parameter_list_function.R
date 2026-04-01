@@ -38,7 +38,7 @@ create_param_list <- function(action_ids) {
   # H3
   if("H-3" %in% action_ids) {
     # through explorations, this has a significant effect on adult returns. need to be cautious
-    param_list$adult_enroute_surv_mult["Upper Sacramento River"] <- param_list$adult_enroute_surv_mult["Upper Sacramento River"] * 1.1
+    param_list$adult_enroute_surv_mult["Battle Creek"] <- param_list$adult_enroute_surv_mult["Battle Creek"] * 1.1
   
   }
   
