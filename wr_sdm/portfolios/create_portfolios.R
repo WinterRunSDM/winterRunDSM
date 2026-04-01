@@ -19,7 +19,7 @@ p2_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", "ASD-3", "ASD-4"
                                               h_actions, sr_actions, bc_actions, o_actions))
 
 ## P3: All Actions with Shasta Volitional Passage
-p3_params <- create_param_list(action_ids = c("ASD-2", "ASD-62", "ASD-7", "ASD-8",
+p3_params <- create_param_list(action_ids = c("ASD-2", "ASD-6", "ASD-7", "ASD-8",
                                               h_actions, sr_actions, bc_actions, o_actions))
 
 ## P4: Population Enhancement Below Shasta

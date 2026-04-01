@@ -18,7 +18,6 @@ load("wr_sdm/portfolios/portfolio_results.Rdata")
 # Create metrics
 p1_metrics <- calculate_performance_metrics(p1_results, p1_params)
 p1_metrics$metrics_table
-p1_metrics$returns
 
 p2_metrics <- calculate_performance_metrics(p2_results, p2_params)
 p2_metrics$metrics_table
