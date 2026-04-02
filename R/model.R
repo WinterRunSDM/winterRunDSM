@@ -71,10 +71,7 @@ winter_run_model <- function(scenario = NULL,
     lower_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
     
     rearing_survival_inchannel = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
-    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
-    # for tracking fish through migration
-    migrants_at_golden_gate = data.frame(),
-    ocean_entry_survival = data.frame()
+    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20))
   )
   
   if (mode == 'calibrate') {
@@ -385,6 +382,9 @@ winter_run_model <- function(scenario = NULL,
       juveniles["Upper Sacramento River",1] <- juveniles["Upper Sacramento River" ,1] - ..params$addl_juv_chipps
     }
     
+    # WR SDM - add nz juveniles as large fish
+    juveniles["Upper Sacramento River", 3] <- ..params$nz_juveniles["l"]
+    
     fish_list <- lapply(1:8, function(i) list(juveniles = juveniles,
                                               lower_mid_sac_fish = lower_mid_sac_fish,
                                               lower_sac_fish = lower_sac_fish,
@@ -540,25 +540,6 @@ winter_run_model <- function(scenario = NULL,
           delta_growth = growth_rates_delta,
           gs_bubble_curtain_effect_mult = ..params$gs_bubble_curtain_effect_mult,
           non_natal_proportion_shift = ..params$non_natal_proportion_shift
-        )
-        
-        # track migrants at golden gate by size
-        gg <- data.frame(fish_list$route_1_fish$migrants_at_golden_gate)
-        colnames(gg) <- c("s", "m", "l", "vl")
-        gg$watershed <- winterRunDSM::watershed_labels
-        gg$month <- month
-        gg$year <- year
-        output$migrants_at_golden_gate <- dplyr::bind_rows(output$migrants_at_golden_gate, gg)
-        
-        # track ocean entry diagnostics
-        ocean_entry_surv <- fish_list$route_1_fish$ocean_entry_survival_probs
-        ocean_entry_surv$year <- year
-        ocean_entry_not_surv <- fish_list$route_1_fish$ocean_entry_fish_not_surviving
-        ocean_entry_not_surv$year <- year
-        output$ocean_entry_survival <- dplyr::bind_rows(
-          output$ocean_entry_survival,
-          ocean_entry_surv |> dplyr::mutate(type = "survival_prob"),
-          ocean_entry_not_surv |> dplyr::mutate(type = "fish_not_surviving")
         )
         
         # TODO make sure this isn't double counting

@@ -409,18 +409,13 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
     juveniles_at_chipps <- delta_fish$juveniles_at_chipps
   }
   
-  ocean_entry_result <- ocean_entry_success(
-    migrants = migrants_at_golden_gate,
-    month = month,
-    avg_ocean_transition_month = avg_ocean_transition_month,
-    .ocean_entry_success_length = ..params$.ocean_entry_success_length,
-    ..ocean_entry_success_int = ..params$..ocean_entry_success_int,
-    .ocean_entry_success_months = ..params$.ocean_entry_success_months,
-    stochastic = stochastic
-  )
-  
-  adults_in_ocean <- adults_in_ocean + ocean_entry_result$adults_in_ocean
-  
+  adults_in_ocean <- adults_in_ocean + ocean_entry_success(migrants = migrants_at_golden_gate,
+                                                           month = month,
+                                                           avg_ocean_transition_month = avg_ocean_transition_month,
+                                                           .ocean_entry_success_length = ..params$.ocean_entry_success_length,
+                                                           ..ocean_entry_success_int = ..params$..ocean_entry_success_int,
+                                                           .ocean_entry_success_months = ..params$.ocean_entry_success_months,
+                                                           stochastic = stochastic)
   return(list(juveniles = juveniles,
               lower_mid_sac_fish = lower_mid_sac_fish,
               lower_sac_fish = lower_sac_fish,
@@ -431,10 +426,7 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
               north_delta_fish = north_delta_fish,
               south_delta_fish = south_delta_fish,
               juveniles_at_chipps = juveniles_at_chipps,
-              adults_in_ocean = adults_in_ocean,
-              migrants_at_golden_gate = migrants_at_golden_gate,
-              ocean_entry_survival_probs = ocean_entry_result$survival_probs,
-              ocean_entry_fish_not_surviving = ocean_entry_result$fish_not_surviving)
+              adults_in_ocean = adults_in_ocean)
   )
   
 }
