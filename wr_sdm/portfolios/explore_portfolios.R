@@ -12,7 +12,7 @@ colors <- c("#93c47d", "#009E73")
 colors2 <- c("goldenrod", "#D55E00")
 
 ## Visualize
-load("wr_sdm/portfolios/portfolio_params.Rdata")
+  load("wr_sdm/portfolios/portfolio_params.Rdata")
 load("wr_sdm/portfolios/portfolio_results.Rdata")
 
 # Create metrics
@@ -57,6 +57,9 @@ p13_metrics$metrics_table
 
 p14_metrics <- calculate_performance_metrics(p14_results, p14_params)
 p14_metrics$metrics_table
+
+save(p1_metrics, p2_metrics, p3_metrics, p4_metrics, p5_metrics, p6_metrics, p7_metrics, p8_metrics, p9_metrics, 
+     p10_metrics, p11_metrics, p12_metrics, p13_metrics, p14_metrics, file = "wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 
 # Plots
 ggplot(p1_metrics$spawners_split) + 
