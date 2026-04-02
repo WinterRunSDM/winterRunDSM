@@ -71,7 +71,10 @@ winter_run_model <- function(scenario = NULL,
     lower_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
     
     rearing_survival_inchannel = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
-    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20))
+    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
+    # for tracking fish through migration
+    migrants_at_golden_gate = data.frame(),
+    ocean_entry_survival = data.frame()
   )
   
   if (mode == 'calibrate') {
@@ -239,6 +242,35 @@ winter_run_model <- function(scenario = NULL,
     init_adults <- round(spawners$init_adults)
     
     output$spawners[ , year] <- init_adults
+    
+    # BC-9 dynamic hatchery release logic
+    if(mode == "simulate" &&
+       !is.null(..params$bc9_implement_dynamic) && 
+       ..params$bc9_implement_dynamic && 
+       year >= 5) {
+      
+      bc_natural_spawners <- output$spawners["Battle Creek", max(1, (year-4)):year] * 
+        output$proportion_natural_at_spawning["Battle Creek", max(1, (year-4)):year]
+      
+      bc_geomean <- geometric_mean(bc_natural_spawners)
+      
+      cat("Year:", year, "Battle Creek geomean natural spawners:", round(bc_geomean), "\n")
+      
+      if(bc_geomean >= 850) {
+        ..params$hatchery_release["Battle Creek", "l", year] <- 0
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0
+      } else if(bc_geomean >= 500) {
+        ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase2_release
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0.15
+      } else if(bc_geomean >= 100) {
+        ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase1_late_release
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0.15
+      } else {
+        ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase1_initial_release
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0
+      }
+    } # end BC-9 dynamic logic
+    
     # # For use in the r2r metrics ---------------------------------------------
     # TODO fix handling for PHOS on non spawn and 0 fish watersheds
     phos <- ifelse(is.na(1 - spawners$proportion_natural), 0, 1 - spawners$proportion_natural)
@@ -510,10 +542,24 @@ winter_run_model <- function(scenario = NULL,
           non_natal_proportion_shift = ..params$non_natal_proportion_shift
         )
         
-        if(month %in% 3:5) {
-          cat("Year:", year, "Month:", month, 
-              "Upper Sac golden gate by size:", fish_list$route_1_fish$migrants_at_golden_gate[1,], "\n")
-        }
+        # track migrants at golden gate by size
+        gg <- data.frame(fish_list$route_1_fish$migrants_at_golden_gate)
+        colnames(gg) <- c("s", "m", "l", "vl")
+        gg$watershed <- winterRunDSM::watershed_labels
+        gg$month <- month
+        gg$year <- year
+        output$migrants_at_golden_gate <- dplyr::bind_rows(output$migrants_at_golden_gate, gg)
+        
+        # track ocean entry diagnostics
+        ocean_entry_surv <- fish_list$route_1_fish$ocean_entry_survival_probs
+        ocean_entry_surv$year <- year
+        ocean_entry_not_surv <- fish_list$route_1_fish$ocean_entry_fish_not_surviving
+        ocean_entry_not_surv$year <- year
+        output$ocean_entry_survival <- dplyr::bind_rows(
+          output$ocean_entry_survival,
+          ocean_entry_surv |> dplyr::mutate(type = "survival_prob"),
+          ocean_entry_not_surv |> dplyr::mutate(type = "fish_not_surviving")
+        )
         
         # TODO make sure this isn't double counting
         output$upper_mid_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$upper_mid_sac_fish, na.rm = T)

@@ -26,6 +26,8 @@ create_param_list <- function(action_ids) {
   if("H-2b" %in% action_ids) {
     # change adult removal rate
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.15
+    # improve egg to fry survival to account for the positive effect of more hatchery-origin broodstock
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * 1.1
   }
   
   # H-2c
@@ -33,6 +35,8 @@ create_param_list <- function(action_ids) {
     # change adult removal rate
     # will default to H-2c rate (not additive with H-2b)
     param_list$natural_adult_removal_rate["Upper Sacramento River"] <- 0.25
+    # improve egg to fry survival to account for the positive effect of more hatchery-origin broodstock
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * 1.2
   }
   
   # H3
@@ -72,7 +76,7 @@ create_param_list <- function(action_ids) {
   }
   
   if("SR-3" %in% action_ids) {
-    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- 1.1
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * 1.1
   }
   
   if("SR-4a" %in% action_ids) {
@@ -212,12 +216,21 @@ create_param_list <- function(action_ids) {
     }
   }
  
-  # TODO modify model code based on a threshold of adults returning to Battle Creek
-    # BC-9
+  # BC-9
   if("BC-9" %in% action_ids) {
+    # param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
+    # 
+    # param_list$natural_adult_removal_rate["Battle Creek"] <- 0.25
     param_list$hatchery_release["Battle Creek","l",] <- rep(200000, 20)
-    
     param_list$natural_adult_removal_rate["Battle Creek"] <- 0.25
+    
+    # phase-specific release levels for BC-9 dynamic logic
+    param_list$bc9_phase1_initial_release <- 200000  # full supplementation
+    param_list$bc9_phase1_late_release <- 160000     # 10-20% broodstock collection reduces releases
+    param_list$bc9_phase2_release <- 100000          # integrated program, reduced hatchery influence
+    param_list$bc9_phase3_release <- 0               # termination
+    param_list$bc9_implement_dynamic <- TRUE
+    
   }
   
   # Other ---------------------
@@ -378,6 +391,12 @@ create_param_list <- function(action_ids) {
     param_list$prespawn_survival_abv_dam <- 0.95
   }
   
+  # ASD-8 Return historic salmon from NZ
+  # 500,000 smolts to Full McCloud (will always be paired with ASD-6 and ASD_7)
+  if("ASD-8" %in% action_ids) {
+    # TODO add the same as hatchery releases (ASD-1 ?)
+  }
+  
   # Facilities -------
 
   # F-1
@@ -389,7 +408,7 @@ create_param_list <- function(action_ids) {
     # 26 months reached 53.5 target in baseline
     # so moving from 26/252 to 17/252 is an improvement of 0.0357
     # this is compounding on SR-3 which improves by 10%
-    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * (1 + ((26-17)/252)) 
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * 1.081
   }
 
   return(param_list)
@@ -551,5 +570,14 @@ convert_hab_matrix_to_df <- function(matrix, scenario) {
     mutate(plot_date = as.Date(paste0(year, "-", month, "-01")))
   
   return(final_df)
+}
+
+#' @title Calculate geometric mean
+#' @description Calculates geometric mean for use in implementing BC-9
+#' @export
+geometric_mean <- function(x) {
+  x <- x[x > 0]  # exclude zeros
+  if(length(x) == 0) return(0)
+  exp(mean(log(x)))
 }
 
