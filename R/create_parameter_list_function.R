@@ -118,12 +118,11 @@ create_param_list <- function(action_ids) {
   }
  
   if("SR-9" %in% action_ids) {
-    # TODO Liz to convert to habitat_additions
     # spawning habitat: this is an add'l 1.8 acres for 0.75 quantile of spawning habitat
-    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] * 1.03)
-    param_list$abv_dam_spawn_proportion <- mean((winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] * 1.03)/ 
-                                                  (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,]+
-                                                     (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] * 1.03)))
+    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + habitat_additions$sr_9$spawn
+    param_list$abv_dam_spawn_proportion <- mean(habitat_additions$sr_9$spawn / 
+                                                  (winterRunDSM::wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] + 
+                                                     habitat_additions$sr_9$spawn))
     param_list$abv_dam_spawn_habitat_proportion["Upper Sacramento River"] <- param_list$abv_dam_spawn_proportion
     # juvenile survival includes swimming through Lake Shasta
     # adult survival represents survival with volitional challenges
@@ -381,8 +380,17 @@ create_param_list <- function(action_ids) {
   # Facilities -------
 
   # F-1
-  # TODO waiting for HEC-5Q
-  
+  # we will use the information provided from temperature modeling to identify the
+  # proportion of days that meet the 53.5 F threshold under cold water pool
+  # management that did not reach the threshold under baseline management
+  if("F-1" %in% action_ids) {
+    # 17 months reached 53.5 target in temp control scenario
+    # 26 months reached 53.5 target in baseline
+    # so moving from 26/252 to 17/252 is an improvement of 0.0357
+    # this is compounding on SR-3 which improves by 10%
+    param_list$egg_to_fry_survival_mult["Upper Sacramento River"] <- param_list$egg_to_fry_survival_mult["Upper Sacramento River"] * (1 + ((26-17)/252)) 
+  }
+
   return(param_list)
 }
 
@@ -473,6 +481,11 @@ calculate_habitat_additions_ASD_BC <- function() {
   bc_bc2_bc5_juv_addition <- bc_bc2_juv_addition + bc_bc5_juv_addition
   bc_bc2_bc5_fp_addition <- bc_bc2_fp_addition
   
+  
+  # sr-9
+  # spawning habitat: this is an add'l 1.8 acres for 0.75 quantile of spawning habitat
+  sr9_spawn_addition <- baseline_spawn * 0.03
+  
   return(list("upper_mccloud" = list("fry" = upper_mccloud_addition_fry,
                                      "juv" = upper_mccloud_addition_juv,
                                      "fp" = upper_mccloud_addition_fp,
@@ -499,5 +512,43 @@ calculate_habitat_additions_ASD_BC <- function() {
               "bc_2_5" = list("fry" = bc_bc2_bc5_fry_addition,
                               "juv" = bc_bc2_bc5_juv_addition,
                               "fp" = bc_bc2_bc5_fp_addition,
-                              "spawn" = bc_bc2_bc5_spawn_addition)))
+                              "spawn" = bc_bc2_bc5_spawn_addition),
+              "sr_9" = list("spawn" = sr9_spawn_addition)))
 }
+
+#' @title Convert DSMhabitat matrix to tidy df
+#' @description Converts a DSM habitat matrix to a tidy df to make plotting and comparison easier
+#' @details input matrix should already be indexed for a watershed, giving a matrix of dim 12 x 20 
+#' indicating month x sim year. produces results in acres with a column for month and for scenario.
+#' @export
+convert_hab_matrix_to_df <- function(matrix, scenario) {
+  
+  include_1979 <- ifelse("1979" %in% colnames(matrix), TRUE, FALSE)
+  
+  if(include_1979) {
+    df <- matrix |> 
+      as.data.frame() |> 
+      mutate(month = 1:12) |> 
+      pivot_longer(`1979`:`2000`,
+                   names_to = "year",
+                   values_to = "hab_sqm") |> 
+      mutate(hab_acres = DSMhabitat::square_meters_to_acres(hab_sqm),
+             scenario = scenario) |> 
+      select(-hab_sqm)
+  } else {
+    df <- matrix |> 
+      as.data.frame() |> 
+      mutate(month = 1:12) |> 
+      pivot_longer(`1980`:`2000`,
+                   names_to = "year",
+                   values_to = "hab_sqm") |> 
+      mutate(hab_acres = DSMhabitat::square_meters_to_acres(hab_sqm),
+             scenario = scenario) |> 
+      select(-hab_sqm)
+  }
+  final_df <- df |> 
+    mutate(plot_date = as.Date(paste0(year, "-", month, "-01")))
+  
+  return(final_df)
+}
+
