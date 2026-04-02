@@ -1,15 +1,6 @@
 library(ggplot2)
 source("wr_sdm/portfolios/calculate_portfolio_performance_metrics.R")
-theme_plots <- 
-  theme_bw() + 
-  theme(axis.text = element_text(size = 12),
-        axis.title = element_text(size = 13),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 13),
-        legend.position = "top")
 
-colors <- c("#93c47d", "#009E73")
-colors2 <- c("goldenrod", "#D55E00")
 
 ## Visualize
 load("wr_sdm/portfolios/portfolio_params.Rdata")
@@ -61,18 +52,4 @@ p14_metrics$metrics_table
 save(p1_metrics, p2_metrics, p3_metrics, p4_metrics, p5_metrics, p6_metrics, p7_metrics, p8_metrics, p9_metrics, 
      p10_metrics, p11_metrics, p12_metrics, p13_metrics, p14_metrics, file = "wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 
-# Plots
-ggplot(p1_metrics$spawners_split) + 
-         geom_line(aes(sim_year, spawners, color = scenario)) +
-         geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
-         labs(title = "Spawners by watershed")+
-         facet_wrap(~watershed, nrow = 2) + 
-         scale_color_manual(values = colors)+
-         theme_plots
-ggplot(returns) + 
-  geom_line(aes(sim_year, phos, color = scenario)) +
-  geom_point(aes(sim_year, phos, color = scenario, shape = scenario), size = 3) +
-  scale_color_manual(values = colors2)+
-  labs(title = "pHOS",y = "pHOS") +
-  # facet_wrap(~watershed, nrow = 2) + 
-  theme_plots
+
