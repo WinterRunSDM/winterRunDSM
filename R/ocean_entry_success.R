@@ -11,10 +11,10 @@
 #' @source IP-117068
 #' @export
 ocean_entry_success <- function(migrants, month, avg_ocean_transition_month,
-                                .ocean_entry_success_length = winterRunDSM::wr_sdm_baseline_params$.ocean_entry_success_length,
-                                ..ocean_entry_success_int = winterRunDSM::wr_sdm_baseline_params$..ocean_entry_success_int,
-                                .ocean_entry_success_months = winterRunDSM::wr_sdm_baseline_params$.ocean_entry_success_months, 
-                                stochastic){
+                                .ocean_entry_success_length,
+                                ..ocean_entry_success_int,
+                                .ocean_entry_success_months,
+                                stochastic) {
   
   month_since <- ifelse(month <= avg_ocean_transition_month, 0, max(1, month - avg_ocean_transition_month))
   
@@ -27,10 +27,7 @@ ocean_entry_success <- function(migrants, month, avg_ocean_transition_month,
   }
   
   survival_probs <- pmin(survival_probs, 1)
-  if (month_since > 0) {
-    cat("month_since:", month_since, 
-        "Upper Sac survival_probs by size:", survival_probs[1,], "\n")
-  }
+  
   if (stochastic) {
     survived <- t(sapply(1:31, function(watershed) {
       rbinom(4, size = migrants[watershed, ], prob = survival_probs[watershed, ])
@@ -39,6 +36,20 @@ ocean_entry_success <- function(migrants, month, avg_ocean_transition_month,
     survived <- round(survival_probs * migrants)
   }
   
-  if (month_since == 0) rep(0, 31) else rowSums(survived)
+  result <- if (month_since == 0) rep(0, 31) else rowSums(survived)
   
+  # return list with survival diagnostics
+  list(
+    adults_in_ocean = result,
+    survival_probs = data.frame(survival_probs) |>
+      setNames(c("s", "m", "l", "vl")) |>
+      dplyr::mutate(watershed = winterRunDSM::watershed_labels,
+                    month = month,
+                    month_since = month_since),
+    fish_not_surviving = data.frame(migrants - survived) |>
+      setNames(c("s", "m", "l", "vl")) |>
+      dplyr::mutate(watershed = winterRunDSM::watershed_labels,
+                    month = month,
+                    month_since = month_since)
+  )
 }
