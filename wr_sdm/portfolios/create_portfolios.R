@@ -9,27 +9,26 @@ sr_actions <- c("SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4a", "SR-4b", "SR
 bc_actions <- c("BC-1", "BC-2", "BC-3", "BC-5", "BC-6", "BC-7", "BC-8", "BC-9")
 o_actions <- c("O-1", "O-2", "O-3")
 
-#TODO add F-1
 ## P1: All Actions with Trap and Haul for All Tributaries
-p1_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", "ASD-3", "ASD-4", "ASD-5c",
+p1_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", "ASD-3", "ASD-4", "ASD-5c", "F-1",
                                               h_actions, sr_actions, bc_actions, o_actions))
 
 ## P2: All Actions with Trap and Haul for McCloud River
-p2_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", "ASD-3", "ASD-4", "ASD-5a",
+p2_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", "ASD-3", "ASD-4", "ASD-5a", "F-1",
                                               h_actions, sr_actions, bc_actions, o_actions))
 
 ## P3: All Actions with Shasta Volitional Passage
-p3_params <- create_param_list(action_ids = c("ASD-2", "ASD-6", "ASD-7", "ASD-8",
+p3_params <- create_param_list(action_ids = c("ASD-2", "ASD-6", "ASD-7", "ASD-8", "F-1",
                                               h_actions, sr_actions, bc_actions, o_actions))
 
 ## P4: Population Enhancement Below Shasta
-p4_params <- create_param_list(action_ids = c(h_actions, sr_actions, bc_actions, o_actions))
+p4_params <- create_param_list(action_ids = c(h_actions, sr_actions, bc_actions, o_actions, "F-1"))
 
 ## P5: Battle Creek + Hatchery Actions
 p5_params <- create_param_list(action_ids = c(h_actions, bc_actions))
 
 ## P6: Mainstem + Hatchery Actions
-p6_params <- create_param_list(action_ids = c(h_actions, sr_actions, o_actions))
+p6_params <- create_param_list(action_ids = c(h_actions, sr_actions, o_actions, "F-1"))
 
 ## P7: Implementable Within 5 years
 p7_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", 
