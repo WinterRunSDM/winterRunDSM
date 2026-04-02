@@ -7,6 +7,19 @@ library(tidyr)
 library(purrr)
 library(winterRunDSM)
 
+obj_metrics <- readxl::read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx")
+
+format_metric <- function(x) {
+  dplyr::case_when(
+    is.na(x)        ~ "NA",
+    abs(x) >= 1000  ~ formatC(x, format = "f", digits = 0, big.mark = ","),
+    abs(x) >= 2   ~ formatC(x, format = "f", digits = 0),
+    abs(x) >= 1     ~ formatC(x, format = "f", digits = 2),
+    abs(x) > 0      ~ formatC(x, format = "f", digits = 3),
+    TRUE            ~ formatC(x, format = "f", digits = 0)
+  )
+}
+
 # Run models ----------------------------------------------------
 
 # baseline
@@ -326,12 +339,15 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       objective = character()
     ),
     metrics_table = tibble::tibble(
-      objective = character(),
-      metric    = character(),
+      Objective = character(),
+      Metric    = character(),
+      Watershed = character(),
       watershed = character(),
-      baseline  = numeric(),
-      portfolio = numeric()
+      `Baseline Results`  = character(),
+      `Portfolio Results` = character()
+      
     ),
+    
     # Output list initialization entries:
     
     sub_area_habitat_props = tibble::tibble(
@@ -801,13 +817,15 @@ rearing_prop <- habitat_diff |>
   select(sim_year, scenario, hab_prop_juv, hab_prop_fry, hab_prop_fp) |> 
   group_by(sim_year, scenario) |> 
   mutate(rear_prop = mean(hab_prop_juv, hab_prop_fry, hab_prop_fp)) |> 
-  ungroup() 
+  ungroup() |> 
+  group_by(sim_year, scenario) |> 
+  summarize(mean_rear_prop = mean(rear_prop))
 
 # rearing prop summary 
 rearing_prop_summary <- rearing_prop |> 
   group_by(scenario) |> 
    #TODO maybe add an if_else to have this be 0 when no ASD actions
-  summarize(mean_juv_rear_trib = mean(rear_prop))
+  summarize(mean_juv_rear_trib = mean(mean_rear_prop))
 
 
 ### Spawning and rearing habitat above Shasta-------------------
@@ -975,25 +993,24 @@ populations_table <- mean_spawners_in_tribs |>
                values_to = "value") |> 
   pivot_wider(names_from = scenario,
               values_from = value) |> 
-  mutate(objective = "independent populations")
+  mutate(objective = "number of populations")
 
 ## Metrics Table ---------------------
-obj_metrics <- readxl::read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx")
 
 metrics_table <- abund_table |>
   bind_rows(prod_table,diversity_table,populations_table) |>
   mutate(watershed = "combined") |>
   select(objective, metric, watershed, baseline, portfolio)|>
-  mutate(objective = factor(objective, levels = c("abundance", "productivity", "diversity and fitness", "independent populations"))) |>
-  arrange(objective) 
-  # left_join(obj_metrics) |>
-  # select(Objective = objective_display,
-  #        Metric = metric_display,
-  #        Watershed = watershed,
-  #        `Baseline Results` = baseline,
-  #        `Portfolio Results` = portfolio) |>
-  # mutate(`Baseline Results` = format_metric(`Baseline Results`),
-  #        `Portfolio Results` = format_metric(`Portfolio Results`))
+  mutate(objective = factor(objective, levels = c("abundance", "productivity", "diversity and fitness", "number of populations"))) |>
+  arrange(objective) |>  
+  left_join(obj_metrics) |>
+  select(Objective = objective_display,
+         Metric = metric_display,
+         Watershed = watershed,
+         `Baseline Results` = baseline,
+         `Portfolio Results` = portfolio) |>
+  mutate(`Baseline Results` = format_metric(`Baseline Results`),
+         `Portfolio Results` = format_metric(`Portfolio Results`))
 
 ### output updates ------------------
 output$spawners_bc <- spawners_bc
