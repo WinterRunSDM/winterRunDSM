@@ -54,17 +54,16 @@ create_param_list <- function(action_ids) {
     # double instream habitat in Upper-mid Sacramento River
     param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper Sacramento River",,]
     param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]
-    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,]*2
-    param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,]*2
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_fry["Upper Sacramento River",,]
+    param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,]+ wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]
   }
   
   if("SR-2b" %in% action_ids) {
     # double instream habitat in Upper-mid Sacramento River
-    # TODO code as above
-    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,]*2
-    param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]*2
-    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,]*2
-    param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,]*2
+    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper Sacramento River",,]
+    param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper-mid Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + wr_sdm_baseline_params$inchannel_habitat_fry["Upper Sacramento River",,]
+    param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper-mid Sacramento River",,]+ wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper-mid Sacramento River",,]
   }
   
   if("SR-2c" %in% action_ids) {
@@ -139,10 +138,10 @@ create_param_list <- function(action_ids) {
   
   if("SR-10" %in% action_ids) {
     # calculated at 0.75 quantile of habitat to get ~ 1 acre floodplain, ~2 acres inchannel habitat and fry, ~7 acres spawning habitat
-    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] * 1.12
-    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] *1.16
-    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <-param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] *1.03
-    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] * 1.03
+    param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + (wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper Sacramento River",,] * 1.03)
+    param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + (wr_sdm_baseline_params$floodplain_habitat["Upper Sacramento River",,] * 1.16)
+    param_list$spawning_habitat["Upper Sacramento River",,] <- param_list$spawning_habitat["Upper Sacramento River",,] + (wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,]*1.12)
+    param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + (wr_sdm_baseline_params$inchannel_habitat_fry["Upper Sacramento River",,]*1.03)
     param_list$surv_adult_prespawn_mult["Upper Sacramento River"] <- 1.04
     
   }
