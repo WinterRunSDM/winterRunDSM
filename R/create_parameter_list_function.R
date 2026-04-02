@@ -393,7 +393,7 @@ create_param_list <- function(action_ids) {
   # ASD-8 Return historic salmon from NZ
   # 500,000 smolts to Full McCloud (will always be paired with ASD-6 and ASD_7)
   if("ASD-8" %in% action_ids) {
-    # TODO add the same as hatchery releases (ASD-1 ?)
+    param_list$nz_juveniles["l"] <- param_list$nz_juveniles["l"] + 500000
   }
   
   # Facilities -------

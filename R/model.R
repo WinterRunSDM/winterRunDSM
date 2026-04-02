@@ -71,7 +71,9 @@ winter_run_model <- function(scenario = NULL,
     lower_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
     
     rearing_survival_inchannel = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
-    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20))
+    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
+    # nz additions
+    prop_nz_juveniles = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
   )
   
   if (mode == 'calibrate') {
@@ -383,7 +385,14 @@ winter_run_model <- function(scenario = NULL,
     }
     
     # WR SDM - add nz juveniles as large fish
-    juveniles["Upper Sacramento River", 3] <- ..params$nz_juveniles["l"]
+    juveniles["Upper Sacramento River", 3] <- juveniles["Upper Sacramento River", 3] + ..params$nz_juveniles["l"]
+    
+    # track proportion of juveniles from NZ additions
+    total_juves_post_nz <- rowSums(juveniles)
+    output$prop_nz_juveniles["Upper Sacramento River", year] <- ifelse(
+      total_juves_post_nz["Upper Sacramento River"] == 0, 0,
+      ..params$nz_juveniles["l"] / total_juves_post_nz["Upper Sacramento River"]
+    )
     
     fish_list <- lapply(1:8, function(i) list(juveniles = juveniles,
                                               lower_mid_sac_fish = lower_mid_sac_fish,
