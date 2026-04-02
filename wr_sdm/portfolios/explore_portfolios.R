@@ -12,7 +12,7 @@ colors <- c("#93c47d", "#009E73")
 colors2 <- c("goldenrod", "#D55E00")
 
 ## Visualize
-  load("wr_sdm/portfolios/portfolio_params.Rdata")
+load("wr_sdm/portfolios/portfolio_params.Rdata")
 load("wr_sdm/portfolios/portfolio_results.Rdata")
 
 # Create metrics
