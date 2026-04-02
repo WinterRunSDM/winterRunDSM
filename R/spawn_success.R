@@ -48,9 +48,9 @@ spawn_success <- function(escapement,
     }
     spawner_capacity_blw_dam <- pmin(spawner_potential_blw_dam, capacity_blw_dam)
     if(capacity_blw_dam["Upper Sacramento River"] < spawner_potential_blw_dam["Upper Sacramento River"]) {
-      print("Below dam is spawning habitat limited")
+      # print("Below dam is spawning habitat limited")
     } else {
-      print("Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
+      # print("Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
     }
 
     # spawner potential above dam
@@ -64,11 +64,11 @@ spawn_success <- function(escapement,
     }
     spawner_capacity_abv_dam <- pmin(spawner_potential_abv_dam, capacity_abv_dam)
     if(capacity_abv_dam["Upper Sacramento River"] < spawner_potential_abv_dam["Upper Sacramento River"]) {
-      print("Above dam is spawning habitat limited")
+      # print("Above dam is spawning habitat limited")
     } else {
-      print("Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
-      print(paste("Spawning capacity abv:", capacity_abv_dam["Upper Sacramento River"]))
-      print(paste("Spawning capacity blw:", capacity_blw_dam["Upper Sacramento River"]))
+      # print("Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
+      # print(paste("Spawning capacity abv:", capacity_abv_dam["Upper Sacramento River"]))
+      # print(paste("Spawning capacity blw:", capacity_blw_dam["Upper Sacramento River"]))
     }
 
     # full spawner capacity
