@@ -59,7 +59,7 @@ ggplot(p1_metrics$crr) +
   scale_color_manual(values = colors2)+
   theme_plots
 
-# Diversity ---------------
+## Diversity ---------------
 # Size Class Diversity
 ggplot(p1_metrics$shannon_di_size) + 
   geom_line(aes(year, shannon_index, color = scenario)) +
@@ -75,7 +75,7 @@ ggplot(p1_metrics$juvenile_size_ocean_entry)+
   viridis::scale_fill_viridis(option= "mako", discrete = TRUE)  + 
   theme_bw()
 
-# Number of tributaries supporting WRCS -----------------
+## Number of tributaries supporting WRCS -----------------
 ggplot(p1_metrics$spawners_tribs) + 
   geom_line(aes(sim_year, spawners, color = scenario)) +
   geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
