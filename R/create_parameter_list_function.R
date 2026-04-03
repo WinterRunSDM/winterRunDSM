@@ -309,9 +309,9 @@ create_param_list <- function(action_ids) {
     # this is the case where someone is running the function for exploring and don't have
     # ASD-3 and ASD-4 entered. still need to create juv habitat
     if("ASD-5a" %in% action_ids) {
-      param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$upper_mccloud$fry
-      param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$upper_mccloud$juv
-      param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$upper_mccloud$fp
+      param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fry
+      param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] <- param_list$inchannel_habitat_juvenile["Upper Sacramento River",,] + habitat_additions$lower_mccloud$juv
+      param_list$floodplain_habitat["Upper Sacramento River",,] <- param_list$floodplain_habitat["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fp
     }
     if("ASD-5c" %in% action_ids) {
       param_list$inchannel_habitat_fry["Upper Sacramento River",,] <- param_list$inchannel_habitat_fry["Upper Sacramento River",,] + habitat_additions$lower_mccloud$fry + habitat_additions$little_sac$fry
