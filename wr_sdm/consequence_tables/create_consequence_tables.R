@@ -8,6 +8,18 @@ load("wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 ct_scales <- read_csv("wr_sdm/consequence_tables/ct_scales.csv")
 raw_ct_nonmod <- read_csv("wr_sdm/consequence_tables/nonmodeled_metrics.csv")
 weights <- read_excel("wr_sdm/consequence_tables/weights.xlsx")
+obj_met <- read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx")
+
+format_metric <- function(x) {
+  dplyr::case_when(
+    is.na(x)        ~ "NA",
+    abs(x) >= 1000  ~ formatC(x, format = "f", digits = 0, big.mark = ","),
+    abs(x) >= 1   ~ formatC(x, format = "f", digits = 0),
+    # abs(x) >= 1     ~ formatC(x, format = "f", digits = 2),
+    abs(x) > 0      ~ formatC(x, format = "f", digits = 3),
+    TRUE            ~ formatC(x, format = "f", digits = 0)
+  )
+}
 
 # Create consequence table
 raw_ct_mod <- map(1:14, \(i) {
@@ -19,7 +31,7 @@ raw_ct_mod <- map(1:14, \(i) {
   pivot_longer(-metric, names_to = "portfolio", values_to = "value") |> 
   pivot_wider(names_from = metric, values_from = value)
 
-raw_ct_comb <- left_join(raw_ct_mod, raw_ct_nonmod) |> select(portfolio, portfolio_name, everything())
+raw_ct_comb <- left_join(raw_ct_mod, raw_ct_nonmod) 
 
 # Normalize 
 best <- ct_scales |> filter(value_type == "best") |> select(-value_type)
@@ -61,9 +73,17 @@ scores <- map(1:nrow(weights), \(i) {
   select(weight_set, portfolio, portfolio_name, score)
 
 
+## Tables for app ----------------------------
 
-
-
+### this is Consequence table for app
+raw_table <- raw_ct_comb|> 
+  select(portfolio_name, everything()) |> 
+  mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |> 
+  pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |> 
+  select(-portfolio) |> 
+  pivot_wider(names_from = portfolio_name, values_from = value) |> left_join(obj_met |> select(metric, metric_display)) |> 
+  select(metric_display, everything())
+  
 ### this is Results 1 for app
 results_portfolio_weightset <- scores |> 
   pivot_wider(names_from = weight_set, values_from = score) |> select(-portfolio)
