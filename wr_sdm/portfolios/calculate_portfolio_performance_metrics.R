@@ -825,7 +825,9 @@ rearing_prop <- habitat_diff |>
 rearing_prop_summary <- rearing_prop |> 
   group_by(scenario) |> 
    #TODO maybe add an if_else to have this be 0 when no ASD actions
-  summarize(mean_juv_rear_trib = mean(mean_rear_prop))
+  reframe(mean_juv_rear_trib = if_else(portfolio_param_obj$abv_dam_spawn_proportion>0,
+                                         mean(mean_rear_prop),
+                                         0))
 
 
 ### Spawning and rearing habitat above Shasta-------------------
