@@ -264,6 +264,7 @@ winter_run_model <- function(scenario = NULL,
       } else if(bc_geomean >= 100) {
         ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase1_late_release
         ..params$natural_adult_removal_rate["Battle Creek"] <- 0.15
+        ..params$egg_to_fry_survival_mult["Battle Creek"] <- ..params$egg_to_fry_survival_mult["Battle Creek"] * 1.2
       } else {
         ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase1_initial_release
         ..params$natural_adult_removal_rate["Battle Creek"] <- 0
