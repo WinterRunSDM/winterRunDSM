@@ -85,10 +85,7 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       scenario  = character(),
       spawners  = numeric()
     ),
-    mean_spawners = tibble::tibble(
-      scenario      = character(),
-      mean_spawners = numeric()
-    ),
+
     abv_dam_habitat_props = tibble::tibble(
       sim_year           = integer(),
       prop_mccloud = numeric(),
@@ -119,10 +116,6 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       spawners         = numeric(),
       phos             = numeric()
     ),
-    mean_phos = tibble::tibble(
-      scenario  = character(),
-      mean_phos = numeric()
-    ),
     
     # DECLINE
     decline = tibble::tibble(
@@ -141,13 +134,6 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       cat_decline = numeric()
     ),
     
-    # ABUNDANCE TABLE
-    abund_table = tibble::tibble(
-      metric    = character(),
-      baseline  = numeric(),
-      portfolio = numeric(),
-      objective = character()
-    ),
     
     # JUVENILES - UPPER SAC
     juvs_us = tibble::tibble(
@@ -156,10 +142,6 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       year      = integer(),
       total_juv = numeric()
     ),
-    mean_juv_us = tibble::tibble(
-      scenario = character(),
-      mean_juv = numeric()
-    ),
     
     # JUVENILES AT CHIPPS
     juv_chipps = tibble::tibble(
@@ -167,10 +149,7 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       year     = integer(),
       jac      = numeric()
     ),
-    mean_jac = tibble::tibble(
-      scenario = character(),
-      mean_jac = numeric()
-    ),
+
     
     # CRR
     crr = tibble::tibble(
@@ -194,18 +173,7 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       crr              = numeric(),
       crr_over_one     = integer()
     ),
-    crr_summary = tibble::tibble(
-      scenario = character(),
-      mean_crr = numeric()
-    ),
-    
-    # PRODUCTIVITY TABLE
-    prod_table = tibble::tibble(
-      metric    = character(),
-      baseline  = numeric(),
-      portfolio = numeric(),
-      objective = character()
-    ),
+
     
     # LIFE HISTORY DIVERSITY
     juvenile_size_ocean_entry = tibble::tibble(
@@ -224,39 +192,19 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       scenario      = character(),
       shannon_index = numeric()
     ),
-    mean_shannon_di_size = tibble::tibble(
-      scenario                  = character(),
-      avg_annual_shannon_di_size = numeric()
-    ),
     
-    # DIVERSITY TABLE
-    diversity_table = tibble::tibble(
-      metric    = character(),
-      baseline  = numeric(),
-      portfolio = numeric(),
-      objective = character()
-    ),
+
     # POPULATIONS IN TRIBS - Spawners
-    spawners_bc = tibble::tibble(
-      watershed = character(),
-      scenario  = character(),
-      sim_year  = numeric(),
-      spawners  = numeric()
-    ),
-    spawners_abv_shasta = tibble::tibble(
-      watershed = character(),
-      sim_year  = integer(),
-      spawners  = numeric(),
-      scenario  = character()
-    ),
+    # spawners_abv_shasta = tibble::tibble(
+    #   watershed = character(),
+    #   sim_year  = integer(),
+    #   spawners  = numeric(),
+    #   scenario  = character()
+    # ),
     spawners_tribs = tibble::tibble(
       scenario  = character(),
       sim_year  = integer(),
       spawners  = numeric()
-    ),
-    mean_spawners_in_tribs = tibble::tibble(
-      scenario            = character(),
-      mean_spawners_trib  = numeric()
     ),
     
     # Tributary
@@ -280,10 +228,7 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       hab_prop_fp  = numeric(),
       rear_prop    = numeric()
     ),
-    rearing_prop_summary = tibble::tibble(
-      scenario       = character(),
-      mean_juv_rear_trib = numeric()
-    ),
+
     habitat_abv_shasta = tibble::tibble(
       sim_year        = integer(),
       scenario        = character(),
@@ -299,55 +244,36 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       rear            = integer(),
       habitat_score   = integer()
     ),
-    mean_habitat_abv_shasta = tibble::tibble(
-      scenario       = character(),
-      num_trib = numeric()
-    ),
+
     
     # POPULATIONS IN TRIBS - Independent Populations
-    ind_pop = tibble::tibble(
-      scenario                  = character(),
-      sim_year                  = numeric(),
-      nat_returns               = numeric(),
-      hatchery_returns          = numeric(),
-      spawners                  = numeric(),
-      phos                      = numeric(),
-      crr                       = numeric(),
-      crr_over_one              = integer(),
-      decline                   = numeric(),
-      decline_threshold         = integer(),
-      consecutive_decline       = numeric(),
-      cat_decline               = numeric(),
-      cat_decline_threshold     = integer(),
-      growth_rate =     numeric(),
-      above_500_spawners        = integer(),
-      phos_less_than_5_percent  = integer(),
-      crr_above_1               = integer(),
-      growth_rate_above_1       = integer(),
-      independent_conditions    = integer()
-    ),
-    ind_pop_long = tibble::tibble(
-      scenario  = character(),
-      sim_year  = numeric(),
-      metric    = character(),
-      value     = integer()
-    ),
-    populations_table = tibble::tibble(
-      metric    = character(),
-      baseline  = numeric(),
-      portfolio = numeric(),
-      objective = character()
-    ),
-    metrics_table = tibble::tibble(
-      Objective = character(),
-      Metric    = character(),
-      Watershed = character(),
-      watershed = character(),
-      `Baseline Results`  = character(),
-      `Portfolio Results` = character()
-      
-    ),
-    
+    # ind_pop = tibble::tibble(
+    #   scenario                  = character(),
+    #   sim_year                  = numeric(),
+    #   nat_returns               = numeric(),
+    #   hatchery_returns          = numeric(),
+    #   spawners                  = numeric(),
+    #   phos                      = numeric(),
+    #   crr                       = numeric(),
+    #   crr_over_one              = integer(),
+    #   decline                   = numeric(),
+    #   decline_threshold         = integer(),
+    #   consecutive_decline       = numeric(),
+    #   cat_decline               = numeric(),
+    #   cat_decline_threshold     = integer(),
+    #   growth_rate =     numeric(),
+    #   above_500_spawners        = integer(),
+    #   phos_less_than_5_percent  = integer(),
+    #   crr_above_1               = integer(),
+    #   growth_rate_above_1       = integer(),
+    #   independent_conditions    = integer()
+    # ),
+    # ind_pop_long = tibble::tibble(
+    #   scenario  = character(),
+    #   sim_year  = numeric(),
+    #   metric    = character(),
+    #   value     = integer()
+    # ),
     # Output list initialization entries:
     
     sub_area_habitat_props = tibble::tibble(
@@ -393,43 +319,64 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       growth_rate_above_1       = integer(),
       independent_conditions    = integer()
     ),
-    spawn_prop_us = tibble::tibble(
-      sim_year     = integer(),
-      prop_natural = numeric()
-    ),
-    spawners_abv_dam_split_baseline = tibble::tibble(
-      sim_year               = integer(),
-      spawners_abv_dam       = numeric(),
-      prop_mccloud     = numeric(),
-      prop_little_sac        = numeric(),
-      prop_upper_sac_blw     = numeric(),
-      spawners_mccloud = numeric(),
-      spawners_little_sac    = numeric(),
-      spawners_upper_sac_blw = numeric()
-    ),
-    spawn_prop_us_baseline = tibble::tibble(
-      sim_year     = integer(),
-      prop_natural = numeric()
-    ),
-    sub_area_spawners_baseline = tibble::tibble(
-      sim_year         = integer(),
-      sub_area         = character(),
-      spawners         = numeric(),
-      prop_natural     = numeric(),
-      nat_returns      = numeric(),
-      hatchery_returns = numeric(),
-      phos             = numeric()
-    ),
-    baseline_habitat_props = tibble::tibble(
-      sim_year           = integer(),
-      prop_mccloud = numeric(),
-      prop_little_sac    = numeric(),
-      prop_upper_sac_blw = numeric()
-    ),
+    # spawn_prop_us = tibble::tibble(
+    #   sim_year     = integer(),
+    #   prop_natural = numeric()
+    # ),
+    # spawners_abv_dam_split_baseline = tibble::tibble(
+    #   sim_year               = integer(),
+    #   spawners_abv_dam       = numeric(),
+    #   prop_mccloud     = numeric(),
+    #   prop_little_sac        = numeric(),
+    #   prop_upper_sac_blw     = numeric(),
+    #   spawners_mccloud = numeric(),
+    #   spawners_little_sac    = numeric(),
+    #   spawners_upper_sac_blw = numeric()
+    # ),
+    # spawn_prop_us_baseline = tibble::tibble(
+    #   sim_year     = integer(),
+    #   prop_natural = numeric()
+    # ),
+    # sub_area_spawners_baseline = tibble::tibble(
+    #   sim_year         = integer(),
+    #   sub_area         = character(),
+    #   spawners         = numeric(),
+    #   prop_natural     = numeric(),
+    #   nat_returns      = numeric(),
+    #   hatchery_returns = numeric(),
+    #   phos             = numeric()
+    # ),
+    # baseline_habitat_props = tibble::tibble(
+    #   sim_year           = integer(),
+    #   prop_mccloud = numeric(),
+    #   prop_little_sac    = numeric(),
+    #   prop_upper_sac_blw = numeric()
+    # ),
     ind_pop_table = tibble::tibble(
       scenario           = character(),
       ind_pop = integer()
+    ),
+    
+    metrics_table_raw = tibble::tibble(
+      objective = character(),
+      metric    = character(),
+      watershed = character(),
+      baseline = numeric(),
+      portfolio = numeric(),
+      `Baseline Results`  = character(),
+      `Portfolio Results` = character()
+    ),
+
+    metrics_table = tibble::tibble(
+      Objective = character(),
+      Metric    = character(),
+      Watershed = character(),
+      watershed = character(),
+      `Baseline Results`  = character(),
+      `Portfolio Results` = character()
+      
     )
+
     
   )
 ## Abundance -------------------
@@ -557,16 +504,13 @@ abund_table <- mean_spawners |>
 ### output update --------------------
 output$spawners_split <- spawners_split
 output$spawners <- spawners
-output$mean_spawners <- mean_spawners
 output$abv_dam_habitat_props   <- abv_dam_habitat_props
 output$spawners_abv_dam_split  <- spawners_abv_dam_split
 output$spawn_prop <- spawn_prop
 output$returns_split <- returns_split
 output$returns <- returns
-output$mean_phos <- mean_phos
 output$decline <- decline
 output$max_cat_declines <- max_cat_declines
-output$abund_table <- abund_table
 
 ## Productivity ------------------------
 ### Juveniles leaving Upper Sac -------------------
@@ -638,13 +582,10 @@ prod_table <- mean_juv_us |>
 
 ### output update --------
 output$juvs_us <- juvs_us
-output$mean_juv_us <- mean_juv_us
 output$juv_chipps <- juv_chipps
-output$mean_jac <- mean_jac
 output$crr <- crr
 output$crr_split <- crr_split
 output$crr_summary <- crr_summary
-output$prod_table <- prod_table
 
 ## Life History Diversity ------------------
 
@@ -682,6 +623,7 @@ mean_shannon_di_size <- shannon_di_size |>
 
 ### Combine ----------------
 diversity_table <- mean_shannon_di_size |> 
+  left_join(mean_phos |> rename(mean_phos_d = mean_phos)) |> 
   pivot_longer(cols = -scenario,
                names_to = "metric", 
                values_to = "value") |> 
@@ -692,8 +634,6 @@ diversity_table <- mean_shannon_di_size |>
 output$juvenile_size_ocean_entry <- juvenile_size_ocean_entry
 output$annual_total <- annual_total
 output$shannon_di_size <- shannon_di_size
-output$mean_shannon_di_size <- mean_shannon_di_size
-output$diversity_table <- diversity_table
 
 ## Populations in tribs ------------------------
 ### Spawners in tribs------------------
@@ -998,6 +938,15 @@ populations_table <- mean_spawners_in_tribs |>
   mutate(objective = "number of populations")
 
 ## Metrics Table ---------------------
+metrics_table_raw <- abund_table |>
+  bind_rows(prod_table,diversity_table,populations_table) |>
+  mutate(watershed = "combined") |>
+  select(objective, metric, watershed, baseline, portfolio)|>
+  mutate(objective = factor(objective, levels = c("abundance", "productivity", "diversity and fitness", "number of populations"))) |>
+  arrange(objective) |>  
+  left_join(obj_metrics) |>
+  mutate(`Baseline Results` = format_metric(baseline),
+         `Portfolio Results` = format_metric(portfolio))
 
 metrics_table <- abund_table |>
   bind_rows(prod_table,diversity_table,populations_table) |>
@@ -1015,32 +964,32 @@ metrics_table <- abund_table |>
          `Portfolio Results` = format_metric(`Portfolio Results`))
 
 ### output updates ------------------
-output$spawners_bc <- spawners_bc
-output$spawners_abv_shasta <- spawners_abv_shasta
+# output$spawners_bc <- spawners_bc
+# output$spawners_abv_shasta <- spawners_abv_shasta
 output$spawners_tribs <- spawners_tribs
-output$mean_spawners_in_tribs <- mean_spawners_in_tribs
+# output$mean_spawners_in_tribs <- mean_spawners_in_tribs
 # output$fry_habitat_abv_shasta <- fry_habitat_abv_shasta
 # output$juv_habitat_abv_shasta <- juv_habitat_abv_shasta
 # output$fp_habitat_abv_shasta <- fp_habitat_abv_shasta
 # output$spawn_habitat_abv_shasta <- spawn_habitat_abv_shasta
 output$habitat_diff <- habitat_diff
 output$rearing_prop <- rearing_prop
-output$rearing_prop_summary <- rearing_prop_summary
+# output$rearing_prop_summary <- rearing_prop_summary
 output$habitat_abv_shasta <- habitat_abv_shasta
-output$mean_habitat_abv_shasta <- mean_habitat_abv_shasta
+# output$mean_habitat_abv_shasta <- mean_habitat_abv_shasta
 output$spawn_prop_us                  <- spawn_prop_us
-output$sub_area_spawners              <- sub_area_spawners
-output$sub_area_ind_pop               <- sub_area_ind_pop
-output$baseline_habitat_props         <- baseline_habitat_props
-output$spawners_abv_dam_split_baseline <- spawners_abv_dam_split_baseline
-output$spawn_prop_us_baseline         <- spawn_prop_us_baseline
-output$sub_area_spawners_baseline     <- sub_area_spawners_baseline
-output$sub_area_ind_pop_baseline      <- sub_area_ind_pop_baseline
+# output$sub_area_spawners              <- sub_area_spawners
+# output$sub_area_ind_pop               <- sub_area_ind_pop
+# output$baseline_habitat_props         <- baseline_habitat_props
+# output$spawners_abv_dam_split_baseline <- spawners_abv_dam_split_baseline
+# output$spawn_prop_us_baseline         <- spawn_prop_us_baseline
+# output$sub_area_spawners_baseline     <- sub_area_spawners_baseline
+# output$sub_area_ind_pop_baseline      <- sub_area_ind_pop_baseline
 output$sub_area_ind_pop_combined      <- sub_area_ind_pop_combined
 output$sub_area_ind_pop_last3         <- sub_area_ind_pop_last3
 output$ind_pop_table                  <- ind_pop_table
-output$populations_table <- populations_table
 output$metrics_table <- metrics_table
+output$metrics_table_raw <- metrics_table_raw
 
 return(output)
 }
