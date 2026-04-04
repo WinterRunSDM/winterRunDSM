@@ -10,6 +10,7 @@ raw_ct_nonmod <- read_csv("wr_sdm/consequence_tables/nonmodeled_metrics.csv")
 weights <- read_excel("wr_sdm/consequence_tables/weights.xlsx")
 obj_met <- read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx")
 
+# Display metrics nicely
 format_metric <- function(x) {
   dplyr::case_when(
     is.na(x)        ~ "NA",
@@ -21,19 +22,21 @@ format_metric <- function(x) {
   )
 }
 
-# Create consequence table
+## Create raw consequence table ------
 raw_ct_mod <- map(1:14, \(i) {
   get(paste0("p", i, "_metrics"))$metrics_table_raw |>
     select(metric, portfolio) |>
-    rename("p{i}" := portfolio)
+    rename("p{i}" := portfolio) 
 }) |>
   reduce(full_join, by = "metric") |> 
+  # left_join(get(paste0("p", 1, "_metrics"))$metrics_table_raw |>
+              # select(metric, baseline)) |> 
   pivot_longer(-metric, names_to = "portfolio", values_to = "value") |> 
   pivot_wider(names_from = metric, values_from = value)
 
 raw_ct_comb <- left_join(raw_ct_mod, raw_ct_nonmod) 
 
-# Normalize 
+## Create normalize table ---------
 best <- ct_scales |> filter(value_type == "best") |> select(-value_type)
 worst <- ct_scales |> filter(value_type == "worst") |> select(-value_type)
 norm_ct <- raw_ct_comb |>
@@ -57,9 +60,10 @@ norm_ct <- raw_ct_comb |>
                                cost_cost == 5 ~ 0.600400266844563,
                                cost_cost == 6 ~ 0)) 
 
-# Multiply by weights  
+## Create weighted tables ------- 
 metric_cols <- names(weights[-1])
 
+### Table 1 -------------------
 scores <- map(1:nrow(weights), \(i) {
   w <- weights[i, metric_cols] |> as.numeric()
   norm_ct |>
@@ -72,20 +76,73 @@ scores <- map(1:nrow(weights), \(i) {
   list_rbind() |>
   select(weight_set, portfolio, portfolio_name, score)
 
-
 ## Tables for app ----------------------------
 
-### this is Consequence table for app
+
+### Table 2 -----------------
+scores_portfolio_metric <- function(weight_set_choice) {
+  w <- weights |> 
+    filter(weight_set == weight_set_choice) |> 
+    select(-weight_set)
+  
+  metric_cols <- names(w)
+  
+  norm_ct |>
+    mutate(across(all_of(metric_cols), \(col) col * w[[cur_column()]]))  |> 
+    select(portfolio_name, everything()) |> 
+    group_by(portfolio) |> 
+    mutate(abundance = mean_spawners+mean_phos + max_decline + cat_decline,
+           productivity = mean_juv+mean_jac + mean_crr,
+           `diversity and fitness` = avg_annual_shannon_di_size + mean_phos_d,
+           `number of populations` = mean_spawners_trib+mean_juv_rear_trib + num_trib + ind_pop,
+           natural = natural_natural,
+           `other species` = species_fr + species_other,
+           timeliness = timeliness_initiation + timeliness_benefits,
+           cost = cost_cost,
+           `Total Portfolio Value` = rowSums(across(mean_spawners:cost_cost))) |> 
+    mutate(across(c(abundance:`Total Portfolio Value`), \(x) round(x,3))) |> 
+    select(portfolio, abundance, productivity, `diversity and fitness`, 
+           `number of populations`, natural, `other species`,
+           timeliness, cost, `Total Portfolio Value`) |> 
+    ungroup() 
+}
+
+table2 <- scores_portfolio_metric("B") |> 
+  left_join(raw_ct_nonmod |> select(portfolio, portfolio_name) ) |> 
+  select(portfolio, portfolio_name, everything()) |> 
+  janitor::clean_names(case = "title")
+
+### Table 3 ---------------------
+scores_weight_metric <- function(portfolio_choice) {
+  map(weights$weight_set, \(ws) {
+    scores_portfolio_metric(ws) |>
+      filter(portfolio == portfolio_choice) |>
+      mutate(weight_set = ws)
+  }) |>
+    list_rbind() |> 
+    select(weight_set, abundance, productivity, `diversity and fitness`,
+            `number of populations`, natural, `other species`,
+            timeliness, cost, `Total Portfolio Value`)
+}
+
+table3 <- scores_weight_metric("p1")  |> 
+  janitor::clean_names(case = "title")
+
+
+### Consequence table ------
 raw_table <- raw_ct_comb|> 
   select(portfolio_name, everything()) |> 
   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |> 
   pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |> 
   select(-portfolio) |> 
-  pivot_wider(names_from = portfolio_name, values_from = value) |> left_join(obj_met |> select(metric, metric_display)) |> 
-  select(metric_display, everything())
+  left_join(obj_met |> select(metric, metric_display)) |> 
+  select(-metric) |> 
+  pivot_wider(names_from = metric_display, values_from = value) |> 
+  select(Objective = objective_display, everything())
   
-### this is Results 1 for app
+### Table 1 ---------------
 results_portfolio_weightset <- scores |> 
-  pivot_wider(names_from = weight_set, values_from = score) |> select(-portfolio)
+  pivot_wider(names_from = weight_set, values_from = score) |> select(-portfolio) |> 
+  mutate(across(c(A:K), \(x) round(x,3))) 
 
 
