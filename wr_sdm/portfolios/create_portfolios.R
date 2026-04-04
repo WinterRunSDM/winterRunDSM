@@ -9,6 +9,9 @@ sr_actions <- c("SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4a", "SR-4b", "SR
 bc_actions <- c("BC-1", "BC-2", "BC-3", "BC-5", "BC-6", "BC-7", "BC-8", "BC-9")
 o_actions <- c("O-1", "O-2", "O-3")
 
+## Baseline: 
+baseline_params <- wr_sdm_baseline_params
+
 ## P1: All Actions with Trap and Haul for All Tributaries
 p1_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", "ASD-3", "ASD-4", "ASD-5c", "F-1",
                                               h_actions, sr_actions, bc_actions, o_actions))
@@ -105,11 +108,11 @@ p13_results <- run_portfolio_model(p13_params)
 p14_results <- run_portfolio_model(p14_params)
 
 ## Save params and results -----------------------------
-save(p1_params, p2_params, p3_params, p4_params, p5_params, 
+save(baseline_params, p1_params, p2_params, p3_params, p4_params, p5_params, 
      p6_params, p7_params, p8_params,  p9_params, p10_params, 
      p11_params, p12_params, p13_params, p14_params, file = "wr_sdm/portfolios/portfolio_params.Rdata", 
      compress = "xz")
-save(p1_results, p2_results, p3_results, p4_results, p5_results, 
+save(baseline_results, p1_results, p2_results, p3_results, p4_results, p5_results, 
      p6_results, p7_results, p8_results,  p9_results, p10_results, 
      p11_results, p12_results, p13_results, p14_results, file = "wr_sdm/portfolios/portfolio_results.Rdata", compress = "xz")
 
