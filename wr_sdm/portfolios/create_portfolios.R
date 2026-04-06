@@ -112,7 +112,7 @@ save(baseline_params, p1_params, p2_params, p3_params, p4_params, p5_params,
      p6_params, p7_params, p8_params,  p9_params, p10_params, 
      p11_params, p12_params, p13_params, p14_params, file = "wr_sdm/portfolios/portfolio_params.Rdata", 
      compress = "xz")
-save(baseline_results, p1_results, p2_results, p3_results, p4_results, p5_results, 
+save(p1_results, p2_results, p3_results, p4_results, p5_results, 
      p6_results, p7_results, p8_results,  p9_results, p10_results, 
      p11_results, p12_results, p13_results, p14_results, file = "wr_sdm/portfolios/portfolio_results.Rdata", compress = "xz")
 
