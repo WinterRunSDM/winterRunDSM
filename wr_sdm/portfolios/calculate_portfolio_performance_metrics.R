@@ -7,6 +7,8 @@ library(tidyr)
 library(purrr)
 library(winterRunDSM)
 
+source("wr_sdm/portfolios/calculate_habitat_prop_portfolios.R")
+
 obj_metrics <- readxl::read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx")
 
 format_metric <- function(x) {
@@ -220,61 +222,32 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       hab_prop_spawn  = numeric(),
       scenario        = character()
     ),
-    rearing_prop = tibble::tibble(
-      sim_year     = integer(),
-      scenario     = character(),
-      hab_prop_juv = numeric(),
-      hab_prop_fry = numeric(),
-      hab_prop_fp  = numeric(),
-      rear_prop    = numeric()
+    hab_prop = tibble::tibble(
+    portfolio = character(),
+    sim_year     = integer(),
+     prop_bc_rear = numeric(),
+    prop_mccloud_rear = numeric(),
+    prop_little_sac_rear = numeric(),
+    prop_asd_rear = numeric(),
+    prop_trib_rear = numeric(),
+    prop_mccloud_spawn = numeric(),
+    prop_little_sac_spawn = numeric(),
+    prop_asd_spawn = numeric(),
+    prop_trib_spawn = numeric(),
+     scenario = character()
     ),
 
     habitat_abv_shasta = tibble::tibble(
       sim_year        = integer(),
       scenario        = character(),
-      hab_diff_spawn  = numeric(),
-      hab_prop_spawn  = numeric(),
-      hab_diff_juv    = numeric(),
-      hab_prop_juv    = numeric(),
-      hab_diff_fp     = numeric(),
-      hab_prop_fp     = numeric(),
-      hab_diff_fry    = numeric(),
-      hab_prop_fry    = numeric(),
-      spawn           = integer(),
-      rear            = integer(),
+     rear_mccloud  = numeric(),
+      rear_littlesac  = numeric(),
+      spawn_mccloud    = numeric(),
+      spawn_littlesac    = numeric(),
+      mccloud_score     = numeric(),
+      littlesac_score     = numeric(),
       habitat_score   = integer()
     ),
-
-    
-    # POPULATIONS IN TRIBS - Independent Populations
-    # ind_pop = tibble::tibble(
-    #   scenario                  = character(),
-    #   sim_year                  = numeric(),
-    #   nat_returns               = numeric(),
-    #   hatchery_returns          = numeric(),
-    #   spawners                  = numeric(),
-    #   phos                      = numeric(),
-    #   crr                       = numeric(),
-    #   crr_over_one              = integer(),
-    #   decline                   = numeric(),
-    #   decline_threshold         = integer(),
-    #   consecutive_decline       = numeric(),
-    #   cat_decline               = numeric(),
-    #   cat_decline_threshold     = integer(),
-    #   growth_rate =     numeric(),
-    #   above_500_spawners        = integer(),
-    #   phos_less_than_5_percent  = integer(),
-    #   crr_above_1               = integer(),
-    #   growth_rate_above_1       = integer(),
-    #   independent_conditions    = integer()
-    # ),
-    # ind_pop_long = tibble::tibble(
-    #   scenario  = character(),
-    #   sim_year  = numeric(),
-    #   metric    = character(),
-    #   value     = integer()
-    # ),
-    # Output list initialization entries:
     
     sub_area_habitat_props = tibble::tibble(
       sim_year           = integer(),
@@ -319,39 +292,7 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       growth_rate_above_1       = integer(),
       independent_conditions    = integer()
     ),
-    # spawn_prop_us = tibble::tibble(
-    #   sim_year     = integer(),
-    #   prop_natural = numeric()
-    # ),
-    # spawners_abv_dam_split_baseline = tibble::tibble(
-    #   sim_year               = integer(),
-    #   spawners_abv_dam       = numeric(),
-    #   prop_mccloud     = numeric(),
-    #   prop_little_sac        = numeric(),
-    #   prop_upper_sac_blw     = numeric(),
-    #   spawners_mccloud = numeric(),
-    #   spawners_little_sac    = numeric(),
-    #   spawners_upper_sac_blw = numeric()
-    # ),
-    # spawn_prop_us_baseline = tibble::tibble(
-    #   sim_year     = integer(),
-    #   prop_natural = numeric()
-    # ),
-    # sub_area_spawners_baseline = tibble::tibble(
-    #   sim_year         = integer(),
-    #   sub_area         = character(),
-    #   spawners         = numeric(),
-    #   prop_natural     = numeric(),
-    #   nat_returns      = numeric(),
-    #   hatchery_returns = numeric(),
-    #   phos             = numeric()
-    # ),
-    # baseline_habitat_props = tibble::tibble(
-    #   sim_year           = integer(),
-    #   prop_mccloud = numeric(),
-    #   prop_little_sac    = numeric(),
-    #   prop_upper_sac_blw = numeric()
-    # ),
+
     ind_pop_table = tibble::tibble(
       scenario           = character(),
       ind_pop = integer()
@@ -405,7 +346,7 @@ abv_dam_habitat_props <- get_abv_dam_habitat_props(portfolio_param_obj)
 spawners_abv_dam_split <- portfolio_res_obj$spawners_abv_dam["Upper Sacramento River", ] |>
   as.data.frame() |>
   setNames("spawners_abv_dam") |>
-  mutate(sim_year = 1:20) |>
+  mutate(sim_year = as.integer(1:20)) |>
   left_join(abv_dam_habitat_props) |>
   mutate(
     spawners_mccloud = spawners_abv_dam * prop_mccloud,
@@ -663,125 +604,38 @@ mean_spawners_in_tribs <- spawners_tribs |>
   group_by(scenario) |> 
   summarize(mean_spawners_trib = round(mean(spawners)))
 
-### Habitat proportion -----------------
+### Rearing habitat proportion -----------------
 
-# calculate difference between portfolio and baseline rearing habitat
-fry_habitat_abv_shasta <- portfolio_param_obj$inchannel_habitat_fry["Upper Sacramento River",,] |> 
-  as.table() |> 
-  as.data.frame() |> 
-  mutate(watershed = "Upper Sacramento River", scenario = "portfolio") |> 
-  bind_rows(wr_sdm_baseline_params$inchannel_habitat_fry["Upper Sacramento River",,] |> 
-              as.table() |> 
-              as.data.frame() |> 
-              mutate(watershed = "Upper Sacramento River",
-                     scenario = "baseline")) |> 
-  rename(month = Var1, 
-         sim_year= Var2,
-         hab_sqm = Freq) |> 
-  group_by(sim_year, scenario) |> 
-  summarize(total_habitat = sum(hab_sqm)) |> 
-  pivot_wider(names_from = "scenario", values_from = "total_habitat") |> 
-  mutate(hab_diff_fry = portfolio-baseline,
-         hab_prop_fry = hab_diff_fry/(baseline + hab_diff_fry))
+# use the portfolio selected to get the rearing habitat proportion 
+portfolio_obj <- deparse(substitute(portfolio_res_obj))
+portfolio_num <- stringr::str_extract(portfolio_obj, "p\\d+")
 
-juv_habitat_abv_shasta <- portfolio_param_obj$inchannel_habitat_juvenile["Upper Sacramento River",,] |> 
-  as.table() |> 
-  as.data.frame() |> 
-  mutate(watershed = "Upper Sacramento River", scenario = "portfolio") |> 
-  bind_rows(wr_sdm_baseline_params$inchannel_habitat_juvenile["Upper Sacramento River",,] |> 
-              as.table() |> 
-              as.data.frame() |> 
-              mutate(watershed = "Upper Sacramento River",
-                     scenario = "baseline")) |> 
-  rename(month = Var1, 
-         sim_year= Var2,
-         hab_sqm = Freq) |> 
-  group_by(sim_year, scenario) |> 
-  summarize(total_habitat = sum(hab_sqm)) |> 
-  pivot_wider(names_from = "scenario", values_from = "total_habitat") |> 
-  mutate(hab_diff_juv = portfolio-baseline,
-         hab_prop_juv = hab_diff_juv/(baseline+hab_diff_juv))
+# combine
+trib_hab_all <- bind_rows(trib_hab_baseline, trib_hab_portfolios)
 
-fp_habitat_abv_shasta <- portfolio_param_obj$floodplain_habitat["Upper Sacramento River",,] |> 
-  as.table() |> 
-  as.data.frame() |> 
-  mutate(watershed = "Upper Sacramento River", scenario = "portfolio") |> 
-  bind_rows(wr_sdm_baseline_params$floodplain_habitat["Upper Sacramento River",,] |> 
-              as.table() |> 
-              as.data.frame() |> 
-              mutate(watershed = "Upper Sacramento River",
-                     scenario = "baseline")) |> 
-  rename(month = Var1, 
-         sim_year= Var2,
-         hab_sqm = Freq) |> 
-  group_by(sim_year, scenario) |> 
-  summarize(total_habitat = sum(hab_sqm)) |> 
-  pivot_wider(names_from = "scenario", values_from = "total_habitat") |> 
-  mutate(hab_diff_fp = portfolio-baseline,
-         hab_prop_fp = hab_diff_fp/(baseline+hab_diff_fp))
+hab_prop <- trib_hab_all |> 
+  filter(portfolio == portfolio_num) 
 
-# spawning 
-spawn_habitat_abv_shasta <- portfolio_param_obj$spawning_habitat["Upper Sacramento River",,] |> 
-  as.table() |> 
-  as.data.frame() |> 
-  mutate(watershed = "Upper Sacramento River", scenario = "portfolio") |> 
-  bind_rows(wr_sdm_baseline_params$spawning_habitat["Upper Sacramento River",,] |> 
-              as.table() |> 
-              as.data.frame() |> 
-              mutate(watershed = "Upper Sacramento River",
-                     scenario = "baseline")) |> 
-  rename(month = Var1, 
-         sim_year= Var2,
-         hab_sqm = Freq) |> 
-  group_by(sim_year, scenario) |> 
-  summarize(total_habitat = sum(hab_sqm)) |> 
-  pivot_wider(names_from = "scenario", values_from = "total_habitat") |> 
-  mutate(hab_diff_spawn = portfolio-baseline,
-         hab_prop_spawn = hab_diff_spawn/(baseline+hab_diff_spawn))
-
-habitat_diff <- fp_habitat_abv_shasta |> select(sim_year, hab_diff_fp, hab_prop_fp) |> 
-  left_join(juv_habitat_abv_shasta |> select(sim_year, hab_diff_juv, hab_prop_juv)) |> 
-  left_join(fry_habitat_abv_shasta |> select(sim_year, hab_diff_fry, hab_prop_fry)) |> 
-  left_join(spawn_habitat_abv_shasta|> select(sim_year, hab_diff_spawn, hab_prop_spawn)) |> 
-  mutate(sim_year = as.integer(sim_year)) |> 
-  mutate(scenario = "portfolio") |>
-  bind_rows(data.frame(sim_year = 1:20,
-                       hab_diff_fp = 0, hab_prop_fp = 0,
-                       hab_diff_juv = 0, hab_prop_juv = 0,
-                       hab_diff_fry = 0, hab_prop_fry = 0,
-                       hab_diff_spawn = 0, hab_prop_spawn = 0,
-                       scenario = "baseline"))
-
-#### rearing habitat proportion ---------
-rearing_prop <- habitat_diff |> 
-  select(sim_year, scenario, hab_prop_juv, hab_prop_fry, hab_prop_fp) |> 
-  group_by(sim_year, scenario) |> 
-  mutate(rear_prop = mean(hab_prop_juv, hab_prop_fry, hab_prop_fp)) |> 
-  ungroup() |> 
-  group_by(sim_year, scenario) |> 
-  summarize(mean_rear_prop = mean(rear_prop))
-
-# rearing prop summary 
-rearing_prop_summary <- rearing_prop |> 
+rearing_prop_summary  <- hab_prop |> 
   group_by(scenario) |> 
-   #TODO maybe add an if_else to have this be 0 when no ASD actions
-  reframe(mean_juv_rear_trib = if_else(portfolio_param_obj$abv_dam_spawn_proportion>0,
-                                         mean(mean_rear_prop),
-                                         0))
+  summarize(mean_rear_prop = mean(prop_trib_rear))
 
 
-### Spawning and rearing habitat above Shasta-------------------
-# summary by year
-habitat_abv_shasta <- 
-  habitat_diff |> 
+### spawning and rearing abv shasta -----------
+habitat_abv_shasta <- hab_prop |> 
   group_by(sim_year, scenario) |> 
-  mutate(spawn = if_else(hab_diff_spawn >0, 1L, 0L),
-         rear = if_else((hab_diff_juv>0 | hab_diff_fp > 0 | hab_diff_fry>0), 1L, 0L),
-         habitat_score = sum(spawn, rear) )
+  summarize(rear_mccloud = if_else(prop_mccloud_rear>0, 1L, 0L),
+         rear_littlesac = if_else(prop_little_sac_rear>0, 1L, 0L),
+         spawn_mccloud = if_else(prop_mccloud_spawn>0, 1L, 0L),
+         spawn_littlesac = if_else(prop_little_sac_spawn>0, 1L, 0L),
+         mccloud_score = if_else(sum(rear_mccloud, spawn_mccloud)==2L, 1L, 0L),
+         littlesac_score = if_else(sum(rear_littlesac, spawn_littlesac)==2L, 1L, 0L),
+         habitat_score = littlesac_score + mccloud_score) |> 
+  ungroup()
 
 mean_habitat_abv_shasta <- habitat_abv_shasta |> 
   group_by(scenario) |> 
-  summarize(num_trib = mean(habitat_score)) |> 
+  summarize(hab_access = mean(habitat_score)) |> 
   ungroup()
 
 
@@ -797,19 +651,20 @@ spawn_prop_us <- portfolio_res_obj$proportion_natural_at_spawning["Upper Sacrame
   mutate(sim_year = 1:20,
          prop_natural = replace(prop_natural, is.nan(prop_natural), 0))
 
-# Build sub-area spawner table
 sub_area_spawners <- spawners_abv_dam_split |>
-  select(sim_year, 
-         `McCloud`               = spawners_mccloud,
-         `Little Sacramento`           = spawners_little_sac,
+  select(sim_year,
+         `McCloud`                      = spawners_mccloud,
+         `Little Sacramento`            = spawners_little_sac,
          `Upper Sacramento (below dam)` = spawners_upper_sac_blw) |>
-  bind_rows(
-    spawners_split |> 
+  left_join(
+    spawners_split |>
+      mutate(sim_year = as.numeric(sim_year)) |>
       filter(watershed == "Battle Creek", scenario == "portfolio") |>
-      select(sim_year, `Battle Creek` = spawners)
+      select(sim_year, `Battle Creek` = spawners),
+    by = "sim_year"
   ) |>
   pivot_longer(-sim_year, names_to = "sub_area", values_to = "spawners") |>
-  left_join(spawn_prop_us |> select(sim_year, prop_natural)) |>
+  left_join(spawn_prop_us |> select(sim_year, prop_natural), by = "sim_year") |>
   mutate(
     nat_returns      = spawners * prop_natural,
     hatchery_returns = spawners - nat_returns,
@@ -824,8 +679,6 @@ sub_area_ind_pop <- sub_area_spawners |>
     crr         = lead(nat_returns, 3) / spawners,
     crr         = replace(crr, is.nan(crr), NA),
     growth_rate = (spawners - lag(spawners)) / lag(spawners),
-    decline     = growth_rate,
-    cat_decline = (spawners - lag(spawners, 3)) / lag(spawners, 3),
     above_500_spawners       = if_else(spawners > 500, 1L, 0L),
     phos_less_than_5_percent = if_else(phos < 0.05, 1L, 0L),
     crr_above_1              = if_else(crr >= 1, 1L, 0L),
@@ -865,10 +718,12 @@ sub_area_spawners_baseline <- spawners_abv_dam_split_baseline |>
          `Upper McCloud`               = spawners_mccloud,
          `Little Sacramento`           = spawners_little_sac,
          `Upper Sacramento (below dam)` = spawners_upper_sac_blw) |>
-  bind_rows(
+  left_join(
     spawners_split |>
+      mutate(sim_year = as.numeric(sim_year)) |>
       filter(watershed == "Battle Creek", scenario == "baseline") |>
-      select(sim_year, `Battle Creek` = spawners)
+      select(sim_year, `Battle Creek` = spawners),
+    by = "sim_year"
   ) |>
   pivot_longer(-sim_year, names_to = "sub_area", values_to = "spawners") |>
   left_join(spawn_prop_us_baseline |> select(sim_year, prop_natural)) |>
@@ -886,8 +741,6 @@ sub_area_ind_pop_baseline <- sub_area_spawners_baseline |>
     crr         = lead(nat_returns, 3) / spawners,
     crr         = replace(crr, is.nan(crr), NA),
     growth_rate = (spawners - lag(spawners)) / lag(spawners),
-    decline     = growth_rate,
-    cat_decline = (spawners - lag(spawners, 3)) / lag(spawners, 3),
     above_500_spawners       = if_else(spawners > 500, 1L, 0L),
     phos_less_than_5_percent = if_else(phos < 0.05, 1L, 0L),
     crr_above_1              = if_else(crr >= 1, 1L, 0L),
@@ -964,30 +817,12 @@ metrics_table <- abund_table |>
          `Portfolio Results` = format_metric(`Portfolio Results`))
 
 ### output updates ------------------
-# output$spawners_bc <- spawners_bc
-# output$spawners_abv_shasta <- spawners_abv_shasta
 output$spawners_tribs <- spawners_tribs
-# output$mean_spawners_in_tribs <- mean_spawners_in_tribs
-# output$fry_habitat_abv_shasta <- fry_habitat_abv_shasta
-# output$juv_habitat_abv_shasta <- juv_habitat_abv_shasta
-# output$fp_habitat_abv_shasta <- fp_habitat_abv_shasta
-# output$spawn_habitat_abv_shasta <- spawn_habitat_abv_shasta
-output$habitat_diff <- habitat_diff
-output$rearing_prop <- rearing_prop
-# output$rearing_prop_summary <- rearing_prop_summary
+output$hab_prop <- hab_prop
 output$habitat_abv_shasta <- habitat_abv_shasta
-# output$mean_habitat_abv_shasta <- mean_habitat_abv_shasta
 output$spawn_prop_us                  <- spawn_prop_us
-# output$sub_area_spawners              <- sub_area_spawners
-# output$sub_area_ind_pop               <- sub_area_ind_pop
-# output$baseline_habitat_props         <- baseline_habitat_props
-# output$spawners_abv_dam_split_baseline <- spawners_abv_dam_split_baseline
-# output$spawn_prop_us_baseline         <- spawn_prop_us_baseline
-# output$sub_area_spawners_baseline     <- sub_area_spawners_baseline
-# output$sub_area_ind_pop_baseline      <- sub_area_ind_pop_baseline
 output$sub_area_ind_pop_combined      <- sub_area_ind_pop_combined
 output$sub_area_ind_pop_last3         <- sub_area_ind_pop_last3
-output$ind_pop_table                  <- ind_pop_table
 output$metrics_table <- metrics_table
 output$metrics_table_raw <- metrics_table_raw
 
