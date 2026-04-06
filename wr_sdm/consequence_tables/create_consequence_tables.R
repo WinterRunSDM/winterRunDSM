@@ -107,9 +107,13 @@ scores_portfolio_metric <- function(weight_set_choice) {
     ungroup() 
 }
 
-table2 <- scores_portfolio_metric("B") |> 
-  left_join(raw_ct_nonmod |> select(portfolio, portfolio_name) ) |> 
-  select(portfolio, portfolio_name, everything()) |> 
+results2 <- map(unique(weights$weight_set), \(ws) {
+  scores_portfolio_metric(ws) |>
+    mutate(weight_set = ws)
+}) |>
+  list_rbind() |>
+  left_join(raw_ct_nonmod |> select(portfolio, portfolio_name)) |>
+  select(weight_set, portfolio, portfolio_name, everything()) |>
   janitor::clean_names(case = "title")
 
 ### Table 3 ---------------------
@@ -132,11 +136,11 @@ all_scores <- purrr::map_dfr(portfolios, \(p) {
   scores_weight_metric(p) |>
     mutate(portfolio = p)
 }) |> janitor::clean_names(case = "title")
-save(all_scores, file = "wr_sdm/normalized_weighted_portfolio_scores.RData")
 
 
 ### Consequence table ------
-raw_table <- raw_ct_comb|>
+# this looks bad but works for the shiny app
+raw_table <- raw_ct_comb |>
   select(portfolio_name, everything()) |>
   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |>
   pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |>
@@ -144,18 +148,19 @@ raw_table <- raw_ct_comb|>
   left_join(obj_met |> select(metric, metric_display, objective_display)) |>
   select(-metric) |>
   pivot_wider(names_from = metric_display, values_from = value) |>
-  select(Objective = objective_display, everything())
-# raw_table <- raw_ct_comb|> 
-#   select(portfolio_name, everything()) |> 
-#   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |> 
-#   pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |> 
-#   select(-portfolio) |> 
-#   pivot_wider(names_from = portfolio_name, values_from = value) |> left_join(obj_met |> select(objective_display, metric, metric_display)) |> 
+  select(Portfolio = portfolio_name, Objective = objective_display, everything())
+
+# raw_table <- raw_ct_comb|>
+#   select(portfolio_name, everything()) |>
+#   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |>
+#   pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |>
+#   select(-portfolio) |>
+#   pivot_wider(names_from = portfolio_name, values_from = value) |> left_join(obj_met |> select(objective_display, metric, metric_display)) |>
 #   select(Objective = objective_display, Metric= metric_display, everything())
   
 ### Table 1 ---------------
-results_portfolio_weightset <- scores |> 
+results1_portfolio_weightset <- scores |> 
   pivot_wider(names_from = weight_set, values_from = score) |> select(-portfolio) |> 
   mutate(across(c(A:K), \(x) round(x,3))) 
 
-save(scores, table2, raw_table, file ="results_tables.Rdata")
+save(scores, all_scores, weights, results2, raw_table, results1_portfolio_weightset, file ="wr_sdm/consequence_tables/results_tables.Rdata")
