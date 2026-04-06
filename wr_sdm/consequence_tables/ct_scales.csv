@@ -1,3 +1,3 @@
-﻿value_type,mean_spawners,mean_phos,max_decline,cat_decline,mean_juv,mean_jac,mean_crr,avg_annual_shannon_di_size,mean_phos_d,mean_spawners_trib,mean_juv_rear_trib,num_trib,ind_pop,natural_natural,species_fr,species_other,timeliness_initiation,timeliness_benefits,cost_cost
+﻿value_type,mean_spawners,mean_phos,max_decline,cat_decline,mean_juv,mean_jac,mean_crr,avg_annual_shannon_di_size,mean_phos_d,mean_spawners_trib,mean_rear_prop,hab_access,ind_pop,natural_natural,species_fr,species_other,timeliness_initiation,timeliness_benefits,cost_cost
 best,25000,0.05,0,0,4000000,1200000,5,0.05,1.4,50000,0.5,2,4,1,1,1,1,1,1
 worst,100,1,20,10,30000,15000,0.3,1,0,0,0,0,0,4,3,3,4,4,6

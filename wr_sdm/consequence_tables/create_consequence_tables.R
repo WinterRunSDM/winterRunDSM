@@ -2,7 +2,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(readxl)
-
+library(readr)
 # Load metrics results for portfolios
 load("wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 ct_scales <- read_csv("wr_sdm/consequence_tables/ct_scales.csv")
@@ -52,7 +52,7 @@ norm_ct <- raw_ct_comb |>
     w <- worst[[metric]]
     1-(b) / (w-b)
   })) |> 
-  mutate(mean_juv_rear_trib=pmin(1, mean_juv_rear_trib),
+  mutate(mean_rear_prop=pmin(1, mean_rear_prop),
          cost_cost = case_when(cost_cost == 1 ~ 1,
                                cost_cost == 2 ~ 0.993328885923949,
                                cost_cost == 3 ~ 0.960640426951301,
@@ -94,7 +94,7 @@ scores_portfolio_metric <- function(weight_set_choice) {
     mutate(abundance = mean_spawners+mean_phos + max_decline + cat_decline,
            productivity = mean_juv+mean_jac + mean_crr,
            `diversity and fitness` = avg_annual_shannon_di_size + mean_phos_d,
-           `number of populations` = mean_spawners_trib+mean_juv_rear_trib + num_trib + ind_pop,
+           `number of populations` = mean_spawners_trib+mean_rear_prop + hab_access + ind_pop,
            natural = natural_natural,
            `other species` = species_fr + species_other,
            timeliness = timeliness_initiation + timeliness_benefits,
@@ -141,7 +141,7 @@ raw_table <- raw_ct_comb|>
   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |>
   pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |>
   select(-portfolio) |>
-  left_join(obj_met |> select(metric, metric_display)) |>
+  left_join(obj_met |> select(metric, metric_display, objective_display)) |>
   select(-metric) |>
   pivot_wider(names_from = metric_display, values_from = value) |>
   select(Objective = objective_display, everything())
