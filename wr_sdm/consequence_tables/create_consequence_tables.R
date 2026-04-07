@@ -5,10 +5,12 @@ library(readxl)
 library(readr)
 # Load metrics results for portfolios
 load("wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
-ct_scales <- read_csv("wr_sdm/consequence_tables/ct_scales.csv")
-raw_ct_nonmod <- read_csv("wr_sdm/consequence_tables/nonmodeled_metrics.csv")
-weights <- read_excel("wr_sdm/consequence_tables/weights.xlsx")
-obj_met <- read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx")
+ct_scales <- read_csv("wr_sdm/consequence_tables/ct_scales.csv") # best and worst values
+raw_ct_nonmod <- read_csv("wr_sdm/consequence_tables/nonmodeled_metrics.csv") # raw nonmodeled
+nonmodlookup <- read_csv("wr_sdm/consequence_tables/nonmodeled_metrics_lookup.csv") # conversion from raw to normalized
+timeliness <- read_csv("wr_sdm/consequence_tables/timeliness_norm.csv") # timeliness normalized vals
+weights <- read_excel("wr_sdm/consequence_tables/weights.xlsx") # participant weights
+obj_met <- read_excel("wr_sdm/documentation/objectives_metrics_v2.xlsx") 
 
 # Display metrics nicely
 format_metric <- function(x) {
@@ -34,7 +36,7 @@ raw_ct_mod <- map(1:14, \(i) {
   pivot_longer(-metric, names_to = "portfolio", values_to = "value") |> 
   pivot_wider(names_from = metric, values_from = value)
 
-raw_ct_comb <- left_join(raw_ct_mod, raw_ct_nonmod) 
+raw_ct_comb <- left_join(raw_ct_mod, raw_ct_nonmod) |> select(-portfolio_description) |> select(portfolio, portfolio_name, everything())
 
 ## Create normalize table ---------
 best <- ct_scales |> filter(value_type == "best") |> select(-value_type)
@@ -46,19 +48,27 @@ norm_ct <- raw_ct_comb |>
     w <- worst[[metric]]
     (col - w) / (b - w)
   })) |> 
-  mutate(across(c(max_decline, cat_decline, natural_natural:timeliness_benefits), \(col) {
+  mutate(across(c(max_decline, cat_decline), \(col) {
     metric <- cur_column()
     b <- best[[metric]]
     w <- worst[[metric]]
-    1-(b) / (w-b)
+    1- (col /w)
   })) |> 
-  mutate(mean_rear_prop=pmin(1, mean_rear_prop),
-         cost_cost = case_when(cost_cost == 1 ~ 1,
-                               cost_cost == 2 ~ 0.993328885923949,
-                               cost_cost == 3 ~ 0.960640426951301,
-                               cost_cost == 4 ~ 0.900600400266845,
-                               cost_cost == 5 ~ 0.600400266844563,
-                               cost_cost == 6 ~ 0)) 
+  mutate(mean_rear_prop = pmin(1, mean_rear_prop)) |> 
+  pivot_longer(cols = -c(portfolio,portfolio_name),
+               names_to = "metric", 
+               values_to = "score") |> 
+  # most non-modeled are based on a lookup table for constructued scale
+  left_join(nonmodlookup |> select(-metric_description), by = c("metric", "score")) |> 
+  mutate(score = if_else(!is.na(score_description), normalized_value, score)) |> 
+  select(-normalized_value, -score_description) |> 
+  pivot_wider(names_from = "metric", 
+              values_from = score) |> 
+  select(-timeliness_initiation, -timeliness_benefits ) |> 
+  # timeliness normalization had to be copied and pasted directly
+  left_join(timeliness, by = "portfolio") |> 
+  relocate(cost_cost, .after = last_col())
+
 
 ## Create weighted tables ------- 
 metric_cols <- names(weights[-1])
@@ -107,6 +117,7 @@ scores_portfolio_metric <- function(weight_set_choice) {
     ungroup() 
 }
 
+# This one is in shiny app
 results2 <- map(unique(weights$weight_set), \(ws) {
   scores_portfolio_metric(ws) |>
     mutate(weight_set = ws)
@@ -132,6 +143,8 @@ table3 <- scores_weight_metric("p2")  |>
   janitor::clean_names(case = "title")
 
 portfolios <- paste0("p", 1:14)
+
+# this one is in shiny app
 all_scores <- purrr::map_dfr(portfolios, \(p) {
   scores_weight_metric(p) |>
     mutate(portfolio = p)
@@ -140,15 +153,32 @@ all_scores <- purrr::map_dfr(portfolios, \(p) {
 
 ### Consequence table ------
 # this looks bad but works for the shiny app
-raw_table <- raw_ct_comb |>
+# raw_table <- raw_ct_comb |>
+#   select(portfolio_name, everything()) |>
+#   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |>
+#   pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |>
+#   select(-portfolio) |>
+#   left_join(obj_met |> select(metric, metric_display, objective_display)) |>
+#   select(-metric) |>
+#   pivot_wider(names_from = metric_display, values_from = value) |>
+#   select(Portfolio = portfolio_name, Objective = objective_display, everything())
+
+nonmodlookup_formatted <- nonmodlookup |> mutate(score = format_metric(score))
+raw_table <- raw_ct_comb |> 
   select(portfolio_name, everything()) |>
   mutate(across(mean_spawners:cost_cost, ~format_metric(.))) |>
-  pivot_longer(-c(portfolio_name, portfolio), names_to = "metric", values_to = "value") |>
-  select(-portfolio) |>
-  left_join(obj_met |> select(metric, metric_display, objective_display)) |>
+  pivot_longer(cols = -c(portfolio,portfolio_name),
+               names_to = "metric", 
+               values_to = "score") |> 
+  left_join(nonmodlookup_formatted |> select(-metric_description), by = c("metric", "score")) |> 
+  mutate(score = if_else(!is.na(score_description), score_description, as.character(score))) |> 
+  select(-c(score_description, normalized_value)) |> 
+  left_join(obj_met |> select(metric, metric_display, objective, objective_display)) |> 
   select(-metric) |>
-  pivot_wider(names_from = metric_display, values_from = value) |>
-  select(Portfolio = portfolio_name, Objective = objective_display, everything())
+  select( -objective) |>
+  pivot_wider(names_from = metric_display, values_from = score) |>
+  select(portfolio, Portfolio = portfolio_name, Objective = objective_display, everything())
+
 
 # raw_table <- raw_ct_comb|>
 #   select(portfolio_name, everything()) |>
@@ -163,4 +193,8 @@ results1_portfolio_weightset <- scores |>
   pivot_wider(names_from = weight_set, values_from = score) |> select(-portfolio) |> 
   mutate(across(c(A:K), \(x) round(x,3))) 
 
-save(scores, all_scores, weights, results2, raw_table, results1_portfolio_weightset, file ="wr_sdm/consequence_tables/results_tables.Rdata")
+
+save(raw_table, results1_portfolio_weightset, results2, all_scores, file ="wr_sdm/consequence_tables/results_tables.Rdata")
+
+# This output needs to be copied into winterRunDSM-shiny
+save(raw_table, results1_portfolio_weightset, results2, all_scores, file ="../winterRunDSM-shiny/data/results_tables.Rdata")
