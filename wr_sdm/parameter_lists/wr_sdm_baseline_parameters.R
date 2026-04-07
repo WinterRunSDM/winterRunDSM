@@ -211,7 +211,7 @@ wr_sdm_baseline_params <- list(
   # if you change any one of the params below, you should change them all
   abv_dam_spawn_proportion = 0, # should be 0 for baseline due to restructuring of spawn_success
   prespawn_survival_abv_dam  = 0, # R2R was using max fall run survival here
-  egg_to_fry_survival_abv_dam = 0, # baseline is 0
+  egg_to_fry_survival_abv_dam_mult = 0, # baseline is 0
   # abv_dam_spawn_habitat_proportion NEEDS to be calculated based on habitat input data
   abv_dam_spawn_habitat_proportion = setNames(rep(0, 31), winterRunDSM::watershed_labels), # this should specifically be about the amount of additional habitat above dam
   surv_adult_prespawn_mult = setNames(c(1, rep(1, 30)), winterRunDSM::watershed_labels),

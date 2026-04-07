@@ -26,14 +26,16 @@ spawn_success <- function(escapement,
                           harvest_rate_abv_dam, # WR SDM addition
                           egg_to_fry_survival,
                           egg_to_fry_survival_mult, # WR SDM addition
-                          egg_to_fry_survival_abv_dam, # WR SDM addition
+                          egg_to_fry_survival_abv_dam_mult, # WR SDM addition
                           prob_scour, spawn_habitat,
                           stochastic,
                           sex_ratio,
                           redd_size,
                           fecundity){
 
-
+  # egg to fry survival abv dam was recoded as a multiplier, so implementing that here
+  # 4-7-2026
+  egg_to_fry_survival_abv_dam <- pmin(egg_to_fry_survival["Upper Sacramento River"] * egg_to_fry_survival_abv_dam_mult, 1)
 # spawn capacity -------------------------------------------------------
     # spawner potential below dam
     # will represent all habitat if no above dam habitat
