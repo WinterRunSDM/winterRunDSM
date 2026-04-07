@@ -71,7 +71,7 @@ Several participants highlighted the importance of applying the same temperature
 
 **Data:** Temperature time series provided by Mike Deas and Maya Wood, Watercourse Engineering Inc. Contains time series from sources along Battle Creek, Shasta Lake, the McCloud River, Sacramento River, and Pit River. These data were also used to scale total proposed habitat to account for temperature suitability.
 
-**Approach:** Take temperature timeseries from representative locations and calculate the proportion of days from May-August (spawning) where the temperature is below `53.5 F`. Calculate how this proportion relates to modeled temperature data on the Upper Sacramento River and use that ratio to modify the component of the egg-to-fry submodel that models the effect of temperature, effectively scaling the egg-to-fry survival by the suitable temperatures for the proposed action.
+**Approach:** Take temperature timeseries from representative locations and calculate the proportion of days from May-October (spawning in the lifecycle model is May-October but we include through October to account for emergence) where the temperature is below `53.5 F`. Calculate how this proportion relates to modeled temperature data on the Upper Sacramento River and use that ratio to modify the component of the egg-to-fry submodel that models the effect of temperature, effectively scaling the egg-to-fry survival by the suitable temperatures for the proposed action.
 
 ### Metadata
 
@@ -96,7 +96,7 @@ Additionally, for below Keswick temperatures representing baseline, we use the H
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 us_modeled_temps <- read_csv(here("data-raw", "habitat-data-docs", "hec5q_blw_clear_creek_temps.csv")) |> 
   filter(watershed == "Upper Sacramento River",
-         month(date) %in% 5:8) |>
+         month(date) %in% 5:10) |>
   mutate(year = year(date), 
          month = month(date), 
          day = day(date), 
@@ -136,7 +136,7 @@ us_modeled_props <- us_modeled_temps |>
 knitr::kable(us_modeled_props)
 ```
 
-The average proportion of days within the months of May-August that are below `53.5 F` in the HEC 5Q modeled temperature time series from 1980-2000 is `r mean(us_modeled_props$prop_below_threshold)`. 
+The average proportion of days within the months of May-October that are below `53.5 F` in the HEC 5Q modeled temperature time series from 1980-2000 is `r mean(us_modeled_props$prop_below_threshold)`. 
 
 ### McCloud River
 
@@ -144,26 +144,26 @@ The average proportion of days within the months of May-August that are below `5
 
 #### Lower McCloud River (ASD-5 & ASD-6)
 
-We used `MR4A` as the relevant gage for representing spawning habitat in the Lower McCloud River. The value by which to scale the total egg-to-fry survival is `(0.28 - 0.57) / 0.57 = -0.51` which results in a scale factor of `1 + -0.51 = 0.49`. 
+We used `MR3A` as the relevant gage for representing the Lower McCloud River based on its proximity to existing streamside egg incubators. The value by which to scale the total egg-to-fry survival is `0.92 / 0.59 = 1.56`. 
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-mr4a <- temps |> 
-  filter(location == "MR4A",
+mr3a <- temps |> 
+  filter(location == "MR3A",
          statistic == "avg",
-         month(date) %in% 5:8)
+         month(date) %in% 5:10)
 
-mr4a |>
+mr3a |>
   ggplot(aes(x = date, y = deg_f)) + 
   geom_line() +
   theme_minimal() + 
   geom_hline(aes(yintercept = 53.5), linetype = "dashed") +
   scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
-  annotate("text", x = min(mr4a$date), y = 54.5, label = "53.5°F",
+  annotate("text", x = min(mr3a$date), y = 54.5, label = "53.5°F",
            hjust = 0, size = 3, color = "gray30") +
   labs(x = "Date", y = "Temperature (F)",
-       title = "MR4A Spawning Time Series")
+       title = "MR3A Spawning Time Series")
 
-mr4a |> 
+mr3a |> 
   mutate(below_threshold = ifelse(deg_f <= 53.5, TRUE, FALSE)) |> 
   group_by(year(date)) |> 
   summarise(prop_below_threshold = round(sum(below_threshold, na.rm = T) / n(), 2)) |> 
@@ -176,13 +176,13 @@ mr4a |>
 
 #### Full McCloud River 
 
-We took the average of the value for `MR4A` (`0.28`) for the Lower McCloud and the value for the station `MRA` (`0.99`) representing the Upper McCloud resulting in a mean proportion of `0.625`. 
+We took the average of the value for `MR3A` (`0.92`) for the Lower McCloud and the value for the station `MRA` (`0.99`) representing the Upper McCloud resulting in a mean proportion of `0.95`. 
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 mra <- temps |> 
   filter(location == "MRA",
          statistic == "avg",
-         month(date) %in% 5:8)
+         month(date) %in% 5:10)
 
 mra |>
   ggplot(aes(x = date, y = deg_f)) + 
@@ -205,19 +205,19 @@ mra |>
   knitr::kable()
 ```
 
-The value by which to scale the total egg-to-fry survival is `(0.625 - 0.57) / 0.57 = 0.10` which results in a scale factor of `1 + 0.10 = 1.10`. 
+The value by which to scale the total egg-to-fry survival is `0.95 / 0.59 = 1.61`. 
 
 ### Little Upper Sacramento River (ASD-5 & ASD-6)
 
 ![](md_graphs/md_asl_map.png)
 
-We used `11342000` as the relevant gage for representing spawning habitat in the Little Upper Sacramento River. The value by which to scale the total egg-to-fry survival is `(0.17 - 0.57) / 0.57 = -0.70` which results in a scale factor of `1 + -0.70 = 0.3`.
+We used `11342000` as the relevant gage for representing spawning habitat in the Little Upper Sacramento River. The value by which to scale the total egg-to-fry survival is `0.18 / 0.59 = 0.3`.
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 lilsac <- temps |> 
   filter(location == "sacasl",
          statistic == "avg",
-         month(date) %in% 5:8)
+         month(date) %in% 5:10)
 
 lilsac |>
   ggplot(aes(x = date, y = deg_f)) + 
@@ -244,10 +244,10 @@ lilsac |>
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 # this code is also in cache-data.R so we can read it into our param function
-wr_sdm_egg_to_fry_values <- tibble("Station ID" = c("11342000", "MRA", "MR4A", NA_character_),
+wr_sdm_egg_to_fry_abv_dam_values <- tibble("Station ID" = c("11342000", "MRA", "MR3A", NA_character_),
                           "Watershed" = c("Little Sacramento River", "Upper McCloud River", "Lower McCloud River", "Full McCloud River"),
-                          "Egg-to-Fry Scale Factor" = c(0.30, 1.74, 0.49, 1.10))
+                          "Egg-to-Fry Scale Factor" = c(0.30, 1.67, 1.56, 1.61))
 
-wr_sdm_egg_to_fry_values |> 
+wr_sdm_egg_to_fry_abv_dam_values |> 
   knitr::kable()
 ```

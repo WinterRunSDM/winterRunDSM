@@ -269,6 +269,20 @@ wr_sdm_habitat_action_5_bc_scaled <- list(spawn = action5_spawn,
 
 usethis::use_data(wr_sdm_habitat_action_5_bc_scaled, overwrite = TRUE)
 
+# egg to fry survival values
+# see documentation/egg_to_fry_actions_documentation.Rmd
+wr_sdm_egg_to_fry_abv_dam_table <- tibble("station_id" = c("11342000", "MRA", "MR3A", NA_character_),
+                                           "watershed" = c("Little Sacramento River", "Upper McCloud River", 
+                                                           "Lower McCloud River", "Full McCloud River"),
+                                           "egg_to_fry_scale_factor" = c(0.30, 1.67, 1.56, 1.61),
+                                           "wr_sdm_spawn_action" = c("ASD-5b", NA_character_, 
+                                                                     "ASD-6; ASD-5a; ASD-5c", "ASD-7"))
+wr_sdm_egg_to_fry_abv_dam_values <- list("little_sac" = 0.30,
+                                         "upper_mccloud" = 1.67,
+                                         "lower_mccloud" = 1.56,
+                                         "full_mccloud" = 1.61)
+usethis::use_data(wr_sdm_egg_to_fry_abv_dam_values, overwrite = TRUE)
+
 
 
 
