@@ -52,4 +52,8 @@ p14_metrics$metrics_table
 save(p1_metrics, p2_metrics, p3_metrics, p4_metrics, p5_metrics, p6_metrics, p7_metrics, p8_metrics, p9_metrics, 
      p10_metrics, p11_metrics, p12_metrics, p13_metrics, p14_metrics, file = "wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 
+# This output needs to be copied into winterRunDSM-shiny
+save(p1_metrics, p2_metrics, p3_metrics, p4_metrics, p5_metrics, p6_metrics, p7_metrics, p8_metrics, p9_metrics, 
+     p10_metrics, p11_metrics, p12_metrics, p13_metrics, p14_metrics, file ="../winterRunDSM-shiny/data/portfolio_performance_metrics.Rdata")
+
 
