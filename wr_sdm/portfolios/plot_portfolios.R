@@ -1,3 +1,4 @@
+library(tidyverse)
 load("wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 
 # Settings --------------
@@ -18,7 +19,7 @@ p1_metrics$metrics_table
 # Plots -----------------------
 ## Abundance --------------
 # Spawners
-ggplot(p1_metrics$spawners) + 
+ggplot(p1_metrics$spawners |>filter(scenario =="portfolio")) + 
   geom_line(aes(sim_year, spawners, color = scenario)) +
   geom_point(aes(sim_year, spawners, color = scenario, shape = scenario), size = 3) +
   labs(title = "Spawners")+
@@ -106,3 +107,49 @@ ggplot(p1_metrics$sub_area_ind_pop_combined) +
   labs(title = "Independent Conditions", y = "Independent Conditions")+
   scale_color_manual(values = colors)+
   theme_plots
+
+# Independent populations detail ----------------
+ind_pop_long_p4 <- p4_metrics$sub_area_ind_pop_combined |> 
+  pivot_longer(cols = c(growth_rate_above_1, above_500_spawners, phos_less_than_5_percent, crr_above_1),
+               names_to = "metric",
+               values_to = "value") |> 
+  mutate(value = factor(value)) |> 
+  filter(sub_area!="Upper McCloud")
+
+ggplot(ind_pop_long_p4)+
+  geom_tile(aes(sim_year, metric, fill = value), color = "black") +
+  facet_grid(sub_area~scenario)+
+  scale_fill_manual(values = c("maroon", "lightblue")) +
+  labs(title = "Portfolio 4")
+ggsave("wr_sdm/portfolios_ind_pop_p4.png", width =6, height = 5, dpi = 300, units = "in")
+
+
+ind_pop_long_p11 <- p11_metrics$sub_area_ind_pop_combined |> 
+  pivot_longer(cols = c(growth_rate_above_1, above_500_spawners, phos_less_than_5_percent, crr_above_1),
+               names_to = "metric",
+               values_to = "value") |> 
+  mutate(value = factor(value)) |> 
+  filter(sub_area!="Upper McCloud")
+
+ggplot(ind_pop_long_p11)+
+  geom_tile(aes(sim_year, metric, fill = value), color = "black") +
+  facet_grid(sub_area~scenario)+
+  scale_fill_manual(values = c("maroon", "lightblue"))+
+  labs(title = "Portfolio 11")
+ggsave("wr_sdm/portfolios_ind_pop_p11.png", width =6, height = 5, dpi = 300, units = "in")
+
+ind_pop_long_p3 <- p3_metrics$sub_area_ind_pop_combined |> 
+  pivot_longer(cols = c(growth_rate_above_1, above_500_spawners, phos_less_than_5_percent, crr_above_1),
+               names_to = "metric",
+               values_to = "value") |> 
+  mutate(value = factor(value)) |> 
+  filter(sub_area!="Upper McCloud")
+
+ggplot(ind_pop_long_p3)+
+  geom_tile(aes(sim_year, metric, fill = value), color = "black") +
+  facet_grid(sub_area~scenario)+
+  scale_fill_manual(values = c("maroon", "lightblue"))+
+  labs(title = "Portfolio 3")
+ggsave("wr_sdm/portfolios_ind_pop_p3.png", width =6, height = 5, dpi = 300, units = "in")
+
+
