@@ -1,0 +1,20 @@
+1. wr_sdm/parameter_lists/wr_sdm_baseline_parameters.R
+  - update baseline if needed
+  - build
+2. R/functions/create_parameter_list_function.R
+  - make updates to parameter calculations here
+  - build
+3. R/wr_sdm/portfolios/create_portfolios.R
+  - create parameter lists for portfolios
+  - run model results
+  - save
+4. R/wr_sdm/portfolios/explore_portfolios.R
+  - run and save performance metrics 
+  - function for performance metrics is in portfolios/calculate_portfolio_performance_metrics.R
+5. R/wr_sdm/consequence_tables/create_consequence_tables.R
+  - weights.xlsx from Karen's consequences spreadsheet (raw)
+  - 
+6. create_portfolio_action_table.R
+  - joins the portfolio descriptions with action descriptions, 
+  allowing filtering by portfolio to see the actions
+  
