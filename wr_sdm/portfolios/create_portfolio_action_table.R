@@ -29,7 +29,7 @@ p6 <- data.frame(portfolio = "p6",
 p7 <- data.frame(portfolio = "p7",
                  action = c("ASD-1", "ASD-2", 
                             h_actions, 
-                            "SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4a", "SR-4b", "SR-5", "SR-6", "SR-8", "SR-10", "SR-11",
+                            "SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4b", "SR-5", "SR-6", "SR-8", "SR-10", "SR-11",
                             "BC-1", "BC-2", "BC-3", "BC-5", "BC-7", "BC-8", "BC-9",
                             "O-2", "O-3"))
 p8 <- data.frame(portfolio = "p8",

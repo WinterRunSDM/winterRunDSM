@@ -4,7 +4,7 @@ library(ggplot2)
 library(tidyr)
 
 ## Build portfolios ---------------------------------
-h_actions <- c("H-1", "H2a", "H-2b", "H-2c", "H-3")
+h_actions <- c("H-1", "H-2a", "H-2b", "H-2c", "H-3")
 sr_actions <- c("SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4a", "SR-4b", "SR-5", "SR-6", "SR-8", "SR-9", "SR-10", "SR-11")
 bc_actions <- c("BC-1", "BC-2", "BC-3", "BC-5", "BC-6", "BC-7", "BC-8", "BC-9")
 o_actions <- c("O-1", "O-2", "O-3")
@@ -36,7 +36,7 @@ p6_params <- create_param_list(action_ids = c(h_actions, sr_actions, o_actions, 
 ## P7: Implementable Within 5 years
 p7_params <- create_param_list(action_ids = c("ASD-1", "ASD-2", 
                                               h_actions, 
-                                              "SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4a", "SR-4b", "SR-5", "SR-6", "SR-8", "SR-10", "SR-11",
+                                              "SR-1", "SR-2a", "SR-2b", "SR-2c", "SR-3", "SR-4b", "SR-5", "SR-6", "SR-8", "SR-10", "SR-11",
                                               "BC-1", "BC-2", "BC-3", "BC-5", "BC-7", "BC-8", "BC-9",
                                               "O-2", "O-3"))
 
