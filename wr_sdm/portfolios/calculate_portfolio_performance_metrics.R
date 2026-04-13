@@ -47,7 +47,7 @@ get_abv_dam_habitat_props <- function(portfolio_param_obj) {
   upper_and_little_sac_spawn <- DSMhabitat::wr_spawn$action_5_upper_sac_tmh["Upper Sacramento River",,2:21]
   
   mccloud_addition_raw <- upper_sac_w_mccloud_spawn - upper_and_little_sac_spawn
-  mccloud_spawn <- mccloud_spawn <- mccloud_addition_raw * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$spawn
+  mccloud_spawn <- mccloud_addition_raw * wr_sdm_temp_habitat_scaling_factors$`Full McCloud River`$spawn
   
   little_sac_spawn <- (upper_and_little_sac_spawn - baseline_spawn) * 
     wr_sdm_temp_habitat_scaling_factors$`Little Sacramento River`$spawn
@@ -63,7 +63,7 @@ get_abv_dam_habitat_props <- function(portfolio_param_obj) {
     sim_year           = 1:20,
     prop_mccloud = mccloud_annual / total_annual,
     prop_little_sac    = little_sac_annual    / total_annual,
-    prop_upper_sac_blw = 1 - (mccloud_annual + little_sac_annual) / total_annual
+    prop_upper_sac_blw = 1 -(mccloud_annual + little_sac_annual) / total_annual
   ) |>
     mutate(across(starts_with("prop_"), ~ replace(.x, is.nan(.x), 0)))
   
@@ -650,23 +650,31 @@ spawn_prop_us <- portfolio_res_obj$proportion_natural_at_spawning["Upper Sacrame
   setNames("prop_natural") |>
   mutate(sim_year = 1:20,
          prop_natural = replace(prop_natural, is.nan(prop_natural), 0))
+spawn_prop_bc <- portfolio_res_obj$proportion_natural_at_spawning["Battle Creek", ] |>
+  as.data.frame() |>
+  setNames("prop_natural_bc") |>
+  mutate(sim_year = 1:20,
+         prop_natural_bc = replace(prop_natural_bc, is.nan(prop_natural_bc), 0))
 
-sub_area_spawners <- spawners_abv_dam_split |>
-  select(sim_year,
-         `McCloud`                      = spawners_mccloud,
-         `Little Sacramento`            = spawners_little_sac,
-         `Upper Sacramento (below dam)` = spawners_upper_sac_blw) |>
-  left_join(
-    spawners_split |>
-      mutate(sim_year = as.numeric(sim_year)) |>
-      filter(watershed == "Battle Creek", scenario == "portfolio") |>
-      select(sim_year, `Battle Creek` = spawners),
-    by = "sim_year"
-  ) |>
-  pivot_longer(-sim_year, names_to = "sub_area", values_to = "spawners") |>
+# spawners_abv_dam_df <- spawners_abv_dam_split |>  mutate(scenario = "portfolio") |> 
+#   bind_rows(data.frame(sim_year = 1:20,
+#                        spawners_abv_dam = 0,
+#                        scenario = "baseline"))
+
+sub_area_spawners <- hab_access |> 
+  mutate(prop_us_spawn = 1-prop_asd_spawn-prop_bc_spawn,
+         prop_sac_spawn=1-prop_bc_spawn) |> 
+  left_join(spawners_split  |> pivot_wider(names_from = "watershed", values_from = "spawners")) |> 
+  # left_join(spawners_abv_dam_df |>  select(spawners_abv_dam, sim_year, scenario)) |> 
+  mutate(`McCloud`                      = prop_mccloud_spawn/prop_sac_spawn*`Upper Sacramento River`,
+         `Little Sacramento`            = prop_little_sac_spawn/prop_sac_spawn*`Upper Sacramento River`,,
+         `Upper Sacramento (below dam)` = prop_us_spawn/prop_sac_spawn*`Upper Sacramento River`)|>
+  select(sim_year, scenario,  `McCloud`, `Little Sacramento`, `Upper Sacramento (below dam)`, `Battle Creek`) |> 
+  pivot_longer(-c(sim_year,scenario), names_to = "sub_area", values_to = "spawners") |>
   left_join(spawn_prop_us |> select(sim_year, prop_natural), by = "sim_year") |>
+  left_join(spawn_prop_bc |> select(sim_year, prop_natural_bc), by = "sim_year") |>
   mutate(
-    nat_returns      = spawners * prop_natural,
+    nat_returns      = if_else(sub_area == "Battle Creek", spawners * prop_natural_bc, spawners*prop_natural),
     hatchery_returns = spawners - nat_returns,
     phos             = hatchery_returns / spawners,
     phos             = replace(phos, is.nan(phos), NA)
@@ -674,11 +682,12 @@ sub_area_spawners <- spawners_abv_dam_split |>
 
 # Calculate CRR and growth per sub-area
 sub_area_ind_pop <- sub_area_spawners |>
-  group_by(sub_area) |>
+  group_by(sub_area, scenario) |>
   mutate(
     crr         = lead(nat_returns, 3) / spawners,
     crr         = replace(crr, is.nan(crr), NA),
     growth_rate = (spawners - lag(spawners)) / lag(spawners),
+    growth_rate = replace(growth_rate, is.nan(growth_rate), NA),
     above_500_spawners       = if_else(spawners > 500, 1L, 0L),
     phos_less_than_5_percent = if_else(phos < 0.05, 1L, 0L),
     crr_above_1              = if_else(crr >= 1, 1L, 0L),
@@ -686,84 +695,79 @@ sub_area_ind_pop <- sub_area_spawners |>
     independent_conditions   = if_else(
       above_500_spawners & phos_less_than_5_percent &
         growth_rate_above_1 & crr_above_1, 1L, 0L)
-  ) |>
-  ungroup() |> 
-  mutate(scenario = "portfolio")
+  ) 
 
 # baseline habitat props
-baseline_habitat_props <- get_abv_dam_habitat_props(wr_sdm_baseline_params)
-
-# baseline spawners above dam split
-spawners_abv_dam_split_baseline <- baseline_results$spawners_abv_dam["Upper Sacramento River", ] |>
-  as.data.frame() |>
-  setNames("spawners_abv_dam") |>
-  mutate(sim_year = 1:20) |>
-  left_join(baseline_habitat_props) |>
-  mutate(
-    spawners_mccloud = spawners_abv_dam * prop_mccloud,
-    spawners_little_sac    = spawners_abv_dam * prop_little_sac,
-    spawners_upper_sac_blw = spawners_abv_dam * prop_upper_sac_blw
-  )
+# baseline_habitat_props <- get_abv_dam_habitat_props(wr_sdm_baseline_params)
+# 
+# # baseline spawners above dam split
+# spawners_abv_dam_split_baseline <- baseline_results$spawners_abv_dam["Upper Sacramento River", ] |>
+#   as.data.frame() |>
+#   setNames("spawners_abv_dam") |>
+#   mutate(sim_year = 1:20) |>
+#   left_join(baseline_habitat_props) |>
+#   mutate(
+#     spawners_mccloud = spawners_abv_dam * prop_mccloud,
+#     spawners_little_sac    = spawners_abv_dam * prop_little_sac,
+#     spawners_upper_sac_blw = spawners_abv_dam * prop_upper_sac_blw
+#   )
 
 # baseline spawn prop
-spawn_prop_us_baseline <- baseline_results$proportion_natural_at_spawning["Upper Sacramento River", ] |>
-  as.data.frame() |>
-  setNames("prop_natural") |>
-  mutate(sim_year = 1:20,
-         prop_natural = replace(prop_natural, is.nan(prop_natural), 0))
+# spawn_prop_us_baseline <- baseline_results$proportion_natural_at_spawning["Upper Sacramento River", ] |>
+#   as.data.frame() |>
+#   setNames("prop_natural") |>
+#   mutate(sim_year = 1:20,
+#          prop_natural = replace(prop_natural, is.nan(prop_natural), 0))
+# spawn_prop_bc_baseline <- baseline_results$proportion_natural_at_spawning["Battle Creek", ] |>
+#   as.data.frame() |>
+#   setNames("prop_natural_bc") |>
+#   mutate(sim_year = 1:20,
+#          prop_natural_bc = replace(prop_natural_bc, is.nan(prop_natural_bc), 0))
 
 # baseline sub area spawners
-sub_area_spawners_baseline <- spawners_abv_dam_split_baseline |>
-  select(sim_year,
-         `Upper McCloud`               = spawners_mccloud,
-         `Little Sacramento`           = spawners_little_sac,
-         `Upper Sacramento (below dam)` = spawners_upper_sac_blw) |>
-  left_join(
-    spawners_split |>
-      mutate(sim_year = as.numeric(sim_year)) |>
-      filter(watershed == "Battle Creek", scenario == "baseline") |>
-      select(sim_year, `Battle Creek` = spawners),
-    by = "sim_year"
-  ) |>
-  pivot_longer(-sim_year, names_to = "sub_area", values_to = "spawners") |>
-  left_join(spawn_prop_us_baseline |> select(sim_year, prop_natural)) |>
-  mutate(
-    nat_returns      = spawners * prop_natural,
-    hatchery_returns = spawners - nat_returns,
-    phos             = hatchery_returns / spawners,
-    phos             = replace(phos, is.nan(phos), NA)
-  )
+# sub_area_spawners_baseline <- spawners_split |> 
+#   filter(scenario == "baseline") |> 
+#   mutate(watershed = replace(watershed, watershed == "Upper Sacramento River", "Upper Sacramento (below dam)")) |> 
+#   mutate(sim_year = as.numeric(sim_year)) |> 
+#   select(scenario, sim_year, sub_area = watershed, spawners) |> 
+#   bind_rows(data.frame(sim_year = c(1:20,1:20),
+#                        scenario = "baseline",
+#                        sub_area =  c(rep("McCloud",20), rep("Little Sacramento",20)),
+#                       spawners = 0))|>
+#   # pivot_longer(-sim_year, names_to = "sub_area", values_to = "spawners") |>
+#   left_join(spawn_prop_us_baseline |> select(sim_year, prop_natural)) |>
+#   left_join(spawn_prop_bc_baseline |> select(sim_year, prop_natural_bc)) |>
+#   mutate(
+#     nat_returns      = if_else(sub_area == "Battle Creek", spawners * prop_natural_bc, spawners*prop_natural),
+#     hatchery_returns = spawners - nat_returns,
+#     phos             = hatchery_returns / spawners,
+#     phos             = replace(phos, is.nan(phos), NA)
+#   )
 
 # baseline ind pop
-sub_area_ind_pop_baseline <- sub_area_spawners_baseline |>
-  group_by(sub_area) |>
-  mutate(
-    crr         = lead(nat_returns, 3) / spawners,
-    crr         = replace(crr, is.nan(crr), NA),
-    growth_rate = (spawners - lag(spawners)) / lag(spawners),
-    above_500_spawners       = if_else(spawners > 500, 1L, 0L),
-    phos_less_than_5_percent = if_else(phos < 0.05, 1L, 0L),
-    crr_above_1              = if_else(crr >= 1, 1L, 0L),
-    growth_rate_above_1      = if_else(growth_rate >= 0, 1L, 0L),
-    independent_conditions   = if_else(
-      above_500_spawners & phos_less_than_5_percent &
-        growth_rate_above_1 & crr_above_1, 1L, 0L)
-  ) |>
-  ungroup() |>
-  mutate(scenario = "baseline")
+# sub_area_ind_pop_baseline <- sub_area_spawners_baseline |>
+#   group_by(sub_area) |>
+#   mutate(
+#     crr         = lead(nat_returns, 3) / spawners,
+#     crr         = replace(crr, is.nan(crr), NA),
+#     growth_rate = if_else(lag(spawners) == 0, NA, (spawners - lag(spawners)) / lag(spawners)),
+#     above_500_spawners       = if_else(spawners > 500, 1L, 0L),
+#     phos_less_than_5_percent = if_else(phos < 0.05, 1L, 0L),
+#     crr_above_1              = if_else(crr >= 1, 1L, 0L),
+#     growth_rate_above_1      = if_else(growth_rate >= 0, 1L, 0L),
+#     independent_conditions   = if_else(
+#       above_500_spawners & phos_less_than_5_percent &
+#         growth_rate_above_1 & crr_above_1, 1L, 0L)
+#   ) |>
+#   ungroup() |>
+#   mutate(scenario = "baseline")
 
 # combine baseline and portfolio
-sub_area_ind_pop_combined <- bind_rows(
-  sub_area_ind_pop_baseline,
-  sub_area_ind_pop
-)
+sub_area_ind_pop_combined <- sub_area_ind_pop
 
 # last 3 years per sub_area and scenario
 sub_area_ind_pop_last3 <- sub_area_ind_pop_combined |>
-  filter(!is.na(independent_conditions)) |>
-  group_by(sub_area, scenario) |>
-  slice_tail(n = 3) |>
-  ungroup()
+  filter(sim_year %in% c(15, 16, 17)) # since CRR doesn't exist for the last 3 years
 
 # summary table
 ind_pop_table <- sub_area_ind_pop_last3 |>

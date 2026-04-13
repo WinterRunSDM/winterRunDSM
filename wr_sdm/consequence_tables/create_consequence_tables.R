@@ -3,6 +3,7 @@ library(dplyr)
 library(tidyr)
 library(readxl)
 library(readr)
+library(purrr)
 # Load metrics results for portfolios
 load("wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 ct_scales <- read_csv("wr_sdm/consequence_tables/ct_scales.csv") # best and worst values
