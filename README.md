@@ -1,7 +1,8 @@
 # Winter-Run Chinook Salmon Model for 2026 Winter-Run Structured Decision Making Effort 
 
-This model was forked from the [Reorienting to Recovery](https://github.com/Reorienting-to-Recovery/winterRunDSM) model, which was based off the [CVPIA Science Integration Team Model](https://github.com/CVPIA-OSC/winterRunDSM) model.
-The model has undergone a few different iterations for a variety of purposes. 
+This model was forked from the [Reorienting to Recovery](https://github.com/Reorienting-to-Recovery/winterRunDSM) model, which is based off the [CVPIA Science Integration Team Model](https://github.com/CVPIA-OSC/winterRunDSM) model.
+The model has undergone several iterations targeted to specific processes, and the codebase reflects this. Comments 
+are included throughout the codebase identifying where changes were made for the 2026 Winter Run SDM. 
 
 ## Original Authors:                                                     
                                                                      
@@ -45,25 +46,38 @@ remotes::install_github("WinterRunSDM/DSMtemperature")
 ```
 
 ### Run Model
+
 The `winter_run_model()` is a Winter Run Chinook life cycle model originally used for [CVPIA's Structured Decision Making Process](http://cvpia.scienceintegrationteam.com/).
 Running the model simulates Winter Run Chinook population dynamics across 31 watersheds in California over a 20 year period. 
 
-The following code runs the winter run model with a custom scenario defined in `scenario_df`:
+The following code shows how to run the model for baseline conditions and for a scenario composed of actions 
+defined in the Winter Run SDM:
 
 ```r
-# define scenario
-The SDM process led to several proposed scenarios. 
-Scenarios can be created by updating parameter values and running the model.
 
+# baseline run
 # seed model
-wr_sdm_seeds <- winterRunDSM::winter_run_model(mode = "seed",
+baseline_seeds <- winterRunDSM::winter_run_model(mode = "seed",
                                               seeds = NULL, 
                                               ..params = winterRunDSM::wr_sdm_baseline_params)
 
+# baseline results 
+baseline_results <- winterRunDSM::winter_run_model(mode = "simulate", 
+                                                   ..params = winterRunDSM::wr_sdm_scenario_params,
+                                                    seeds = baseline_seeds)
+                                                    
+# run model for scenario composed of actions (here the Battle Creek Actions)
+alt_params <- create_param_list(action_ids = c("BC-1", "BC-2", "BC-3", "BC-5", "BC-6", "BC-7", "BC-8", "BC-9"))
+
+# seed model
+alt_seeds <- winterRunDSM::winter_run_model(mode = "seed",
+                                              seeds = NULL, 
+                                              ..params = alt_params)
+
 # evaluate the impact of your scenario over the 20 year simulation
 wr_sdm_model_results <- winterRunDSM::winter_run_model(mode = "simulate", 
-                                                    ..params = winterRunDSM::wr_sdm_scenario_params,
-                                                    seeds = wr_sdm_seeds)
+                                                       alt_params,
+                                                       seeds = alt_seeds)
 ```
 
 ## Details on Supporting Data
@@ -75,11 +89,11 @@ The `winterRunDSM` package uses data from several other packages within the [CVP
 
 ### Flow, Habitat, and Temperature Data
 
-All data used in the `winterRunDSM` is passed in as a argument to `winter_run_model()` from a `winterRunDSM::params` data list that is composed of data objects from the following packages:
+All data used in the `winterRunDSM` is passed in as a argument to `winter_run_model()` from a `winterRunDSM::wr_sdm_baseline_params` data list that is composed of data objects from the following packages:
 
-* **Flow Data**: View detailed documentation of flow data inputs at [DSMflow](https://cvpia-osc.github.io/DSMflow/). Flow inputs to the `winterRunDSM` are generated using CalSim 2 data.
-* **Habitat Data**: View detailed documentation of habitat data inputs at [DSMhabitat](https://cvpia-osc.github.io/DSMhabitat/). Modeling details for each stream can be viewed [here](https://cvpia-osc.github.io/DSMhabitat/reference/habitat_data.html#modeling-details-for-streams).
-* **Temperature Data**: View detailed documentation of temperature data inputs at [DSMtemperature](https://cvpia-osc.github.io/DSMtemperature/). Modeling details for each stream can be viewed [here](https://cvpia-osc.github.io/DSMtemperature/reference/stream_temperature.html#watershed-modeling-details).
+* **Flow Data**: View detailed documentation of flow data inputs at [DSMflow](https://winterRunSDM.github.io/DSMflow/). Flow inputs to the `winterRunDSM` are generated using CalSim 3 data.
+* **Habitat Data**: View detailed documentation of habitat data inputs at [DSMhabitat](https://winterRunSDM.github.io/DSMhabitat/). Modeling details for each stream can be viewed [here](https://cvpia-osc.github.io/DSMhabitat/reference/habitat_data.html#modeling-details-for-streams).
+* **Temperature Data**: View detailed documentation of temperature data inputs at [DSMtemperature](https://winterRunSDM.github.io/DSMtemperature/). Modeling details for each stream can be viewed [here](https://cvpia-osc.github.io/DSMtemperature/reference/stream_temperature.html#watershed-modeling-details).
 
 ### Calibration Data
 
