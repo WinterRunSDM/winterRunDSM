@@ -210,18 +210,7 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
     ),
     
     # Tributary
-    habitat_diff = tibble::tibble(
-      sim_year        = integer(),
-      hab_diff_fp     = numeric(),
-      hab_prop_fp     = numeric(),
-      hab_diff_juv    = numeric(),
-      hab_prop_juv    = numeric(),
-      hab_diff_fry    = numeric(),
-      hab_prop_fry    = numeric(),
-      hab_diff_spawn  = numeric(),
-      hab_prop_spawn  = numeric(),
-      scenario        = character()
-    ),
+
     hab_prop = tibble::tibble(
     portfolio = character(),
     sim_year     = integer(),
@@ -249,12 +238,6 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
       habitat_score   = integer()
     ),
     
-    sub_area_habitat_props = tibble::tibble(
-      sim_year           = integer(),
-      prop_mccloud = numeric(),
-      prop_little_sac    = numeric(),
-      prop_upper_sac_blw = numeric()
-    ),
     spawners_abv_dam_split = tibble::tibble(
       sim_year               = integer(),
       spawners_abv_dam       = numeric(),
@@ -267,25 +250,27 @@ calculate_performance_metrics <- function(portfolio_res_obj, portfolio_param_obj
     ),
     sub_area_spawners = tibble::tibble(
       sim_year         = integer(),
+      scenario = character(),
       sub_area         = character(),
       spawners         = numeric(),
       prop_natural     = numeric(),
+      prop_natural_bc = numeric(),
       nat_returns      = numeric(),
       hatchery_returns = numeric(),
       phos             = numeric()
     ),
-    sub_area_ind_pop = tibble::tibble(
-      sub_area                  = character(),
+    sub_area_ind_pop_combined = tibble::tibble(
       sim_year                  = integer(),
+      scenario = character(),
+      sub_area                  = character(),
       spawners                  = numeric(),
       prop_natural              = numeric(),
+      prop_natural_bc = numeric(),
       nat_returns               = numeric(),
       hatchery_returns          = numeric(),
       phos                      = numeric(),
       crr                       = numeric(),
       growth_rate               = numeric(),
-      decline                   = numeric(),
-      cat_decline               = numeric(),
       above_500_spawners        = integer(),
       phos_less_than_5_percent  = integer(),
       crr_above_1               = integer(),
@@ -661,7 +646,7 @@ spawn_prop_bc <- portfolio_res_obj$proportion_natural_at_spawning["Battle Creek"
 #                        spawners_abv_dam = 0,
 #                        scenario = "baseline"))
 
-sub_area_spawners <- hab_access |> 
+sub_area_spawners <- hab_prop |> 
   mutate(prop_us_spawn = 1-prop_asd_spawn-prop_bc_spawn,
          prop_sac_spawn=1-prop_bc_spawn) |> 
   left_join(spawners_split  |> pivot_wider(names_from = "watershed", values_from = "spawners")) |> 
@@ -695,7 +680,8 @@ sub_area_ind_pop <- sub_area_spawners |>
     independent_conditions   = if_else(
       above_500_spawners & phos_less_than_5_percent &
         growth_rate_above_1 & crr_above_1, 1L, 0L)
-  ) 
+  ) |> 
+  ungroup()
 
 # baseline habitat props
 # baseline_habitat_props <- get_abv_dam_habitat_props(wr_sdm_baseline_params)
@@ -825,8 +811,8 @@ output$spawners_tribs <- spawners_tribs
 output$hab_prop <- hab_prop
 output$habitat_abv_shasta <- habitat_abv_shasta
 output$spawn_prop_us                  <- spawn_prop_us
+output$sub_area_spawners <- sub_area_spawners
 output$sub_area_ind_pop_combined      <- sub_area_ind_pop_combined
-output$sub_area_ind_pop_last3         <- sub_area_ind_pop_last3
 output$metrics_table <- metrics_table
 output$metrics_table_raw <- metrics_table_raw
 
