@@ -4,11 +4,13 @@ load("wr_sdm/portfolios/portfolio_performance_metrics.Rdata")
 # Settings --------------
 theme_plots <- 
   theme_bw() + 
-  theme(axis.text = element_text(size = 12),
-        axis.title = element_text(size = 13),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 13),
-        legend.position = "top")
+  theme(
+    # axis.text = element_text(size = 12),
+        # axis.title = element_text(size = 13),
+        # legend.text = element_text(size = 12),
+        # legend.title = element_text(size = 13),
+        legend.position = "top",
+        text=element_text(family = "Arial", size = 15))
 
 colors <- c("#93c47d", "#009E73")
 colors2 <- c("goldenrod", "#D55E00")
@@ -109,47 +111,111 @@ ggplot(p1_metrics$sub_area_ind_pop_combined) +
   theme_plots
 
 # Independent populations detail ----------------
-ind_pop_long_p4 <- p4_metrics$sub_area_ind_pop_combined |> 
+ind_pop_long_p5 <- p5_metrics$sub_area_ind_pop_combined |> 
   pivot_longer(cols = c(growth_rate_above_1, above_500_spawners, phos_less_than_5_percent, crr_above_1),
                names_to = "metric",
                values_to = "value") |> 
-  mutate(value = factor(value)) |> 
-  filter(sub_area!="Upper McCloud")
+  mutate(metric = fct_recode(metric, 
+                             "pHOS < 5%" = "phos_less_than_5_percent",
+                             "CRR > 1" = "crr_above_1",
+                             "Spawners > 500" = "above_500_spawners",
+                             "Growth Rate > 1" = "growth_rate_above_1")) |> 
+  mutate(sub_area = fct_recode(sub_area, 
+                               "Upper Sac" = "Upper Sacramento (below dam)",
+                               "Little Sac" = "Little Sacramento")) |> 
+  mutate(value = factor(value, levels = c(0,1),
+                        labels = c("Did not meet criteria", "Met criteria"))) |>
+  filter(sub_area!="Upper McCloud") |> 
+  ungroup()
 
-ggplot(ind_pop_long_p4)+
-  geom_tile(aes(sim_year, metric, fill = value), color = "black") +
-  facet_grid(sub_area~scenario)+
-  scale_fill_manual(values = c("maroon", "lightblue")) +
-  labs(title = "Portfolio 4")
-ggsave("wr_sdm/portfolios_ind_pop_p4.png", width =6, height = 5, dpi = 300, units = "in")
+library(ggpattern)
+
+ggplot(ind_pop_long_p5, aes(sim_year, metric, fill = value, pattern = value))+
+  geom_tile_pattern(pattern_color = "black",
+                    pattern_angle = 45,
+                    pattern_density = 0.1, 
+                    pattern_spacing = 0.04) +
+  geom_tile(alpha = 0.4, color = "black") + 
+  scale_fill_manual(values = c("Met criteria" = "#FDE820", 
+                               "Did not meet criteria" = "#25798F"),
+                               na.value = "white") +
+  scale_pattern_manual(values = c("Met criteria" = "stripe", 
+                                  "Did not meet criteria" = "none"),
+                                  na.value = "none") +
+  labs(title = "Portfolio 5", x = "Simulation Year", y = "Independence Metric", fill = NULL, pattern = NULL) +
+  theme_plots +
+  facet_grid(scenario~sub_area, labeller = label_wrap_gen(multi_line = TRUE))
+
+ggsave(file="wr_sdm/portfolios_ind_pop_p5.png", width =8, height = 6, units = "in", dpi=500) 
 
 
-ind_pop_long_p11 <- p11_metrics$sub_area_ind_pop_combined |> 
+ind_pop_long_p14 <- p14_metrics$sub_area_ind_pop_combined |> 
   pivot_longer(cols = c(growth_rate_above_1, above_500_spawners, phos_less_than_5_percent, crr_above_1),
-               names_to = "metric",
-               values_to = "value") |> 
-  mutate(value = factor(value)) |> 
-  filter(sub_area!="Upper McCloud")
+                                                                       names_to = "metric",
+                                                                       values_to = "value") |> 
+  mutate(metric = fct_recode(metric, 
+                             "pHOS < 5%" = "phos_less_than_5_percent",
+                             "CRR > 1" = "crr_above_1",
+                             "Spawners > 500" = "above_500_spawners",
+                             "Growth Rate > 1" = "growth_rate_above_1")) |> 
+  mutate(sub_area = fct_recode(sub_area, 
+                               "Upper Sac" = "Upper Sacramento (below dam)",
+                               "Little Sac" = "Little Sacramento")) |> 
+  mutate(value = factor(value, levels = c(0,1),
+                        labels = c("Did not meet criteria", "Met criteria"))) |>
+  filter(sub_area!="Upper McCloud") |> 
+  ungroup()
 
-ggplot(ind_pop_long_p11)+
-  geom_tile(aes(sim_year, metric, fill = value), color = "black") +
-  facet_grid(sub_area~scenario)+
-  scale_fill_manual(values = c("maroon", "lightblue"))+
-  labs(title = "Portfolio 11")
-ggsave("wr_sdm/portfolios_ind_pop_p11.png", width =6, height = 5, dpi = 300, units = "in")
+ggplot(ind_pop_long_p14, aes(sim_year, metric, fill = value, pattern = value))+
+  geom_tile_pattern(pattern_color = "black",
+                    pattern_angle = 45,
+                    pattern_density = 0.1, 
+                    pattern_spacing = 0.04) +
+  geom_tile(alpha = 0.4, color = "black") + 
+  scale_fill_manual(values = c("Met criteria" = "#FDE820", 
+                               "Did not meet criteria" = "#25798F"),
+                    na.value = "white") +
+  scale_pattern_manual(values = c("Met criteria" = "stripe", 
+                                  "Did not meet criteria" = "none"),
+                       na.value = "none") +
+  labs(title = "Portfolio 14", x = "Simulation Year", y = "Independence Metric", fill = NULL, pattern = NULL) +
+  theme_plots +
+  facet_grid(scenario~sub_area, labeller = label_wrap_gen(multi_line = TRUE))
+ggsave("wr_sdm/portfolios_ind_pop_p14.png", width =8, height = 6, dpi = 500, units = "in")
 
 ind_pop_long_p3 <- p3_metrics$sub_area_ind_pop_combined |> 
   pivot_longer(cols = c(growth_rate_above_1, above_500_spawners, phos_less_than_5_percent, crr_above_1),
                names_to = "metric",
                values_to = "value") |> 
-  mutate(value = factor(value)) |> 
-  filter(sub_area!="Upper McCloud")
+  mutate(metric = fct_recode(metric, 
+                             "pHOS < 5%" = "phos_less_than_5_percent",
+                             "CRR > 1" = "crr_above_1",
+                             "Spawners > 500" = "above_500_spawners",
+                             "Growth Rate > 1" = "growth_rate_above_1")) |> 
+  mutate(sub_area = fct_recode(sub_area, 
+                               "Upper Sac" = "Upper Sacramento (below dam)",
+                               "Little Sac" = "Little Sacramento")) |> 
+  mutate(value = factor(value, levels = c(0,1),
+                        labels = c("Did not meet criteria", "Met criteria"))) |>
+  filter(sub_area!="Upper McCloud") |> 
+  ungroup()
 
-ggplot(ind_pop_long_p3)+
-  geom_tile(aes(sim_year, metric, fill = value), color = "black") +
-  facet_grid(sub_area~scenario)+
-  scale_fill_manual(values = c("maroon", "lightblue"))+
-  labs(title = "Portfolio 3")
-ggsave("wr_sdm/portfolios_ind_pop_p3.png", width =6, height = 5, dpi = 300, units = "in")
+ggplot(ind_pop_long_p3, aes(sim_year, metric, fill = value, pattern = value))+
+  geom_tile_pattern(pattern_color = "black",
+                    pattern_angle = 45,
+                    pattern_density = 0.1, 
+                    pattern_spacing = 0.04) +
+  geom_tile(alpha = 0.4, color = "black") + 
+  scale_fill_manual(values = c("Met criteria" = "#FDE820", 
+                               "Did not meet criteria" = "#25798F"),
+                    na.value = "white") +
+  scale_pattern_manual(values = c("Met criteria" = "stripe", 
+                                  "Did not meet criteria" = "none"),
+                       na.value = "none") +
+  labs(title = "Portfolio 3", x = "Simulation Year", y = "Independence Metric", fill = NULL, pattern = NULL) +
+  theme_plots +
+  facet_grid(scenario~sub_area, labeller = label_wrap_gen(multi_line = TRUE))
+
+ggsave("wr_sdm/portfolios_ind_pop_p3.png", width =8, height = 6, dpi = 500, units = "in")
 
 
