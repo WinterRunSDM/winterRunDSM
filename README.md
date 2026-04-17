@@ -83,9 +83,9 @@ wr_sdm_model_results <- winterRunDSM::winter_run_model(mode = "simulate",
 ## Details on Supporting Data
 
 ### Dependencies
-The `winterRunDSM` package uses data from several other packages within the [CVPIA Open Science Collaborative](https://github.com/WinterRunSDM). These relationships are visualized in the dependency graph below. 
+The `winterRunDSM` package uses data from several other packages within the [CVPIA Open Science Collaborative](https://github.com/WinterRunSDM). These relationships are visualized below. 
 
-<img src="man/figures/dependencyChain.svg" width="100%"/>
+<img src="man/figures/Winter-run_SDM_process.png" width="100%"/>
 
 ### Flow, Habitat, and Temperature Data
 
@@ -105,3 +105,35 @@ These inputs were used :
 2. Proxy years are used to select Habitat, Flow, and Temperature data for 1998-2017 to correspond with the years of GrandTab escapement data. The data inputs to the DSM are for years 1980-1999. We selected proxy years for 1998-2017 from the 1980-1999 model inputs by [comparing the DWR water year indices](https://cdec.water.ca.gov/reportapp/javareports?name=WSIHIST).
 
 For a detailed overview of the calibration process see the [calibration markdown.](https://cvpia-osc.github.io/winterRunDSM/articles/calibration-2021.html)
+
+### Folder Structure
+
+Code for generating outputs at different stages are described below:
+
+* Creating parameter lists as inputs into the winter-run model
+  - **Cached static inputs:** `data-raw/cache-data.R`
+  - **Baseline:** `wr_sdm/wr_sdm_baseline_parameters.R`
+  - **Actions:** `R/create_parameter_list_function.R`
+  
+* Running winter-run model
+  - **Model Code:** `R/model.R`
+    - **Submodels:** Located in `R/`
+  
+* Creating portfolios
+  - **Create parameter lists and model results for all portfolios:** `wr_sdm/create_portfolios.R`
+  - **Calculate performance metrics for all portfolios:** `wr_sdm/portfolios/calculate_portfolio_performance_metrics.R`
+    - **Calculate habitat proportion in watersheds:** `wr_sdm/portfolios/calculate_habitat_prop_portfolios.R`
+  - **Generate performance metrics for all portfolios:** `wr_sdm/portfolios/explore_portfolios.R`
+  
+* Consequences
+  - **Create consequence tables and results tables:** `wr_sdm/consequence_tables/create_consequence_tables.R`
+    - **Weight sets:** `wr_sdm/consequence_tables/weights.xlsx`
+    - **Consequence table best and worst:** `wr_sdm/consequence_tables/ct_scales.csv`
+    - **Non-modeled metrics scores, lookups:** 
+      - `wr_sdm/consequence_tables/nonmodeled_metrics.csv`
+      - `wr_sdm/consequence_tables/nonmodeled_metrics_lookup.csv`
+      - `wr_sdm/consequence_tables/timeliness_norm.csv`
+      
+### Shiny App
+
+Visualize model inputs, outputs, consequences, and weighted results on the Shiny App at: [WR Shiny App](https://flowwest.shinyapps.io/winterRunDSM-shiny/)
