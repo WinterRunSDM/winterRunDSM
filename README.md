@@ -110,22 +110,22 @@ For a detailed overview of the calibration process see the [calibration markdown
 
 Code for generating outputs at different stages are described below:
 
-* Creating parameter lists as inputs into the winter-run model
-  - **Cached static inputs:** `data-raw/cache-data.R`
+#### Creating parameter lists as inputs into the winter-run model
+  - **Cached inputs:** `data-raw/cache-data.R`
   - **Baseline:** `wr_sdm/wr_sdm_baseline_parameters.R`
   - **Actions:** `R/create_parameter_list_function.R`
   
-* Running winter-run model
+#### Running winter-run model
   - **Model Code:** `R/model.R`
     - **Submodels:** Located in `R/`
   
-* Creating portfolios
+#### Creating portfolios
   - **Create parameter lists and model results for all portfolios:** `wr_sdm/create_portfolios.R`
   - **Calculate performance metrics for all portfolios:** `wr_sdm/portfolios/calculate_portfolio_performance_metrics.R`
     - **Calculate habitat proportion in watersheds:** `wr_sdm/portfolios/calculate_habitat_prop_portfolios.R`
   - **Generate performance metrics for all portfolios:** `wr_sdm/portfolios/explore_portfolios.R`
   
-* Consequences
+#### Consequences
   - **Create consequence tables and results tables:** `wr_sdm/consequence_tables/create_consequence_tables.R`
     - **Weight sets:** `wr_sdm/consequence_tables/weights.xlsx`
     - **Consequence table best and worst:** `wr_sdm/consequence_tables/ct_scales.csv`
