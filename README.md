@@ -125,7 +125,7 @@ Code for generating outputs at different stages are described below:
     - **Calculate habitat proportion in watersheds:** `wr_sdm/portfolios/calculate_habitat_prop_portfolios.R`
   - **Generate performance metrics for all portfolios:** `wr_sdm/portfolios/explore_portfolios.R`
   
-#### Consequences
+#### Generating SDM Consequences and Results
   - **Create consequence tables and results tables:** `wr_sdm/consequence_tables/create_consequence_tables.R`
     - **Weight sets:** `wr_sdm/consequence_tables/weights.xlsx`
     - **Consequence table best and worst:** `wr_sdm/consequence_tables/ct_scales.csv`
