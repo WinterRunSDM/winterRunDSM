@@ -14,7 +14,7 @@ baseline_results <- winterRunDSM::winter_run_model(mode = "simulate",
                                                     seeds = baseline_seeds)
 
 # test out adult enroute survival multiplier
-alt_params <- create_param_list(action_ids = c("SR-11"))
+alt_params <- create_param_list(action_ids = c("ASD-8"))
 
 alt_seeds <- winterRunDSM::winter_run_model(scenario = NULL, 
                                                  mode = "seed",
@@ -236,6 +236,8 @@ all_outmigrating_sac_fish |>
        y = "Proportion of juveniles in Sac by month",
        title = "Sacramento juveniles",
        subtitle = "(Summed across upper-mid, lower-mid, and lower sac)")
+
+
 
 # old code
 action_params <- readr::read_csv("wr_sdm/documentation/WRCS_MASTER_Actions_2026-03-10.csv") |>

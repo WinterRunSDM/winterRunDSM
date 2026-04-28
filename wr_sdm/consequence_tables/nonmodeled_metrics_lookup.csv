@@ -1,0 +1,26 @@
+﻿metric_description,metric,score,score_description,normalized_value
+Ability of WRCS to live their natural life-cycle,natural_natural,1,"Decreases human interventions (e.g. hatchery, transport, handling, or infrastructure operations) by ≥50% and successfully reestablishes of migration, spawning, and rearing processes in historic habitat.",1
+Ability of WRCS to live their natural life-cycle,natural_natural,2,"Decreases human interventions (e.g. hatchery, transport, handling, or infrastructure operations) by ≥10% OR allows successful reestablishment of migration, spawning, and rearing processes in historic habitat.",0.666666667
+Ability of WRCS to live their natural life-cycle,natural_natural,3,"No change in human interventions (e.g. hatchery, transport, handling, or infrastructure operations) within ±10%",0.333333333
+Ability of WRCS to live their natural life-cycle,natural_natural,4,"Increases human interventions (e.g. hatchery, transport, handling, or infrastructure operations) by ≥10%",0
+Avoid or minimize adverse impacts to fall-run Chinook salmon,species_fr,1,Increases suitable spawning/rearing habitat or survival for fall-run Chinook by ≥5%,1
+Avoid or minimize adverse impacts to fall-run Chinook salmon,species_fr,2,No change in suitable spawning/rearing habitat or survival for fall-run Chinook within ±5%,0.5
+Avoid or minimize adverse impacts to fall-run Chinook salmon,species_fr,3,Decreases suitable spawning/rearing habitat or survival for fall-run Chinook by ≥5%,0
+Minimize adverse impacts on other listed fish species,species_other,1,Increases habitat or survival for one or more listed fish species by ≥5%,1
+Minimize adverse impacts on other listed fish species,species_other,2,No change in habitat or survival for other listed fish species by within ±5%,0.5
+Minimize adverse impacts on other listed fish species,species_other,3,Decreases habitat or survival for one or more listed fish species by ≥5%,0
+Timeliness - Time to initial implementation,timeliness_initiation,1,<1 year,1
+Timeliness - Time to initial implementation,timeliness_initiation,2,1–5 years,0.666666667
+Timeliness - Time to initial implementation,timeliness_initiation,3,5-10 years,0.333333333
+Timeliness - Time to initial implementation,timeliness_initiation,4,>10 years,0
+Timeliness - Time to achieve benefits,timeliness_benefits,1,<1 year,1
+Timeliness - Time to achieve benefits,timeliness_benefits,2,1–5 years,0.666666667
+Timeliness - Time to achieve benefits,timeliness_benefits,3,5-10 years,0.333333333
+Timeliness - Time to achieve benefits,timeliness_benefits,4,>10 years,0
+Cost,cost_cost,1,<$1M,1
+Cost,cost_cost,2,$1M - $10M,0.99
+Cost,cost_cost,3,$10M - $50M,0.98
+Cost,cost_cost,4,$50M - $100M,0.95
+Cost,cost_cost,5,$100M - $500M,0.8
+Cost,cost_cost,6,$500M - $1B,0.5
+Cost,cost_cost,7,>$1B,0

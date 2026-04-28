@@ -26,14 +26,16 @@ spawn_success <- function(escapement,
                           harvest_rate_abv_dam, # WR SDM addition
                           egg_to_fry_survival,
                           egg_to_fry_survival_mult, # WR SDM addition
-                          egg_to_fry_survival_abv_dam, # WR SDM addition
+                          egg_to_fry_survival_abv_dam_mult, # WR SDM addition
                           prob_scour, spawn_habitat,
                           stochastic,
                           sex_ratio,
                           redd_size,
                           fecundity){
 
-
+  # egg to fry survival abv dam was recoded as a multiplier, so implementing that here
+  # 4-7-2026
+  egg_to_fry_survival_abv_dam <- pmin(egg_to_fry_survival["Upper Sacramento River"] * egg_to_fry_survival_abv_dam_mult, 1)
 # spawn capacity -------------------------------------------------------
     # spawner potential below dam
     # will represent all habitat if no above dam habitat
@@ -48,9 +50,9 @@ spawn_success <- function(escapement,
     }
     spawner_capacity_blw_dam <- pmin(spawner_potential_blw_dam, capacity_blw_dam)
     if(capacity_blw_dam["Upper Sacramento River"] < spawner_potential_blw_dam["Upper Sacramento River"]) {
-      print("Below dam is spawning habitat limited")
+      # print("Below dam is spawning habitat limited")
     } else {
-      print("Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
+      # print("Below dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
     }
 
     # spawner potential above dam
@@ -64,11 +66,11 @@ spawn_success <- function(escapement,
     }
     spawner_capacity_abv_dam <- pmin(spawner_potential_abv_dam, capacity_abv_dam)
     if(capacity_abv_dam["Upper Sacramento River"] < spawner_potential_abv_dam["Upper Sacramento River"]) {
-      print("Above dam is spawning habitat limited")
+      # print("Above dam is spawning habitat limited")
     } else {
-      print("Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
-      print(paste("Spawning capacity abv:", capacity_abv_dam["Upper Sacramento River"]))
-      print(paste("Spawning capacity blw:", capacity_blw_dam["Upper Sacramento River"]))
+      # print("Above dam is spawner capacity limited (escapement, prespawn survival, sex ratio)")
+      # print(paste("Spawning capacity abv:", capacity_abv_dam["Upper Sacramento River"]))
+      # print(paste("Spawning capacity blw:", capacity_blw_dam["Upper Sacramento River"]))
     }
 
     # full spawner capacity
@@ -98,7 +100,7 @@ spawn_success <- function(escapement,
       select(-c(prop_2, prop_3, prop_4, prop_5, spawners, watershed)) |>
       as.matrix()
     dimnames(nat_spawn_blw_dam) <- list(c(winterRunDSM::watershed_labels), c("2", "3", "4", "5"))
-
+    egg_to_fry_survival <- pmin(egg_to_fry_survival * egg_to_fry_survival_mult, 1)
     natural_fry_blw_dam <- suppressWarnings(rowSums(sweep(nat_spawn_blw_dam *
                                                             (1 - prob_scour), 2, fecundity_natural, "*") *
                                                       egg_to_fry_survival))
@@ -115,7 +117,6 @@ spawn_success <- function(escapement,
     dimnames(hatch_spawn_blw_dam) <- list(c(winterRunDSM::watershed_labels), c("2", "3", "4", "5"))
 
     # calculate hatchery fry
-    egg_to_fry_survival <- pmin(egg_to_fry_survival * egg_to_fry_survival_mult, 1)
     hatchery_fry_blw_dam <- suppressWarnings(rowSums(sweep(hatch_spawn_blw_dam *
                                                              (1 - prob_scour), 2, fecundity_hatch, "*") *
                                                        (egg_to_fry_survival)))

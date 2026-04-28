@@ -20,7 +20,7 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
         if (stochastic) {
           rbinom(4, size = round(juveniles[watershed, ]), prob = survival_rate)
         } else {
-          round(juveniles[watershed, ] * survival_rate)
+          juveniles[watershed, ] * survival_rate
         }
       }))
     } else {
@@ -28,7 +28,7 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
         if (stochastic) {
           rbinom(4, size = round(juveniles[watershed, ]), prob = survival_rate[watershed, ])
         } else {
-          round(juveniles[watershed, ] * survival_rate[watershed, ])
+          juveniles[watershed, ] * survival_rate[watershed, ]
         }
       }))
     }
@@ -38,9 +38,9 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
   if (length(growth) == 16) {
     next_juveniles <- survived %*% growth
   } else {
-    next_juveniles <- round(t(sapply(1:nrow(juveniles), function(i) {
+    next_juveniles <- t(sapply(1:nrow(juveniles), function(i) {
       survived[i,, drop = FALSE] %*% growth[,,i]
-    })))
+    }))
   }
   
   if(!is.null(floodplain_juveniles)) {
@@ -49,7 +49,7 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
         if (stochastic) {
           rbinom(4, size = round(floodplain_juveniles[watershed, ]), prob = floodplain_survival_rate)
         } else {
-          round(floodplain_juveniles[watershed, ] * floodplain_survival_rate)
+          floodplain_juveniles[watershed, ] * floodplain_survival_rate
         }
       }))
     } else {
@@ -57,7 +57,7 @@ rear <- function(juveniles, survival_rate, growth, floodplain_juveniles = NULL,
         if (stochastic) {
           rbinom(4, size = round(floodplain_juveniles[watershed, ]), prob = floodplain_survival_rate[watershed, ])
         } else {
-          round(floodplain_juveniles[watershed, ] * floodplain_survival_rate[watershed, ])
+          floodplain_juveniles[watershed, ] * floodplain_survival_rate[watershed, ]
         }
       }))
     }

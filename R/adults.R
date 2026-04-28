@@ -50,7 +50,7 @@ surv_adult_enroute <- function(migratory_temp, bypass_overtopped,
                                .migratory_temp = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_migratory_temp,
                                .bypass_overtopped = winterRunDSM::wr_sdm_baseline_params$.adult_en_route_bypass_overtopped,
                                # winter run SDM parameter
-                               adult_enroute_surv_mult = adult_enroute_surv_mult) {
+                               adult_enroute_surv_mult = winterRunDSM::wr_sdm_baseline_params$adult_enroute_surv_mult) {
 
   pmax(boot::inv.logit(..surv_adult_enroute_int +
                        .migratory_temp * migratory_temp +
@@ -182,9 +182,11 @@ apply_enroute_survival <- function(year,
 #' @export
 surv_adult_prespawn <- function(deg_day,
                                 .adult_prespawn_int = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_int,
-                                .deg_day = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_deg_day){
+                                .deg_day = winterRunDSM::wr_sdm_baseline_params$.adult_prespawn_deg_day,
+                                # WR SDM addition adding the prespawn survival multiplier
+                                surv_adult_prespawn_mult= winterRunDSM::wr_sdm_baseline_params$surv_adult_prespawn_mult){
 
-  boot::inv.logit(.adult_prespawn_int + .deg_day * deg_day)
+  pmin(boot::inv.logit(.adult_prespawn_int + .deg_day * deg_day) * surv_adult_prespawn_mult, 1)
 }
 
 #' @title Prepare Beta-regression Data

@@ -71,7 +71,9 @@ winter_run_model <- function(scenario = NULL,
     lower_sac_fish = array(0, dim = c(9, 4, 20), dimnames = list(c(9:12, 1:5), c("s", "m", "l", "xl"), 1:20)),
     
     rearing_survival_inchannel = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
-    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20))
+    rearing_survival_fp = array(0, dim = c(31, 4, 20), dimnames = list(winterRunDSM::watershed_labels, c("s", "m", "l", "xl"), 1:20)),
+    # nz additions
+    prop_nz_juveniles = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
   )
   
   if (mode == 'calibrate') {
@@ -239,6 +241,36 @@ winter_run_model <- function(scenario = NULL,
     init_adults <- round(spawners$init_adults)
     
     output$spawners[ , year] <- init_adults
+    
+    # BC-9 dynamic hatchery release logic
+    if(mode == "simulate" &&
+       !is.null(..params$bc9_implement_dynamic) && 
+       ..params$bc9_implement_dynamic && 
+       year >= 5) {
+      
+      bc_natural_spawners <- output$spawners["Battle Creek", max(1, (year-4)):year] * 
+        output$proportion_natural_at_spawning["Battle Creek", max(1, (year-4)):year]
+      
+      bc_geomean <- geometric_mean(bc_natural_spawners)
+      
+      cat("Year:", year, "Battle Creek geomean natural spawners:", round(bc_geomean), "\n")
+      
+      if(bc_geomean >= 850) {
+        ..params$hatchery_release["Battle Creek", "l", year] <- 0
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0
+      } else if(bc_geomean >= 500) {
+        ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase2_release
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0.50
+      } else if(bc_geomean >= 100) {
+        ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase1_late_release
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0.15
+        ..params$egg_to_fry_survival_mult["Battle Creek"] <- ..params$egg_to_fry_survival_mult["Battle Creek"] * 1.2
+      } else {
+        ..params$hatchery_release["Battle Creek", "l", year] <- ..params$bc9_phase1_initial_release
+        ..params$natural_adult_removal_rate["Battle Creek"] <- 0
+      }
+    } # end BC-9 dynamic logic
+    
     # # For use in the r2r metrics ---------------------------------------------
     # TODO fix handling for PHOS on non spawn and 0 fish watersheds
     phos <- ifelse(is.na(1 - spawners$proportion_natural), 0, 1 - spawners$proportion_natural)
@@ -296,7 +328,8 @@ winter_run_model <- function(scenario = NULL,
     
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              .adult_prespawn_int = ..params$.adult_prespawn_int,
-                                             .deg_day = ..params$.adult_prespawn_deg_day)
+                                             .deg_day = ..params$.adult_prespawn_deg_day,
+                                             surv_adult_prespawn_mult = ..params$surv_adult_prespawn_mult)
     
     # calculate juveniles 
     juveniles <- spawn_success(escapement = init_adults,
@@ -313,7 +346,7 @@ winter_run_model <- function(scenario = NULL,
                                harvest_rate_abv_dam  = ..params$harvest_rate_abv_dam, # WR SDM adds new param
                                egg_to_fry_survival = egg_to_fry_surv,
                                egg_to_fry_survival_mult = ..params$egg_to_fry_survival_mult, # WR DSM adds new param for SR-3
-                               egg_to_fry_survival_abv_dam = ..params$egg_to_fry_survival_abv_dam, # WR DSM adds new param for abv dam
+                               egg_to_fry_survival_abv_dam_mult = ..params$egg_to_fry_survival_abv_dam_mult, # WR DSM adds new param for abv dam
                                prob_scour = ..params$prob_nest_scoured,
                                spawn_habitat = min_spawn_habitat,
                                sex_ratio = ..params$spawn_success_sex_ratio,
@@ -351,6 +384,16 @@ winter_run_model <- function(scenario = NULL,
     if (year %in% c(9:13)) {
       juveniles["Upper Sacramento River",1] <- juveniles["Upper Sacramento River" ,1] - ..params$addl_juv_chipps
     }
+    
+    # WR SDM - add nz juveniles as large fish
+    juveniles["Upper Sacramento River", 3] <- juveniles["Upper Sacramento River", 3] + ..params$nz_juveniles["l"]
+    
+    # track proportion of juveniles from NZ additions
+    total_juves_post_nz <- rowSums(juveniles)
+    output$prop_nz_juveniles["Upper Sacramento River", year] <- ifelse(
+      total_juves_post_nz["Upper Sacramento River"] == 0, 0,
+      ..params$nz_juveniles["l"] / total_juves_post_nz["Upper Sacramento River"]
+    )
     
     fish_list <- lapply(1:8, function(i) list(juveniles = juveniles,
                                               lower_mid_sac_fish = lower_mid_sac_fish,
@@ -508,11 +551,6 @@ winter_run_model <- function(scenario = NULL,
           gs_bubble_curtain_effect_mult = ..params$gs_bubble_curtain_effect_mult,
           non_natal_proportion_shift = ..params$non_natal_proportion_shift
         )
-        
-        if(month %in% 3:5) {
-          cat("Year:", year, "Month:", month, 
-              "Upper Sac golden gate by size:", fish_list$route_1_fish$migrants_at_golden_gate[1,], "\n")
-        }
         
         # TODO make sure this isn't double counting
         output$upper_mid_sac_fish[as.character(month), ,year] <- colSums(fish_list$route_1_fish$upper_mid_sac_fish, na.rm = T)

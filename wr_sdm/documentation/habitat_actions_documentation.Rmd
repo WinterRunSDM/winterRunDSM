@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 our_palette <- viridis::turbo(6)
+spawn_months <- 5:8
+rear_months <- c(9:12, 1:4)
 ```
 
 # Habitat Action Documentation
@@ -277,7 +279,9 @@ compare_all_bc |>
 
 ## Temperature threshold data from Mike Deas
 
-The modeling team requested and received a report from Mike Deas and Maya Wood, Watercourse Engineering, Inc. that included a summary of days per month where the mean daily temperature exceeded `53.5 F`. This value was informed by participants during SDM working sessions and represents the critical threshold above which temperature-dependent mortality accures for WRCS eggs. The full report is included and we present the tables in this markdown to show how they were used to scale proposed additional habitat for:
+The modeling team requested and received a report from Mike Deas and Maya Wood, Watercourse Engineering, Inc. that included a summary of days per month where the mean daily temperature exceeded `53.5 F` for several locations in the study area. This value was informed by participants during SDM working sessions and represents the critical threshold above which temperature-dependent mortality accures for WRCS eggs. Mike and Maya also provided the underlying data (temperature time series) that were used in the following analysis.
+
+We present the data in this markdown to show how they were used to scale proposed additional habitat for:
 
 * McCloud River
 * Upper Sacramento River above Shasta Dam
@@ -288,11 +292,13 @@ md_metadata <- read_xlsx(here("data-raw", "habitat-data-docs", "mike_deas_data.x
                          sheet = "metadata")
 md_data <- read_xlsx(here("data-raw", "habitat-data-docs", "mike_deas_data.xlsx"),
                      sheet = "data")
+temps <- read_csv(here("data-raw", "habitat-data-docs", "mikedeas_Temp_data_clean.csv")) |> 
+  #filter(statistic == "avg") |> 
+  mutate(date = as.Date(date))
 ```
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 knitr::kable(md_metadata)
-knitr::kable(md_data)
 ```
 
 ## Scaling approach
@@ -307,71 +313,213 @@ We used the months relevant for each lifestage to scale the appropriate temperat
 * Spawning: May - August
 * Rearing (inchannel and floodplain): September - April
 
-**Spawning:** Per the analyses in the [2003 EIR for the Battle Creek Restoration Project](https://www.waterboards.ca.gov/waterrights/water_issues/programs/water_quality_cert/docs/battlecreek_salmon_ferc1121/draft_eir/appendix_m.pdf), egg survival is `100%` below `55 F` and drops below `80%` at temperatures of `58 F`. Therefore we used additional plots from the analysis to apply a sliding scale of temperature effect, as the binary above/below `53.5 F` would not account for the accruing effects on suitability.
+**Spawning:** Per the analyses in the [2003 EIR for the Battle Creek Restoration Project](https://www.waterboards.ca.gov/waterrights/water_issues/programs/water_quality_cert/docs/battlecreek_salmon_ferc1121/draft_eir/appendix_m.pdf), egg survival is `100%` below `55 F` and drops below `80%` at temperatures of `58 F`. Therefore we used additional plots from the analysis to apply a sliding scale of temperature effect, as the binary above/below `53.5 F` would not account for the accruing effects on suitability. We settled on: 
+
+* `53.5 F` as a threshold value, below which spawning assumed to be not affected by temperature. This was informed by our working sessions and participant input.
+* `58 F` as a value beyond which egg-to-fry survival drops precipitously. We use this to add nuance to the scaling proportion.
 
 **Rearing:** Through conversations with modelers we selected a threshold of `68 F` as appropriate for juvenile rearing. 
 
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+make_season_rects <- function(dates) {
+  years <- unique(lubridate::year(dates))
+  
+  bind_rows(
+    # Spawning: May–Aug
+    tibble(
+      xmin = as.Date(paste0(years, "-05-01")),
+      xmax = as.Date(paste0(years, "-08-31")),
+      ymin = -Inf, ymax = Inf,
+      type = "Spawning (May–Aug)"
+    ),
+    # Rearing: Sep–Dec
+    tibble(
+      xmin = as.Date(paste0(years, "-09-01")),
+      xmax = as.Date(paste0(years, "-12-31")),
+      ymin = -Inf, ymax = Inf,
+      type = "Rearing (Sep–Apr)"
+    ),
+    # Rearing: Jan–Apr (same label so same color in legend)
+    tibble(
+      xmin = as.Date(paste0(years, "-01-01")),
+      xmax = as.Date(paste0(years, "-04-30")),
+      ymin = -Inf, ymax = Inf,
+      type = "Rearing (Sep–Apr)"
+    )
+  )
+}
+plot_temp <- function(df, title) {
+  df_avg  <- df |> filter(statistic == "avg")
+  df_ribbon <- df |> 
+    filter(statistic %in% c("min", "max")) |>
+    pivot_wider(names_from = statistic, values_from = deg_f)
+  
+  df_avg |>
+    ggplot(aes(x = date)) +
+    geom_rect(
+      data = make_season_rects(df_avg$date),
+      aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = type),
+      alpha = 0.15, inherit.aes = FALSE
+    ) +
+    geom_ribbon(
+      data = df_ribbon,
+      aes(ymin = min, ymax = max),
+      alpha = 0.2, fill = "gray50", inherit.aes = TRUE
+    ) +
+    geom_line(aes(y = deg_f)) +
+    geom_hline(yintercept = 53.5, linetype = "dashed") +
+    geom_hline(yintercept = 68, linetype = "dotted") +
+    annotate("text", x = min(df_avg$date), y = 54.5, label = "53.5°F",
+             hjust = 0, size = 3, color = "gray30") +
+    annotate("text", x = min(df_avg$date), y = 69, label = "68°F",
+             hjust = 0, size = 3, color = "gray30") +
+    scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
+    scale_fill_manual(
+      values = c("Spawning (May–Aug)" = "#1f77b4", "Rearing (Sep–Apr)" = "#ff7f0e"),
+      name = "Season"
+    ) +
+    labs(x = "Date", y = "Avg Daily Temperature (F)", title = title) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+}
+
+# calculate prop
+calc_exceed <- function(df, spawn_months = 5:8, rear_months = 9:12) {
+  df |> 
+    filter(statistic == "avg") |>
+    mutate(
+      month = month(date),
+      exceeds_spawn = month %in% spawn_months & deg_f > 53.5,
+      exceeds_rear  = month %in% rear_months & deg_f > 68,
+      exceeds_58    = month %in% spawn_months & deg_f > 58
+    ) |> 
+    group_by(month) |>
+    summarise(
+      prop_spawn_exceed = round(sum(exceeds_spawn) / n(), 2),
+      prop_rear_exceed  = round(sum(exceeds_rear) / n(), 2),
+      prop_exceed_58    = round(sum(exceeds_58) / n(), 2)
+    ) |> 
+    filter(month %in% c(spawn_months, rear_months)) |>
+    mutate(
+      prop_spawn_exceed = ifelse(month %in% spawn_months, prop_spawn_exceed, NA),
+      prop_rear_exceed  = ifelse(month %in% rear_months,  prop_rear_exceed,  NA),
+      prop_exceed_58    = ifelse(month %in% spawn_months, prop_exceed_58,    NA)
+    )
+}
+```
+
 ### BC-2: Lower Battle Creek
 
-![](md_graphs/md_CNFH.png)
-*Deas & Wood, 2026*
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+ubc <- temps |> 
+  filter(location == "ubc")
+# Plot
+plot_temp(ubc, "Upper Battle Creek (300)")
+```
+
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-md_data |> 
-  filter(Station == "Upper Battle Creek") |> 
+calc_exceed(ubc) |> 
   knitr::kable()
 ```
 
-**Spawning:** Nearly all days in May-August are not only above `53.5 F` but are also at or around `60 F` (figure). We propose scaling total habitat to `25%` of the proposed value to account for mortality in June-August and partial survival in May.
+**Spawning:** All days in May-August are above `53.5 F`, and all of June-September are also above `58 F` (see plot above). We propose scaling total habitat to `25%` of the proposed value to account for mortality in June-August and partial survival in May.
 
-**Rearing:** Only one month from Sep-May showed temperatures near `68 F` (September) so we propose scaling to `90%` of total habitat.
+**Rearing:** Only one month from Sep-May showed temperatures near `68 F` (September) so we propose scaling to `95%` of total habitat.
 
 ### BC-5: North Fork Battle Creek
 
-![](md_graphs/md_NF.png)
-*Deas & Wood, 2026*
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+nfbc <- temps |> 
+  filter(location == "wildcat")
+# Plot
+plot_temp(nfbc, "Wildcat Dam (NFBC) (1000)")
+```
+
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-md_data |> 
-  filter(Station == "Wildcat Dam") |> 
+calc_exceed(nfbc) |> 
   knitr::kable()
 ```
 
-**Spawning:** Nearly all days in May-August are not only above `53.5 F` but are also at or around `60 F` (figure). We initially proposed scaling total habitat to `25%` of the proposed value to account for mortality in June-August and partial survival in May; however, Wildcat dam may not represent all the cold-water habitat in the North Fork of Battle Creek which is fed by coldwater springs and shade from a steep canyon section. We propose instead using a scaling factor of `50%` to account for upper reach temperature suitability not represented by Wildcat dam.
+**Spawning:** Nearly all days in May-August are not only above `53.5 F` but are also at or exceed `58 F`. We initially proposed scaling total habitat to `25%` of the proposed value to account for mortality in June-August and partial survival in May; however, Wildcat dam may not represent all the cold-water habitat in the North Fork of Battle Creek which is fed by coldwater springs and shade from a steep canyon section. We propose instead using a scaling factor of `50%` to account for upper reach temperature suitability not represented by Wildcat dam.
 
-**Rearing:** All months from Sep-May showed temperatures below `68 F` (September) so we propose scaling total habitat to `100%` of the proposed value.
+**Rearing:** All months from Sep-May showed temperatures below `68 F` so we propose scaling total habitat to `100%` of the proposed value.
+
+### BC-6 and BC-7
+
+`BC-6` and `BC-7` are related to improving access to cold-water habitat in Battle Creek for WRCS. Habitat is not directly scaled by temperature suitability as it is for `BC-5`, `BC-6`, and the `ASD` actions; instead, the proportion of days within spawning or rearing months that are within `5 degrees F` of the thresholds (`53.5 F` for spawning; `68 F` for rearing) are tallied and that proportion is used to scale **up** the baseline habitat, not **scale down** additional proposed habitat. Because baseline habitat is constrained to Lower Battle Creek, this scaling factor will apply to that region and we use temperature data from that location. We present a value that is the sum of days within the spawning or rearing month period that is within range of the threshold temperature; one value represents the days of the relevant months for a given year.
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+plot_temp(ubc, "Upper Battle Creek (300)") +
+  geom_hline(yintercept = 58.5, linetype = 4, color = "maroon") +
+  annotate("text", x = min(ubc$date), y = 59.5, label = "58.5°F",
+           hjust = 0, size = 3, color = "gray30")
+```
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+ubc |> 
+    filter(statistic == "avg") |> 
+    mutate(
+      month = month(date),
+      year = year(date),
+      close_spawn = month %in% spawn_months & deg_f >= 53.5 & deg_f<= 58.5,
+      close_rear  = month %in% rear_months & deg_f >= 68 & deg_f <= 72
+    ) |> 
+    group_by(year) |>
+    summarise(
+      prop_spawn_close = sum(close_spawn) / n(),
+      prop_rear_close  = sum(close_rear) / n()
+    ) |> 
+  rename(prop_within_spawn_range = prop_spawn_close,
+         prop_within_rear_range = prop_rear_close) |> 
+  knitr::kable()
+```
+
 
 ### ASD: Upper McCloud
 
-![](md_graphs/md_MRA.png)
-*Deas & Wood, 2026*
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+mra <- temps |> 
+  filter(location == "MRA")
+# Plot
+plot_temp(mra, "McCloud River at Wintun Gage Station (MRA)")
+```
+
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-md_data |> 
-  filter(Station == "MRA") |> 
+calc_exceed(mra) |> 
   knitr::kable()
 ```
 
 **Spawning:** All days in May-August are below `53.5 F`. We propose scaling total habitat to `100%` of the proposed value.
 
-**Rearing:** All months from Sep-May showed temperatures below `68 F` (September) so we propose scaling total habitat to `100%` of the proposed value.
+**Rearing:** Data were incomplete for all rearing months, but of the data available all months from Sep-Nov showed temperatures below `68 F` and patterns indicate they were unlikely to increase in the early part of the year, so we propose scaling total habitat to `100%` of the proposed value.
 
 ### ASD: Lower McCloud
 
 There were several gages on the McCloud River as part of the report from Deas & Wood. We selected the gage `MR4A` as representative of the middle of the Lower McCloud.
 
-![](md_graphs/md_MR4A.png)
-*Deas & Wood, 2026*
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+mr4a <- temps |> 
+  filter(location == "MR4A")
+# Plot
+plot_temp(mr4a, "McCloud River above Claiborne Creek (MR4A)")
+```
+
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-md_data |> 
-  filter(Station == "MR4A") |> 
+calc_exceed(mr4a) |> 
   knitr::kable()
 ```
 
-**Spawning:** 7 days in May were above the `53.5 F` threshold, 20 in June, and all days in July and August. Across all spawning months, however, the temperatures did not exceed `60 F`, so we propose scaling by `70%` to represent partial mortality (survival is ~80% at 58 F) for this temperature range.
+**Spawning:** 7 days in May were above the `53.5 F` threshold, 20 in June, and all days in July and August. Across all spawning months, however, the temperatures did not exceed `58 F`, so we propose scaling by `70%` to represent partial mortality (survival is ~80% at 58 F) for this temperature range.
 
-**Rearing:** All months from Sep-May showed temperatures below `68 F` (September) so we propose scaling total habitat to `100%` of the proposed value.
+**Rearing:** Data were incomplete for all rearing months, but of the data available all months from Sep-Nov showed temperatures below `68 F` and patterns indicate they were unlikely to increase in the early part of the year, so we propose scaling total habitat to `100%` of the proposed value.
 
 ### ASD: Full McCloud River 
 
@@ -383,16 +531,20 @@ For the Full McCloud River (for ASD-7; removal of McCloud Dam), we propose takin
 
 ### ASD: Little Sacramento River
 
-![](md_graphs/md_Sac_above_shasta.png)
-*Deas & Wood, 2026*
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+littlesac <- temps |> 
+  filter(location == "sacasl")
+# Plot
+plot_temp(littlesac, "Little Sacramento River (11342000)")
+```
+
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-md_data |> 
-  filter(Station == "Sacramento River") |> 
+calc_exceed(littlesac) |> 
   knitr::kable()
 ```
 
-**Spawning:** 11 days in May were above the `53.5 F` threshold and all days in June, July, and August. Temperatures exceeded `60 F` for July, August, and September. We propose scaling by `15%` to represent partial mortality in May and signficant mortality / stress in July, August, and September.
+**Spawning:** 11 days in May were above the `53.5 F` threshold and all days in June, July, and August. Temperatures exceeded `58 F` for July, August, and September. We propose scaling by `15%` to represent partial mortality in May and signficant mortality / stress in July, August, and September.
 
 **Rearing:** September shows some temperatures near `68 F` and all temperatures from October-May below `68 F` (September) so we propose scaling total habitat to `90%` of the proposed value.
 
@@ -410,7 +562,7 @@ The Pit River was eliminated from consideration due to feedback about barriers a
 wr_sdm_temp_habitat_scaling_factors <- tibble("Station ID" = c("11342000", "MRA", "MR4A", NA_character_, "1000", "2000"),
                           "Watershed" = c("Little Sacramento River", "Upper McCloud River", "Lower McCloud River", "Full McCloud River", "North Fork Battle Creek", "Lower Battle Creek"),
                           "Spawning Scale Factor" = c(0.15, 1, 0.7, 0.85, 0.5, 0.25),
-                          "Rearing Scale Factor" = c(0.9, 1, 1, 1, 1, 0.90))
+                          "Rearing Scale Factor" = c(0.95, 1, 1, 1, 1, 0.90))
 
 wr_sdm_temp_habitat_scaling_factors |> 
   knitr::kable()

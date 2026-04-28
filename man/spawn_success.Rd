@@ -22,7 +22,7 @@ spawn_success(
   harvest_rate_abv_dam,
   egg_to_fry_survival,
   egg_to_fry_survival_mult,
-  egg_to_fry_survival_abv_dam,
+  egg_to_fry_survival_abv_dam_mult,
   prob_scour,
   spawn_habitat,
   stochastic,

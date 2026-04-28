@@ -1,0 +1,345 @@
+---
+title: "Winter Run DSM Portfolio Descriptions"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This document describes the actions included in each portfolio and the resulting parameter changes relative to baseline. For full details on individual action parameter changes, see the companion document *Winter Run DSM Action Descriptions*.
+
+---
+
+## Baseline
+
+No actions applied. All parameters set to `wr_sdm_baseline_params`. Used as the reference condition against which all portfolios are compared.
+
+---
+
+## P1: All Actions with Trap and Haul for All Tributaries
+
+**Actions**: ASD-1, ASD-2, ASD-3, ASD-4, ASD-5c, F-1, H-1, H-2b, H-2c, H-3, SR-1 through SR-11, BC-1 through BC-9, O-1 through O-3
+
+The most comprehensive portfolio, including all actions. Above-dam spawning is enabled via trap and haul to both the Lower McCloud and Little Sacramento River corridors (ASD-5c).
+
+### Above Shasta Dam
+- Adds **20,000 medium** and **30,000 large** Upper Sacramento River hatchery releases per year (ASD-1)
+- Reduces above-dam harvest rate by **50%** (ASD-2)
+- Adds Upper and Lower McCloud hatchery transport releases (ASD-3, ASD-4; years 1–8: 20,000/yr each; years 9–14: 28,750/yr each; years 15–20: 37,500/yr each), with `juvenile_capture_efficiency_dam_transport` initially set to **0.25** before being overridden by ASD-5c
+- Adds Upper and Lower McCloud fry, juvenile, and floodplain habitat to Upper Sacramento River (ASD-3, ASD-4)
+- Enables trap and haul to **both** Lower McCloud and Little Sacramento corridors (ASD-5c):
+  - Adds combined McCloud + Little Sacramento spawning habitat
+  - Sets `juvenile_capture_efficiency_dam_transport` to **0.9**
+  - Sets `dam_passage_survival` to adult = **0.8**, juvenile = **0.8**
+  - Sets `abv_dam_spawn_proportion` to **0.5**
+  - Sets `egg_to_fry_survival_abv_dam_mult` to mean of McCloud and Little Sacramento values
+  - Sets `prespawn_survival_abv_dam` to **0.95**
+
+### Hatchery
+- Adds **30,000 large** hatchery releases to Upper Sacramento River, **90,000 large** each to Upper-mid, Lower-mid, and Lower Sacramento Rivers per year (H-1)
+- Sets `natural_adult_removal_rate["Upper Sacramento River"]` to **0.25** and multiplies `egg_to_fry_survival_mult` by **1.2** (H-2c overrides H-2b)
+- Multiplies `adult_enroute_surv_mult["Battle Creek"]` by **1.1** (H-3)
+
+### Sacramento River Mainstem
+- Triples `floodplain_habitat["Upper-mid Sacramento River",,]` (SR-1)
+- Doubles `inchannel_habitat_juvenile` and `inchannel_habitat_fry` for Upper Sacramento and Upper-mid Sacramento Rivers (SR-2a and SR-2b — note these are identical actions applied twice)
+- Sets `non_natal_proportion_shift` to **0.6** (SR-2c)
+- Multiplies `egg_to_fry_survival_mult["Upper Sacramento River"]` by **1.1** (SR-3)
+- Multiplies `contact_points` by **1.07** for Upper Sacramento, Upper-mid Sacramento, Lower Sacramento, and Lower-mid Sacramento Rivers (SR-4a)
+- Multiplies `prop_high_predation` by **1.07** for the same reaches (SR-4b)
+- Multiplies `.surv_juv_rear_prop_diversions` by **0.75** (SR-5)
+- Sets `gs_bubble_curtain_effect_mult` to **0.8** (SR-6)
+- Multiplies `prop_high_predation` by additional **1.03** for same reaches (SR-8, with SR-4a and SR-4b present)
+- Adds 3% of baseline spawning habitat to Upper Sacramento River; sets `dam_passage_survival` to adult = **0.99**, juvenile = **0.97**; sets `abv_dam_spawn_proportion` from habitat ratio (SR-9) — **note**: `dam_passage_survival` is overridden by ASD-5c
+- Adds 3–16% of baseline habitat across all habitat types for Upper Sacramento River; sets `surv_adult_prespawn_mult` to **1.04** (SR-10)
+- Sets `addl_juv_chipps` to **50,000** (SR-11)
+- Multiplies `egg_to_fry_survival_mult["Upper Sacramento River"]` by **1.081** (F-1)
+- **Combined `egg_to_fry_survival_mult` for Upper Sacramento River**: 1.2 (H-2c) × 1.1 (SR-3) × 1.081 (F-1) = **≈1.43×** baseline
+
+### Battle Creek
+- Reduces `harvest_rate_trib["Battle Creek"]` by **50%** (BC-1)
+- Adds Lower Battle Creek–scaled fry, juvenile, and floodplain habitat (BC-2); adds combined BC-2 + BC-5 habitat since both are present (BC-5)
+- Adds **1.03 × 1.03 = 1.061×** baseline spawning habitat and `egg_to_fry_survival_mult` for Battle Creek (BC-6 + BC-7)
+- Sets `hatchery_release["Battle Creek","l",]` to **200,000 × 1.1 = 220,000** per year (BC-8 with BC-9 present)
+- Enables dynamic BC-9 phase logic with phases triggered at geomean thresholds of 100, 500, and 850 natural spawners
+
+### Other
+- Sets `delta_survival_multiplier` to **1.01** (O-1)
+- Reduces `harvest_rate_ocean` by **1%** across all ages (O-2)
+- Reduces age-2 ocean harvest by **25%** and age-3 ocean harvest by **70%** (O-3)
+
+---
+
+## P2: All Actions with Trap and Haul for McCloud River
+
+**Actions**: ASD-1, ASD-2, ASD-3, ASD-4, ASD-5a, F-1, H-1, H-2b, H-2c, H-3, SR-1 through SR-11, BC-1 through BC-9, O-1 through O-3
+
+Identical to P1 except above-dam trap and haul targets only the **Lower McCloud River** corridor (ASD-5a instead of ASD-5c). All other actions are the same.
+
+### Key difference from P1
+- ASD-5a instead of ASD-5c: adds only Lower McCloud spawning habitat (not Little Sacramento); `egg_to_fry_survival_abv_dam_mult` uses Lower McCloud value only rather than the mean of both corridors
+
+---
+
+## P3: All Actions with Shasta Volitional Passage
+
+**Actions**: ASD-2, ASD-6, ASD-7, ASD-8, F-1, H-1, H-2b, H-2c, H-3, SR-1 through SR-11, BC-1 through BC-9, O-1 through O-3
+
+Replaces trap and haul (ASD-3, ASD-4, ASD-5) with volitional passage (ASD-6, ASD-7) and adds New Zealand Chinook reintroduction (ASD-8). No ASD-1 hatchery releases.
+
+### Key differences from P1/P2
+- **No ASD-1**: no additional Upper Sacramento River hatchery medium/large releases
+- **No ASD-3/ASD-4**: no McCloud hatchery transport releases
+- **ASD-6** (volitional, Lower McCloud): adds Lower McCloud spawning, fry, juvenile, and floodplain habitat; sets `dam_passage_survival` to adult = **0.8**, juvenile = **0.4**; `abv_dam_spawn_proportion` set from habitat ratio
+- **ASD-7** (Upper McCloud dam removal): adds Upper McCloud spawning, fry, juvenile, and floodplain habitat
+- **ASD-8**: adds **500,000 large** NZ-origin juveniles per year to Upper Sacramento River
+- **SR-9 + ASD-6 interaction**: `dam_passage_survival` set to adult = **0.8**, juvenile = **0.6** (overrides ASD-6 standalone values)
+- All SR, BC, H (except no H-2a effect), O, and F-1 actions same as P1
+
+---
+
+## P4: Population Enhancement Below Shasta
+
+**Actions**: H-1, H-2b, H-2c, H-3, SR-1 through SR-11, BC-1 through BC-9, O-1 through O-3, F-1
+
+Full SR, BC, H, and O action suite but **no ASD actions** — all spawning and juvenile production remains below Shasta Dam (`abv_dam_spawn_proportion = 0`).
+
+### Key differences from P1
+- No ASD actions: no above-dam spawning, no McCloud habitat, no NZ juveniles
+- SR-9 still sets a small `abv_dam_spawn_proportion` from habitat ratio and `dam_passage_survival` to adult = **0.99**, juvenile = **0.97**, but without ASD actions the above-dam contribution is minimal
+- All other SR, BC, H, O, and F-1 parameters identical to P1
+
+---
+
+## P5: Battle Creek + Hatchery Actions
+
+**Actions**: H-1, H-2b, H-2c, H-3, BC-1, BC-2, BC-3, BC-5, BC-6, BC-7, BC-8, BC-9
+
+Focuses exclusively on hatchery management and Battle Creek restoration. No SR, ASD, O, or F actions.
+
+### Hatchery
+- Same H-1, H-2b/H-2c (H-2c overrides), H-3 changes as P1
+
+### Battle Creek
+- Same BC-1 through BC-9 changes as P1
+
+### Notable absences
+- No SR actions: no floodplain or instream habitat improvements in mainstem reaches
+- No ASD actions: no above-dam spawning
+- No O actions: no ocean harvest reductions
+- No F-1: no cold water pool improvement
+
+---
+
+## P6: Mainstem + Hatchery Actions
+
+**Actions**: H-1, H-2b, H-2c, H-3, SR-1 through SR-11, O-1 through O-3, F-1
+
+Focuses on mainstem Sacramento River habitat, hatchery management, and ocean/delta actions. No BC or ASD actions.
+
+### Key differences from P4
+- No BC actions: no Battle Creek habitat improvements or hatchery supplementation
+- No ASD actions: no above-dam spawning
+- SR-9 included: adds small `abv_dam_spawn_proportion` with `dam_passage_survival` adult = **0.99**, juvenile = **0.97**
+- All H, SR, O, F-1 parameters same as P1
+
+---
+
+## P7: Implementable Within 5 Years
+
+**Actions**: ASD-1, ASD-2, H-1, H-2b, H-2c, H-3, SR-1, SR-2a, SR-2b, SR-2c, SR-3, SR-4a, SR-4b, SR-5, SR-6, SR-8, SR-10, SR-11, BC-1, BC-2, BC-3, BC-5, BC-7, BC-8, BC-9, O-2, O-3
+
+Near-term implementable actions only. Excludes longer-horizon actions (SR-9, ASD-3/4/5/6/7/8, F-1, O-1, BC-6).
+
+### Key differences from P1
+- **No SR-9**: no ACID dam modification or above-dam spawning proportion from SR-9
+- **No ASD-3/4/5/6/7/8**: no McCloud habitat, no NZ juveniles, no natural above-dam spawning; ASD-1 adds hatchery releases only; ASD-2 reduces above-dam harvest
+- **No F-1**: no cold water pool improvement to egg-to-fry survival
+- **No O-1**: no delta survival multiplier
+- **No BC-6**: no BC-6 temperature improvement (BC-7 still present; **1.03×** spawning habitat and egg-to-fry survival for Battle Creek)
+- **Combined `egg_to_fry_survival_mult` for Upper Sacramento River**: 1.2 (H-2c) × 1.1 (SR-3) = **1.32×** baseline (no F-1)
+
+---
+
+## P8: All Actions with Estimated Costs < $10M
+
+**Actions**: ASD-1, ASD-2, ASD-3, ASD-4, H-1, H-2c, SR-2b, SR-4b, SR-8, SR-11, BC-1, BC-3, BC-5, BC-8, O-2, O-3
+
+Targeted lower-cost action subset. No SR-1 floodplain, no SR-9, no above-dam natural spawning, no BC-2 or BC-6/7 habitat.
+
+### Above Shasta Dam
+- ASD-1: adds **20,000 medium** and **30,000 large** Upper Sacramento River hatchery releases per year
+- ASD-2: reduces above-dam harvest by **50%**
+- ASD-3 + ASD-4: adds McCloud hatchery transport releases and McCloud fry/juvenile/floodplain habitat; sets `dam_passage_survival` to adult = **1.0**, juvenile = **0.8**; `abv_dam_spawn_proportion` = **0**
+
+### Hatchery
+- H-1: adds hatchery large releases across four Sacramento River reaches
+- H-2c: sets `natural_adult_removal_rate["Upper Sacramento River"]` to **0.25**; multiplies `egg_to_fry_survival_mult` by **1.2**
+
+### Sacramento River Mainstem
+- SR-2b: doubles inchannel juvenile and fry habitat for Upper Sacramento and Upper-mid Sacramento Rivers
+- SR-4b: multiplies `prop_high_predation` by **1.07** for four mainstem reaches
+- SR-8 (without SR-4a): multiplies `prop_high_predation` by **1.05** for same reaches
+- SR-11: sets `addl_juv_chipps` to **50,000**
+
+### Battle Creek
+- BC-1: reduces `harvest_rate_trib["Battle Creek"]` by **50%**
+- BC-5: adds North Fork Battle Creek fry, juvenile, and spawning habitat
+- BC-8 (without BC-9): sets `hatchery_release["Battle Creek","l",]` to **200,000** per year
+
+### Other
+- O-2: **1%** ocean harvest reduction
+- O-3: **25%** age-2 and **70%** age-3 ocean harvest reduction
+
+---
+
+## P9: Near-Term Low Hanging Fruit (Proponent 1)
+
+**Actions**: ASD-3, ASD-4, H-2a (no effect — not implemented), H-2c, SR-2b, SR-4b, SR-11, O-3
+
+Small focused portfolio of near-term, lower-cost actions. No above-dam natural spawning.
+
+### Above Shasta Dam
+- ASD-3 + ASD-4: McCloud hatchery transport and habitat; `dam_passage_survival` adult = **1.0**, juvenile = **0.8**; `abv_dam_spawn_proportion` = **0**
+
+### Hatchery
+- H-2a: **no effect** — this action ID has no corresponding block in `create_param_list()`
+- H-2c: sets `natural_adult_removal_rate["Upper Sacramento River"]` to **0.25**; multiplies `egg_to_fry_survival_mult` by **1.2**
+
+### Sacramento River Mainstem
+- SR-2b: doubles inchannel habitat for Upper and Upper-mid Sacramento Rivers
+- SR-4b: multiplies `prop_high_predation` by **1.07** for four mainstem reaches
+- SR-11: sets `addl_juv_chipps` to **50,000**
+
+### Other
+- O-3: **25%** age-2 and **70%** age-3 ocean harvest reduction
+
+---
+
+## P10: Battle Creek Only (Proponent 1)
+
+**Actions**: H-3, BC-1, BC-2, BC-3, BC-5, BC-6, BC-7, BC-8, BC-9
+
+Focuses entirely on Battle Creek recovery with adult en route survival improvement. No Upper Sacramento River or mainstem actions.
+
+### Hatchery
+- H-3: multiplies `adult_enroute_surv_mult["Battle Creek"]` by **1.1**
+
+### Battle Creek
+- BC-1: reduces `harvest_rate_trib["Battle Creek"]` by **50%**
+- BC-2 + BC-5 (combined): adds BC-2 + BC-5 combined fry, juvenile, spawning, and floodplain habitat for Battle Creek
+- BC-6 + BC-7: multiplies Battle Creek spawning habitat by **1.061×** and `egg_to_fry_survival_mult` by **1.061×** baseline
+- BC-8 (with BC-9): sets `hatchery_release["Battle Creek","l",]` to **220,000** per year (200,000 × 1.1)
+- BC-9: enables dynamic phase logic; sets `natural_adult_removal_rate["Battle Creek"]` to **0.25**
+
+---
+
+## P11: Near-Term Low Hanging Fruit + Trap and Haul + ACID (Proponent 1)
+
+**Actions**: ASD-3, ASD-4, ASD-5a, H-2a (no effect), H-2c, SR-2b, SR-4b, SR-10, SR-11, O-3
+
+Extends P9 by adding trap and haul (ASD-5a) and ACID habitat improvements (SR-10).
+
+### Key differences from P9
+- **ASD-5a added**: enables Lower McCloud trap and haul; sets `juvenile_capture_efficiency_dam_transport` to **0.9**; `dam_passage_survival` to adult = **0.8**, juvenile = **0.8**; `abv_dam_spawn_proportion` to **0.5**; `prespawn_survival_abv_dam` to **0.95**
+- **SR-10 added**: adds 3–16% habitat improvements across all types for Upper Sacramento River; sets `surv_adult_prespawn_mult` to **1.04**
+
+---
+
+## P12: Drought Mitigation (Proponent 2)
+
+**Actions**: ASD-1, ASD-3, ASD-4, ASD-5a, SR-3, SR-4a, SR-10, SR-11, BC-7, BC-8
+
+Focused on improving survival and productivity during drought years (simulation years 9–13). No H, O, or F actions.
+
+### Above Shasta Dam
+- ASD-1: adds **20,000 medium** and **30,000 large** Upper Sacramento River hatchery releases per year
+- ASD-3 + ASD-4: McCloud hatchery transport and habitat
+- ASD-5a: trap and haul to Lower McCloud; `dam_passage_survival` adult = **0.8**, juvenile = **0.8**; `abv_dam_spawn_proportion` = **0.5**
+
+### Sacramento River Mainstem
+- SR-3: multiplies `egg_to_fry_survival_mult["Upper Sacramento River"]` by **1.1**
+- SR-4a: multiplies `contact_points` by **1.07** for four mainstem reaches
+- SR-10: adds 3–16% habitat improvements for Upper Sacramento River; sets `surv_adult_prespawn_mult` to **1.04**
+- SR-11: sets `addl_juv_chipps` to **50,000** (directly targets drought years 9–13)
+
+### Battle Creek
+- BC-7: multiplies Battle Creek spawning habitat by **1.03×** and `egg_to_fry_survival_mult` by **1.03×**
+- BC-8 (without BC-9): sets `hatchery_release["Battle Creek","l",]` to **200,000** per year
+
+---
+
+## P13: Hatchery Influence and Production (Proponent 2)
+
+**Actions**: ASD-1, H-1, H-2b, H-2c, H-3, SR-11, BC-8
+
+Most hatchery-intensive portfolio. Minimal habitat actions.
+
+### Above Shasta Dam
+- ASD-1: adds **20,000 medium** and **30,000 large** Upper Sacramento River hatchery releases per year
+
+### Hatchery
+- H-1: adds **30,000 large** to Upper Sacramento River, **90,000 large** each to Upper-mid, Lower-mid, and Lower Sacramento Rivers per year
+- H-2b then H-2c (H-2c overrides H-2b): sets `natural_adult_removal_rate["Upper Sacramento River"]` to **0.25**; combined `egg_to_fry_survival_mult` = **1.2×** baseline (H-2c value)
+- H-3: multiplies `adult_enroute_surv_mult["Battle Creek"]` by **1.1**
+
+### Sacramento River Mainstem
+- SR-11: sets `addl_juv_chipps` to **50,000**
+
+### Battle Creek
+- BC-8 (without BC-9): sets `hatchery_release["Battle Creek","l",]` to **200,000** per year
+
+### Notable absences
+- No SR habitat actions beyond SR-11
+- No ASD above-dam passage actions
+- No O harvest reduction actions
+- No F-1 cold water pool improvement
+- Expected to produce highest total juvenile counts but highest pHOS due to hatchery dominance
+
+---
+
+## P14: Habitat Enhancement and Restoration (Proponent 2)
+
+**Actions**: ASD-5a, SR-1, SR-2a, SR-2b, SR-2c, SR-3, SR-10, BC-2, BC-5, BC-6, BC-7
+
+Purely habitat-focused portfolio. No hatchery releases added anywhere — the only actions that affect hatchery composition are absent, so this portfolio is expected to have the **lowest pHOS** of all portfolios.
+
+### Above Shasta Dam
+- ASD-5a (without ASD-3/ASD-4): adds Lower McCloud fry, juvenile, and floodplain habitat to Upper Sacramento River (uses standalone ASD-5a habitat block since ASD-3/ASD-4 not present); adds Lower McCloud spawning habitat; sets `juvenile_capture_efficiency_dam_transport` to **0.9**; `dam_passage_survival` adult = **0.8**, juvenile = **0.8**; `abv_dam_spawn_proportion` = **0.5**; `prespawn_survival_abv_dam` = **0.95**
+
+### Sacramento River Mainstem
+- SR-1: triples `floodplain_habitat["Upper-mid Sacramento River",,]`
+- SR-2a + SR-2b (both present — identical actions applied twice): effectively **quadruples** baseline inchannel juvenile habitat for Upper Sacramento and Upper-mid Sacramento Rivers and doubles fry habitat (note: unintended doubling of the intended 2× effect)
+- SR-2c: sets `non_natal_proportion_shift` to **0.6**
+- SR-3: multiplies `egg_to_fry_survival_mult["Upper Sacramento River"]` by **1.1**
+- SR-10: adds 3–16% habitat improvements across all types for Upper Sacramento River; sets `surv_adult_prespawn_mult` to **1.04**
+
+### Battle Creek
+- BC-2 + BC-5 (combined): adds combined Lower and North Fork Battle Creek fry, juvenile, spawning, and floodplain habitat
+- BC-6 + BC-7: multiplies Battle Creek spawning habitat by **1.061×** and `egg_to_fry_survival_mult` by **1.061×** baseline
+
+### Notable absences
+- No H actions: no hatchery releases or removal rates modified
+- No ASD-1: no additional Upper Sacramento hatchery releases
+- No BC-8/BC-9: no Battle Creek hatchery supplementation
+- No O or F-1 actions
+- Expected lowest pHOS of all portfolios; highest natural origin juvenile proportion
+
+---
+
+## Summary of Key Parameter Differences Across Portfolios
+
+| Parameter | P1 | P2 | P3 | P4 | P5 | P6 | P7 | P8 | P9 | P10 | P11 | P12 | P13 | P14 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `abv_dam_spawn_proportion` | 0.5 | 0.5 | habitat | ~0 | 0 | ~0 | 0 | 0 | 0 | 0 | 0.5 | 0.5 | 0 | 0.5 |
+| `dam_passage_survival$juv` | 0.8 | 0.8 | 0.6 | 0.97 | — | 0.97 | — | 0.8 | 0.8 | — | 0.8 | 0.8 | — | 0.8 |
+| USR hatchery releases added | ✓ | ✓ | — | — | — | — | ✓ | ✓ | — | — | — | ✓ | ✓ | — |
+| BC hatchery releases | 220k | 220k | 220k | 220k | 220k | — | 200k | 200k | — | 220k | — | 200k | 200k | — |
+| NZ juveniles | — | — | 500k | — | — | — | — | — | — | — | — | — | — | — |
+| SR-1 floodplain | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | — | — | — | — | ✓ |
+| F-1 egg-to-fry | ✓ | ✓ | ✓ | ✓ | — | ✓ | — | — | — | — | — | — | — | — |
+| SR-11 drought juv | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | ✓ | — |
+| O-3 harvest reduction | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | — | ✓ | — | — | — |
+
+*"habitat" = proportion set from habitat ratio rather than fixed value; "~0" = very small proportion from SR-9 only; "—" = not present or not applicable*
